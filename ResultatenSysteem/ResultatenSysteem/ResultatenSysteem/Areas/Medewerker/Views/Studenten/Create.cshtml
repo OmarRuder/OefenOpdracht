@@ -1,0 +1,54 @@
+﻿@model ResultatenSysteem.Models.Student
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Student</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Voornaam" class="control-label"></label>
+                <input asp-for="Voornaam" class="form-control" />
+                <span asp-validation-for="Voornaam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Achternaam" class="control-label"></label>
+                <input asp-for="Achternaam" class="form-control" />
+                <span asp-validation-for="Achternaam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tussenvoegsel" class="control-label"></label>
+                <input asp-for="Tussenvoegsel" class="form-control" />
+                <span asp-validation-for="Tussenvoegsel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Studentnummer" class="control-label"></label>
+                <input asp-for="Studentnummer" class="form-control" />
+                <span asp-validation-for="Studentnummer" class="text-danger"></span>
+            </div>
+            @foreach (var g in ViewBag.Groepen)
+            {
+                <input type="checkbox" name="GroepId" value="@g.Id">
+                <span>@g.Naam</span>
+                <br />
+            }
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
