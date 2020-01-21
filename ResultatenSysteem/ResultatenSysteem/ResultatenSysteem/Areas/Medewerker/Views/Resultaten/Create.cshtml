@@ -2,11 +2,11 @@
 
 @{
     ViewData["Title"] = "Create";
+    var Cijfer = 0;
 }
 
-<h1>Create</h1>
 
-<h4>Resultaat</h4>
+<h4 id="result">Resultaat</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,26 +14,49 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Beoordeling" class="control-label"></label>
-                <input asp-for="Beoordeling" class="form-control" />
-                <span asp-validation-for="Beoordeling" class="text-danger"></span>
+                <input id="CijferInput" name="Cijfer" class="form-control" type="text">
+                @{
+                    Console.WriteLine("Cijfer als eerst ff hier: " + Cijfer);
+                }
+                <span id="Validation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.StudentId"></select>
+                <label asp-for="StudentId" class="control-label">Student</label>
+                <select asp-for="StudentId" class ="form-control" asp-items="ViewBag.Studenten"></select>
             </div>
             <div class="form-group">
                 <label asp-for="VakId" class="control-label"></label>
                 <select asp-for="VakId" class ="form-control" asp-items="ViewBag.VakId"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Cijfer invoeren" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
+<script>
+    var cijfer = 0;
+    $("#CijferInput").change(function () {
+        cijfer = $("#CijferInput").val(); // stopt cijferinput in variabele
+
+        $("#CijferInput").val(cijfer.replace(".", ",")); // vervangt een punt in input tekst met een komma
+
+        $("#Validation").text(""); // cleart validatie tekst
+
+        if (parseInt(cijfer) > 10) {
+            $("#CijferInput").val("10");
+            $("#Validation").text("Een cijfer kan niet hoger zijn dan 10");
+        }
+        else if (parseInt(cijfer) < 1)
+        {
+            $("#CijferInput").val("1");
+            $("#Validation").text("Een cijfer kan niet lager zijn dan 1");
+        }
+    });
+</script>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Terug naar overzicht</a>
 </div>
 
 @section Scripts {

@@ -6,9 +6,10 @@ using ResultatenSysteem.Models;
 
 namespace ResultatenSysteem.ViewModels
 {
-    public class GroepStudentViewModel
+    public class ResultatenStudentViewModel
     {
-        public Groep Groep { get; set; }
+        public List<Vak> Vak { get; set; }
+        public List<Resultaat> Resultaat { get; set; }
         public List<Student> Student { get; set; }
     }
 }

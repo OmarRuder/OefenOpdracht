@@ -37,11 +37,11 @@
             {
                 if (Model.Groepen.FirstOrDefault(sg => sg.GroepId == item.Id) == null)
                 {
-                    <input type="checkbox" name="GroepId" value="@item.Id" /> @item.Naam <br />
+                    <input type="checkbox" name="GroepId" value="@item.Id" /> @item.Naam <span>(@item.Groepscode)</span><br />
                 }
                 else
                 {
-                    <input type="checkbox" name="GroepId" value="@item.Id" checked /> @item.Naam <br />
+                    <input type="checkbox" name="GroepId" value="@item.Id" checked /> @item.Naam <span>(@item.Groepscode)</span><br />
                 }
             }
             <br />

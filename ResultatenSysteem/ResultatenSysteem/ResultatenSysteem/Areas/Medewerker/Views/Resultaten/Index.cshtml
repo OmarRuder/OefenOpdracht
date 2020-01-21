@@ -2,13 +2,83 @@
 
 @{
     ViewData["Title"] = "Index";
+    double cijfer = 0;
 }
-
 <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<script>
+$(document).ready(function(){
+    $(".toggler").click(function(e){
+        e.preventDefault();
+        $('.student-' + $(this).attr('data-student-toggle')).toggle();
+    });
+});
+</script>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Voornaam
+            </th>
+            <th>
+                Tussenvoegsel
+            </th>
+            <th>
+                Achternaam
+            </th>
+            <th>
+               Studentnummer
+            </th>
+            <th>Resultaten</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in ViewBag.Studenten)
+        {
+        <tr>
+            <td>@student.Voornaam</td>
+            <td>@student.Tussenvoegsel</td>
+            <td>@student.Achternaam</td>
+            <td>@student.Studentnummer</td>
+            <td>
+                <a href="#" class="toggler" data-student-toggle="@student.Id">Resultaten bekijken</a>
+                @foreach (var item in Model.Where(g => g.StudentId == student.Id))
+                {
+                <dl class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
+                    <dt>@Html.DisplayFor(modelItem => item.Vak.Vakcode)</dt>
+                    @{
+                        cijfer = item.Beoordeling;
+                    }
+                    @if (cijfer < 5.5)
+                    {
+                        <dd style="color:red;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </dd>
+                    }
+                    else
+                    {
+                        <dd style="color:forestgreen;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </dd>
+                    }
+                </dl>
+                }
+
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
 <table class="table">
     <thead>
         <tr>
@@ -19,29 +89,51 @@
                 @Html.DisplayNameFor(model => model.Student)
             </th>
             <th>
+                Studentnummer
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Vak)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Beoordeling)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Student.Achternaam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vak.Naam)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{
+                        cijfer = item.Beoordeling;
+                    }
+                    @if (cijfer < 5.5)
+                    {
+                        <span style="color:red;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </span>
+                    }
+                    else
+                    {
+                        <span style="color:forestgreen;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Voornaam)
+                    @Html.DisplayFor(modelItem => item.Student.Achternaam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Studentnummer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vak.Naam)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

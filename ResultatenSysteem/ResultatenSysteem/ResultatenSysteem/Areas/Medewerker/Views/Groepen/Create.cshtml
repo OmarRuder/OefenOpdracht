@@ -25,6 +25,10 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+            @foreach (var item in ViewBag.Vakken)
+            {
+                <input type="checkbox" name="VakId" value="@item.Id" /> <span>@item.Naam (@item.Vakcode)</span> <br />
+            }
         </form>
     </div>
 </div>

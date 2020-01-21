@@ -1,7 +1,8 @@
 ﻿@model ResultatenSysteem.Models.Groep
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Bewerken";
+    ViewData["Controller"] = "Groepen";
 }
 
 <h1>Edit</h1>
@@ -26,6 +27,18 @@
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
+            @foreach (var item in ViewBag.Vakken)
+            {
+                if (Model.Vakken.FirstOrDefault(v => v.VakId == item.Id) == null)
+                {
+                    <input type="checkbox" name="VakId" value="@item.Id" /> @item.Naam <span>(@item.Vakcode)</span><br />
+                }
+                else
+                {
+                    <input type="checkbox" name="VakId" value="@item.Id" checked /> @item.Naam <span>(@item.Vakcode)</span><br />
+                }
+            }
+            <br>
         </form>
     </div>
 </div>

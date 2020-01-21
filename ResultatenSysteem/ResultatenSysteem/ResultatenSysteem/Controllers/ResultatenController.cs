@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Data;
 using ResultatenSysteem.Models;
+using ResultatenSysteem.ViewModels;
 
 namespace ResultatenSysteem.Controllers
 {
@@ -23,9 +24,26 @@ namespace ResultatenSysteem.Controllers
         // GET: Resultaten
         public async Task<IActionResult> Index()
         {
+            ViewData["Studenten"] = _context.Student.ToList();
             var applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak);
             return View(await applicationDbContext.ToListAsync());
         }
+
+        public ViewResult Overzicht()
+        {
+            ResultatenStudentViewModel rvm = new ResultatenStudentViewModel()
+            {
+                Student = _context.Student.Include(s => s.Groepen).ToList(),
+                Vak = _context.Vak.Include(v => v.Resultaten).ToList(),
+                Resultaat = _context.Resultaat.Include(r => r.Student).ToList()
+            };
+            ViewData["Studenten"] = _context.Student.ToList();
+            ViewData["Vakken"] = _context.Vak.ToList();
+            ViewData["Resultaten"] = _context.Resultaat.ToList();
+
+            return View(rvm);
+        }
+
 
         // GET: Resultaten/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -50,7 +68,20 @@ namespace ResultatenSysteem.Controllers
         // GET: Resultaten/Create
         public IActionResult Create()
         {
-            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Achternaam");
+            var studenten = _context.Student.ToList();
+            var studentInfo = _context.Student
+                .Select(s =>
+                new
+                {
+                    Id = s.Id,
+                    Naam = string.IsNullOrEmpty(s.Tussenvoegsel)
+                    ? s.Voornaam + " " + s.Achternaam + " - " + s.Studentnummer
+                    : s.Voornaam + " " + s.Tussenvoegsel + " " + s.Achternaam + " - " + s.Studentnummer
+                });
+
+
+            ViewBag.Studenten = new SelectList(studentInfo, "Id", "Naam");
+            //ViewData["Student"] = new SelectList(studentInfo, "Id", "Voornaam");
             ViewData["VakId"] = new SelectList(_context.Set<Vak>(), "Id", "Naam");
             return View();
         }
@@ -60,15 +91,17 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
+        public async Task<IActionResult> Create(double Cijfer, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
         {
+
+            resultaat.Beoordeling = Cijfer;
             if (ModelState.IsValid)
             {
                 _context.Add(resultaat);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Achternaam", resultaat.StudentId);
+            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Voornaam", resultaat.StudentId);
             ViewData["VakId"] = new SelectList(_context.Set<Vak>(), "Id", "Naam", resultaat.VakId);
             return View(resultaat);
         }

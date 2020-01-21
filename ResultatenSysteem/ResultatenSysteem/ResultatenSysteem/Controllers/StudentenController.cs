@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Data;
 using ResultatenSysteem.Models;
+using ResultatenSysteem.ViewModels;
 
 namespace ResultatenSysteem.Controllers
 {
@@ -27,6 +28,7 @@ namespace ResultatenSysteem.Controllers
             Console.WriteLine(studentnummer);
             return View(await _context.Student.ToListAsync());
         }
+
 
         // GET: Studenten/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -63,7 +65,6 @@ namespace ResultatenSysteem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int [] GroepId, [Bind("Id,Voornaam,Achternaam,Tussenvoegsel,Studentnummer")] Student student)
         {
-            List<StudentGroep> UpdateList = new List<StudentGroep>();
             string rs = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 2);
             Random generator = new Random();
             int ri = generator.Next(9999, 99999);
@@ -75,6 +76,8 @@ namespace ResultatenSysteem.Controllers
             {
                 student.Studentnummer = ri.ToString() + rs;
             }
+
+            List<StudentGroep> UpdateList = new List<StudentGroep>();
             foreach (var item in GroepId)
             {
                 StudentGroep sg = new StudentGroep

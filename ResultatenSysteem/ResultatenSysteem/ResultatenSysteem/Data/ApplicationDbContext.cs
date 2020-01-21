@@ -29,11 +29,9 @@ namespace ResultatenSysteem.Data
 
 
         public DbSet<ResultatenSysteem.Models.Student> Student { get; set; }
-
+        public DbSet<ResultatenSysteem.Models.StudentGroep> StudentGroep { get; set; }
         public DbSet<ResultatenSysteem.Models.Groep> Groep{ get; set; }
-
         public DbSet<ResultatenSysteem.Models.Resultaat> Resultaat { get; set; }
-
         public DbSet<ResultatenSysteem.Models.Vak> Vak { get; set; }
 
     }

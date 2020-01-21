@@ -12,7 +12,7 @@ namespace ResultatenSysteem.Models
         [Required]
         public string Naam { get; set; }
         [Required]
-        public int Vakcode { get; set; }
+        public string Vakcode { get; set; }
 
         public List<Resultaat> Resultaten { get; set; }
         public List<GroepVak> Groepen { get; set; }

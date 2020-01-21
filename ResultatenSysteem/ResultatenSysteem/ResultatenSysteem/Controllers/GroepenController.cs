@@ -27,16 +27,15 @@ namespace ResultatenSysteem.Controllers
             return View(await _context.Groep.ToListAsync());
         }
 
-        public  ViewResult Overzicht(int? id, int[] StudentId)
+        public ViewResult Overzicht(int? id, int[] StudentId)
         {
-            GroepStudentViewModel groepStudentViewModel = new GroepStudentViewModel()
+            GroepStudentViewModel gsvm = new GroepStudentViewModel()
             {
                 Groep = _context.Groep.Include(g => g.Studenten).FirstOrDefault(sg => sg.Id == id),
+                Student = _context.Student.Include(s => s.Groepen).ToList()
             };
-            ViewData["Groepen"] = _context.Groep.ToList();
             ViewData["Studenten"] = _context.Student.ToList();
-            return View(groepStudentViewModel);
-
+            return View(gsvm);
         }
 
         // GET: Groepen/Details/5
@@ -60,6 +59,7 @@ namespace ResultatenSysteem.Controllers
         // GET: Groepen/Create
         public IActionResult Create()
         {
+            ViewData["Vakken"] = _context.Vak.ToList();
             return View();
         }
 
@@ -68,8 +68,19 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,Groepscode")] Groep groep)
+        public async Task<IActionResult> Create(int[] VakId, [Bind("Id,Naam,Groepscode")] Groep groep)
         {
+            List<GroepVak> UpdateList = new List<GroepVak>();
+
+            foreach ( var item in VakId)
+            {
+                GroepVak gv = new GroepVak
+                {
+                    VakId = item
+                };
+                UpdateList.Add(gv);
+            }
+            groep.Vakken = UpdateList;
             if (ModelState.IsValid)
             {
                 _context.Add(groep);
@@ -88,6 +99,8 @@ namespace ResultatenSysteem.Controllers
             }
 
             var groep = await _context.Groep.FindAsync(id);
+            ViewData["Vakken"] = _context.Vak.ToList();
+            var existingGroep = _context.Groep.Include(gv => gv.Vakken).FirstOrDefault(gv => gv.Id == id);
             if (groep == null)
             {
                 return NotFound();
@@ -100,7 +113,7 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Groepscode")] Groep groep)
+        public async Task<IActionResult> Edit(int id, int[] VakId, [Bind("Id,Naam,Groepscode")] Groep groep)
         {
             if (id != groep.Id)
             {
@@ -111,7 +124,20 @@ namespace ResultatenSysteem.Controllers
             {
                 try
                 {
-                    _context.Update(groep);
+                    Groep existingGroep = _context.Groep.Include(gv => gv.Vakken).FirstOrDefault(gv => gv.Id == id);
+                    existingGroep.Vakken.Clear();
+
+                    foreach (var item in VakId)
+                    {
+                        GroepVak gv = new GroepVak
+                        {
+                            VakId = item,
+                        };
+                        existingGroep.Vakken.Add(gv);
+                    }
+                    existingGroep.Naam = groep.Naam;
+                    existingGroep.Groepscode = groep.Groepscode;
+                    existingGroep.Studenten = groep.Studenten;
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

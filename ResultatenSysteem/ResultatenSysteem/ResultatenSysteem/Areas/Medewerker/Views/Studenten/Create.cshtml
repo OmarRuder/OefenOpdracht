@@ -35,7 +35,7 @@
             @foreach (var g in ViewBag.Groepen)
             {
                 <input type="checkbox" name="GroepId" value="@g.Id">
-                <span>@g.Naam</span>
+                <span>@g.Naam (@g.Groepscode)</span>
                 <br />
             }
             <div class="form-group">
