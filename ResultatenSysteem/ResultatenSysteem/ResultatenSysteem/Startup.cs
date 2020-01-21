@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ResultatenSysteem.Models;
 
 namespace ResultatenSysteem
 {
@@ -46,8 +47,9 @@ namespace ResultatenSysteem
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -80,6 +82,10 @@ namespace ResultatenSysteem
                   template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
             });
+
+            DataSeed.Initialize(context).Wait();
+
         }
+
     }
 }

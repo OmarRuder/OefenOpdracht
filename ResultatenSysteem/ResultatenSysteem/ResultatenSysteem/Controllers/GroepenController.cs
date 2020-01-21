@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Data;
 using ResultatenSysteem.Models;
+using ResultatenSysteem.ViewModels;
 
 namespace ResultatenSysteem.Controllers
 {
@@ -24,6 +25,18 @@ namespace ResultatenSysteem.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Groep.ToListAsync());
+        }
+
+        public  ViewResult Overzicht(int? id, int[] StudentId)
+        {
+            GroepStudentViewModel groepStudentViewModel = new GroepStudentViewModel()
+            {
+                Groep = _context.Groep.Include(g => g.Studenten).FirstOrDefault(sg => sg.Id == id),
+            };
+            ViewData["Groepen"] = _context.Groep.ToList();
+            ViewData["Studenten"] = _context.Student.ToList();
+            return View(groepStudentViewModel);
+
         }
 
         // GET: Groepen/Details/5

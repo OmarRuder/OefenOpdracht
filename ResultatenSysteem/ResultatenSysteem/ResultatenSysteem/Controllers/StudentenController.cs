@@ -23,6 +23,8 @@ namespace ResultatenSysteem.Controllers
         // GET: Studenten
         public async Task<IActionResult> Index()
         {
+            long studentnummer = DateTime.MaxValue.Ticks;
+            Console.WriteLine(studentnummer);
             return View(await _context.Student.ToListAsync());
         }
 
@@ -35,6 +37,8 @@ namespace ResultatenSysteem.Controllers
             }
             var student = await _context.Student
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            //ViewData["Groepen"] = _context.Groep.Include(s => s.Groepen).Where(sg => sg.Id == id).ToList();
             if (student == null)
             {
                 return NotFound();
@@ -46,8 +50,9 @@ namespace ResultatenSysteem.Controllers
         // GET: Studenten/Create
         public IActionResult Create()
         {
+            var student = _context.Student.ToList();
+       
             ViewData["Groepen"] = _context.Groep.ToList();
-            ViewData["GroepId"] = new SelectList(_context.Groep, "Id", "Naam");
             return View();
         }
 
@@ -59,14 +64,27 @@ namespace ResultatenSysteem.Controllers
         public async Task<IActionResult> Create(int [] GroepId, [Bind("Id,Voornaam,Achternaam,Tussenvoegsel,Studentnummer")] Student student)
         {
             List<StudentGroep> UpdateList = new List<StudentGroep>();
-
+            string rs = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 2);
+            Random generator = new Random();
+            int ri = generator.Next(9999, 99999);
+            var studentnummer = rs + ri.ToString();
+            if ( _context.Student.Where(s => s.Studentnummer == studentnummer) == null )
+            {
+                student.Studentnummer = studentnummer;
+            } else
+            {
+                student.Studentnummer = ri.ToString() + rs;
+            }
             foreach (var item in GroepId)
             {
-                StudentGroep sg = new StudentGroep();
-                sg.GroepId = item;
-                sg.StudentId = student.Id;
+                StudentGroep sg = new StudentGroep
+                {
+                    GroepId = item
+                };
+                //sg.StudentId = student.Id;
                 UpdateList.Add(sg);
             }
+
             student.Groepen = UpdateList;
 
             if (ModelState.IsValid)
@@ -87,6 +105,8 @@ namespace ResultatenSysteem.Controllers
             }
 
             var student = await _context.Student.FindAsync(id);
+            ViewData["Groepen"] = _context.Groep.ToList();
+            var existingStudent =  _context.Student.Include(sg => sg.Groepen).FirstOrDefault(sg => sg.Id == id);
             if (student == null)
             {
                 return NotFound();
@@ -99,18 +119,32 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Voornaam,Achternaam,Tussenvoegsel,Studentnummer")] Student student)
+        public async Task<IActionResult> Edit(int id, int[] GroepId, [Bind("Id,Voornaam,Achternaam,Tussenvoegsel,Studentnummer")] Student student)
         {
             if (id != student.Id)
             {
                 return NotFound();
             }
-
+       
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(student);
+                    Student existingStudent = _context.Student.Include(s => s.Groepen).FirstOrDefault(s => s.Id == id);
+                    existingStudent.Groepen.Clear();
+                    foreach (var item in GroepId)
+                    {
+                        StudentGroep sg = new StudentGroep();
+                        sg.GroepId = item;
+                        existingStudent.Groepen.Add(sg);
+                    }
+                    existingStudent.Voornaam = student.Voornaam;
+                    existingStudent.Tussenvoegsel = student.Tussenvoegsel;
+                    existingStudent.Achternaam = student.Achternaam;
+                    existingStudent.Studentnummer = student.Studentnummer;
+
+
+                    //_context.Update(student);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

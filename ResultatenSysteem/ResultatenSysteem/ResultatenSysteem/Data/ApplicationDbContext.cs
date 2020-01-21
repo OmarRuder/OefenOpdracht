@@ -19,7 +19,14 @@ namespace ResultatenSysteem.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<StudentGroep>().HasKey(sg => new { sg.StudentId, sg.GroepId });
             modelBuilder.Entity<GroepVak>().HasKey(gv => new { gv.GroepId, gv.VakId });
+
+            //ModelBuilder.Entity<Groep>().HasData(
+            //    new Groep { Id = 1, Groepscode = "017AO-A", Naam = "Applicatie/media-ontwikkelaar" },
+            //    new Groep { Id = 2, Groepscode = "017AO-A", Naam = "Applicatie/media-ontwikkelaar" });
+
         }
+
+
 
         public DbSet<ResultatenSysteem.Models.Student> Student { get; set; }
 

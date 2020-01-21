@@ -19,20 +19,33 @@
                 <span asp-validation-for="Voornaam" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Achternaam" class="control-label"></label>
-                <input asp-for="Achternaam" class="form-control" />
-                <span asp-validation-for="Achternaam" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Tussenvoegsel" class="control-label"></label>
                 <input asp-for="Tussenvoegsel" class="form-control" />
                 <span asp-validation-for="Tussenvoegsel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Achternaam" class="control-label"></label>
+                <input asp-for="Achternaam" class="form-control" />
+                <span asp-validation-for="Achternaam" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Studentnummer" class="control-label"></label>
                 <input asp-for="Studentnummer" class="form-control" />
                 <span asp-validation-for="Studentnummer" class="text-danger"></span>
             </div>
+            @foreach (var item in ViewBag.Groepen)
+            {
+                if (Model.Groepen.FirstOrDefault(sg => sg.GroepId == item.Id) == null)
+                {
+                    <input type="checkbox" name="GroepId" value="@item.Id" /> @item.Naam <br />
+                }
+                else
+                {
+                    <input type="checkbox" name="GroepId" value="@item.Id" checked /> @item.Naam <br />
+                }
+            }
+            <br />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

@@ -14,7 +14,7 @@ namespace ResultatenSysteem.Models
         [Required]
         public string Achternaam { get; set; }
         public string Tussenvoegsel { get; set; }
-        public int Studentnummer { get; set; }
+        public string Studentnummer { get; set; }
 
         public List<Resultaat> Resultaten { get; set; }
         public List<StudentGroep> Groepen { get; set; }
