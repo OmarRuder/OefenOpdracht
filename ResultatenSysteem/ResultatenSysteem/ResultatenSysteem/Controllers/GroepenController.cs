@@ -32,7 +32,8 @@ namespace ResultatenSysteem.Controllers
             GroepStudentViewModel gsvm = new GroepStudentViewModel()
             {
                 Groep = _context.Groep.Include(g => g.Studenten).FirstOrDefault(sg => sg.Id == id),
-                Student = _context.Student.Include(s => s.Groepen).ToList()
+                Student = _context.Student.Include(s => s.Groepen).ToList(),
+                Vak = _context.Vak.Include(v => v.Groepen).ToList()
             };
             ViewData["Studenten"] = _context.Student.ToList();
             return View(gsvm);

@@ -19,67 +19,72 @@
             @Model.Groep.Naam (@Model.Groep.Groepscode)
         </h1>
         <hr />
-        <h3>
-            Studenten:
-        </h3>
+        <div class="row">
+            <div class="col" style="width:200%;">
+                <h3>
+                    Studenten:
+                </h3>
 
-        <table id="detailTable" class="table table-bordered table-striped table-hover" style="width:50%;">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Studentnummer</th>
-                    <th>Voornaam</th>
-                    <th>Tussenvoegsel</th>
-                    <th>Achternaam</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Student)
-                {
-                    foreach (var g in item.Groepen)
-                    {
-                        if (g.GroepId == Model.Groep.Id)
+                <table id="detailTable" class="table table-bordered table-striped table-hover" style="width:50%;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Studentnummer</th>
+                            <th>Voornaam</th>
+                            <th>Tussenvoegsel</th>
+                            <th>Achternaam</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Student)
                         {
-                            <tr>
-                                <td>@item.Studentnummer</td>
-                                <td>@item.Voornaam</td>
-                                <td>@item.Tussenvoegsel</td>
-                                <td>@item.Achternaam</td>
-                            </tr>
+                            foreach (var g in item.Groepen)
+                            {
+                                if (g.GroepId == Model.Groep.Id)
+                                {
+                                    <tr>
+                                        <td>@item.Studentnummer</td>
+                                        <td>@item.Voornaam</td>
+                                        <td>@item.Tussenvoegsel</td>
+                                        <td>@item.Achternaam</td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                }
-                @foreach (var item in Model.Student)
-                {
-                    foreach (var g in item.Groepen)
-                    {
-                        if (g.GroepId == Model.Groep.Id)
+                    </tbody>
+                </table>
+            </div>
+            <div class="col" style="width:200%;">
+                <h3>
+                    Vakken:
+                </h3>
+
+                <table id="detailTable" class="table table-bordered table-striped table-hover" style="width:50%;">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Vakcode</th>
+                            <th>Vak</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Vak)
                         {
-                            <tr>
-                                <td>@item.Studentnummer</td>
-                                <td>@item.Voornaam (2)</td>
-                                <td>@item.Tussenvoegsel</td>
-                                <td>@item.Achternaam</td>
-                            </tr>
+                            foreach (var g in item.Groepen)
+                            {
+                                if (g.GroepId == Model.Groep.Id)
+                                {
+                                    <tr>
+                                        <td>@item.Vakcode</td>
+                                        <td>@item.Naam</td>
+                                        <td>Resultaten</td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                }
-                @foreach (var item in Model.Student)
-                {
-                    foreach (var g in item.Groepen)
-                    {
-                        if (g.GroepId == Model.Groep.Id)
-                        {
-                            <tr>
-                                <td>@item.Studentnummer</td>
-                                <td>@item.Voornaam (3)</td>
-                                <td>@item.Tussenvoegsel</td>
-                                <td>@item.Achternaam</td>
-                            </tr>
-                        }
-                    }
-                }
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <div>
             <a asp-action="Edit" asp-route-id="@Model.Groep.Id">Edit</a> |
             <a asp-action="Index">Back to List</a>
