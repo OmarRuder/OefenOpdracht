@@ -10,5 +10,6 @@ namespace ResultatenSysteem.ViewModels
     {
         public Groep Groep { get; set; }
         public List<Student> Student { get; set; }
+        public List<Vak> Vak { get; set; }
     }
 }
