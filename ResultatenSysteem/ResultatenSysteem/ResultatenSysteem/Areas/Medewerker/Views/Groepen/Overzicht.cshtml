@@ -48,36 +48,6 @@
                         }
                     }
                 }
-                @foreach (var item in Model.Student)
-                {
-                    foreach (var g in item.Groepen)
-                    {
-                        if (g.GroepId == Model.Groep.Id)
-                        {
-                            <tr>
-                                <td>@item.Studentnummer</td>
-                                <td>@item.Voornaam (2)</td>
-                                <td>@item.Tussenvoegsel</td>
-                                <td>@item.Achternaam</td>
-                            </tr>
-                        }
-                    }
-                }
-                @foreach (var item in Model.Student)
-                {
-                    foreach (var g in item.Groepen)
-                    {
-                        if (g.GroepId == Model.Groep.Id)
-                        {
-                            <tr>
-                                <td>@item.Studentnummer</td>
-                                <td>@item.Voornaam (3)</td>
-                                <td>@item.Tussenvoegsel</td>
-                                <td>@item.Achternaam</td>
-                            </tr>
-                        }
-                    }
-                }
             </tbody>
         </table>
         <div>

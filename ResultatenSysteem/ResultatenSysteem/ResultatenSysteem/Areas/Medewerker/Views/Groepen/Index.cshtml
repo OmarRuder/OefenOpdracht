@@ -12,12 +12,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Naam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Groepscode)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Naam)</th>
+            <th>@Html.DisplayNameFor(model => model.Groepscode)</th>
+            <th>Vakken</th>
             <th></th>
         </tr>
     </thead>
@@ -31,11 +28,80 @@
                 @Html.DisplayFor(modelItem => item.Groepscode)
             </td>
             <td>
+                @foreach (var vak in ViewBag.Vakken)
+                {
+                    @vak.Naam
+                    @foreach (var vak2 in Model.Where(v => v.Id == vak.Id))
+                    {
+
+                                <dd style="color:red;">
+                                    @vak2.Naam
+                                    @Html.DisplayFor(modelItem => item.Vakken)
+                                </dd>
+
+                        }
+                    }
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Overzicht" asp-route-id="@item.Id">Overzicht</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
+    </tbody>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Voornaam
+            </th>
+            <th>
+                Tussenvoegsel
+            </th>
+            <th>
+                Achternaam
+            </th>
+            <th>
+                Studentnummer
+            </th>
+            <th>Resultaten</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vak in ViewBag.Vakken)
+        {
+            <tr>
+                <td>@vak.Naam</td>
+                <td>@vak.Vakcode</td>
+                <td>
+                    @*<a href="#" class="toggler" data-student-toggle="@student.Id">Resultaten bekijken</a>
+                    @foreach (var item in Model.Where(g => g.StudentId == student.Id))
+                    {
+                        <dl class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
+                            <dt>@Html.DisplayFor(modelItem => item.Vak.Vakcode)</dt>
+                            @{
+                                cijfer = item.Beoordeling;
+                            }
+                            @if (cijfer < 5.5)
+                            {
+                                <dd style="color:red;">
+                                    @Html.DisplayFor(modelItem => item.Beoordeling)
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd style="color:forestgreen;">
+                                    @Html.DisplayFor(modelItem => item.Beoordeling)
+                                </dd>
+                            }
+                        </dl>
+                    }*@
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

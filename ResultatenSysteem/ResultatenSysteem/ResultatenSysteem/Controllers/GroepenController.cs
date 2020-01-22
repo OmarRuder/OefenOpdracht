@@ -24,6 +24,8 @@ namespace ResultatenSysteem.Controllers
         // GET: Groepen
         public async Task<IActionResult> Index()
         {
+            ViewData["Vakken"] = _context.Vak.ToList();
+            var applicationDbContext = _context.Vak.Include(v => v.Groepen);
             return View(await _context.Groep.ToListAsync());
         }
 
