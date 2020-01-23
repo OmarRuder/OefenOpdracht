@@ -7,17 +7,24 @@
 
 
 <h1>Studenten</h1>
+
 <div class="form-group" style="margin:2% 0% 6% 0%;">
     <a class="btn btn-primary" style="float:left;margin-right:20%;color:white;" asp-action="Create">
         Cijfer invoeren
     </a>
     <form asp-controller="Resultaten" asp-action="Index" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
         <div class="input-group" style="color:white;">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" id="searchString" aria-label="Search" aria-describedby="basic-addon2">
+            <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" aria-label="Search" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                @*<i class="fas fa-search fa-sm"></i>*@
+                <select class="form-control bg-light border-0 small" name="groepId">
+                    <option value="">Alle groepen</option>
+                    @foreach (var groep in ViewBag.Groepen)
+                    {
+                        <option value="@groep.Id">@groep.Naam (@groep.Groepscode)</option>
+                    }
+                </select>
                 <input class="btn btn-primary" type="submit" value="Zoeken" />
-                <a class="btn btn-primary" asp-action="Index">
+                <a class="btn btn-primary" asp-action="Index" asp-route-id="0">
                     <i class="fas fa-sync"></i>
                 </a>
             </div>
@@ -40,13 +47,11 @@
 </style>
 
 <script>
-    var test = "";
     $(document).ready(function () {
         $(".toggler").click(function (e) {
             e.preventDefault();
             $('.student-' + $(this).attr('data-student-toggle')).fadeToggle("fast");
             $('.toggle-' + $(this).attr('data-student-toggle')).toggleClass("down");
-            //$(this).attr('data-student-toggle') + $('.rotate').
         });
     });
 </script>
@@ -58,82 +63,90 @@
             <th>Naam</th>
             <th>Studentnummer</th>
             <th>Resultaten</th>
+            <th>Groepen</th>
             <th>Cijfer acties</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var student in ViewBag.Studenten)
         {
-        <tr>
-            <td style="width:20%;">
-                @student.Voornaam
-                @student.Tussenvoegsel
-                @student.Achternaam
-            </td>
-            <td style="width:20%;">@student.Studentnummer</td>
-            <td style="padding-bottom:2%;margin-bottom:5%;">
-                @if (student.Resultaten != null)
-                {
-                    <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate toggle-@student.Id"></i></a>
-                }
-                else
-                {
-                    <span class="text-danger" style="float:left;">Deze student heeft nog geen cijfers</span>
-                }
-                <br />
-                @foreach (var item in Model.Where(g => g.StudentId == student.Id))
-                {
-                    <span class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
-                        @Html.DisplayFor(modelItem => item.Vak.Vakcode)
-                        @{
-                            cijfer = item.Beoordeling;
-                        }
-                        @if (cijfer < 5.5)
-                        {
+            <tr>
+                <td style="width:20%;">
+                    @student.Voornaam
+                    @student.Tussenvoegsel
+                    @student.Achternaam
+                </td>
+                <td style="width:20%;">@student.Studentnummer</td>
+                <td style="padding-bottom:2%;margin-bottom:5%;">
+                    @if (student.Resultaten != null)
+                    {
+                        <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate toggle-@student.Id"></i></a>
+                    }
+                    else
+                    {
+                        <span class="text-danger" style="float:left;">Deze student heeft nog geen cijfers</span>
+                    }
+                    <br />
+                    @foreach (var item in Model.Where(g => g.StudentId == student.Id))
+                    {
+                        <span class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
+                            @Html.DisplayFor(modelItem => item.Vak.Vakcode)
+                            @{
+                                cijfer = item.Beoordeling;
+                            }
+                            @if (cijfer < 5.5)
+                            {
 
-                            <span style="color:red;">
-                                @Html.DisplayFor(modelItem => item.Beoordeling)
-                            </span>
+                                <span style="color:red;">
+                                    @Html.DisplayFor(modelItem => item.Beoordeling)
+                                </span>
 
-                        }
-                        else
-                        {
+                            }
+                            else
+                            {
 
-                            <span style="color:forestgreen;">
-                                @Html.DisplayFor(modelItem => item.Beoordeling)
-                            </span>
+                                <span style="color:forestgreen;">
+                                    @Html.DisplayFor(modelItem => item.Beoordeling)
+                                </span>
 
-                        }
-                    </span>
-                }
+                            }
+                        </span>
+                    }
 
-            </td>
-            <td style="width:25%;">
-                <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
-                    <div class="input-group" style="color:white;">
-                        <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
-                        <div>
-                            <input class="btn btn-primary" type="submit" value="Invoeren" />
-                        </div>
-                    </div>
-                </form>
-                @if (student.Resultaten != null)
-                {
-                    <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:45%;">
+                </td>
+                <td>
+                    @foreach (var groep in student.Groepen)
+                    {
+                        <span>@groep.GroepId</span>
+                    }
+                </td>
+                <td style="width:25%;">
+                    <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
                         <div class="input-group" style="color:white;">
-                            <input name="studentId" value="@student.Id" style="display:none;">
+                            <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
                             <div>
-                                <input class="btn btn-primary" type="submit" value="Aanpassen" />
+                                <input class="btn btn-primary" type="submit" value="Invoeren" />
                             </div>
                         </div>
                     </form>
-                } else
-                {
-                    <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
-                }
+                    @if (student.Resultaten != null)
+                    {
+                        <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:45%;">
+                            <div class="input-group" style="color:white;">
+                                <input name="studentId" value="@student.Id" style="display:none;">
+                                <div>
+                                    <input class="btn btn-primary" type="submit" value="Aanpassen" />
+                                </div>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
+                    }
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

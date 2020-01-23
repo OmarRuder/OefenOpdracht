@@ -22,21 +22,61 @@ namespace ResultatenSysteem.Controllers
         }
 
         // GET: Resultaten
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int groepId, int Id)
         {
             ViewData["Studenten"] = _context.Student.OrderBy(s => s.Voornaam).ToList();
+            ViewData["Groepen"] = _context.Groep.Include(g => g.Studenten).ToList();
+
+            var studentInfo = _context.Student.Join(_context.StudentGroep,
+            s => s.Id,
+            sg => sg.StudentId,
+            (s, sg) => new { Student = s, StudentGroep = sg })
+            .Where(x => x.StudentGroep.GroepId == groepId)
+            .Select(x => x.Student)
+            .ToList();
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 ViewData["Studenten"] = _context.Student.Where(s => s.Voornaam.Contains(searchString)).ToList();
             }
+            if (Id >= 1)
+            {
+                ViewData["Studenten"] = _context.Student.Where(s => s.Id == Id).ToList();
+            }
+            if (groepId >= 1)
+            {
+                ViewData["Studenten"] = studentInfo.ToList();
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    ViewData["Studenten"] = studentInfo.Where(s => s.Voornaam.Contains(searchString) || s.Achternaam.Contains(searchString)).ToList();
+                }
+            }
+
             var applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(r => r.VakId);
             return View(await applicationDbContext.ToListAsync());
         }
 
+
+        // combined query om searchstring op te vullen met zowel voornaam als tussen voegsel als achternaam
+        //(niet werkend)
+        //var studentInfo = _context.Student.Join(_context.StudentGroep,
+        //st => st.Id,
+        //stg => stg.StudentId,
+        //(st, stg) => new { Student = st, StudentGroep = stg })
+        //.Where(x => x.StudentGroep.GroepId == groepId)
+        //.Select(s =>
+        //new
+        //{
+        //    s.Student,
+
+        //    searchString = string.IsNullOrEmpty(s.Student.Tussenvoegsel)
+        //       ? s.Student.Voornaam + " " + s.Student.Achternaam
+        //       : s.Student.Voornaam + " " + s.Student.Tussenvoegsel + " " + s.Student.Achternaam,
+        //})
+        //.ToList();
+
         public async Task<IActionResult> Aanpassen(int studentId)
         {
-            //ViewBag.Studenten = new SelectList(_context.Student.ToList(), "Id", "Naam");
-
             // Hier wordt viewdata student gevuld met maar 1 student, om de view dynamisch te maken (aanpassen van student x) indien de view maar 1 student betreft.
             ViewData["Student"] = _context.Student.Where(s => s.Id == studentId).ToList();
 
@@ -49,21 +89,21 @@ namespace ResultatenSysteem.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public ViewResult Overzicht()
-        {
-            ResultatenStudentViewModel rvm = new ResultatenStudentViewModel()
-            {
-                Student = _context.Student.Include(s => s.Groepen).ToList(),
-                Vak = _context.Vak.Include(v => v.Resultaten).ToList(),
-                Resultaat = _context.Resultaat.Include(r => r.Student).ToList()
-            };
-            ViewData["Studenten"] = _context.Student.ToList();
-            ViewData["Vakken"] = _context.Vak.ToList();
-            ViewData["Resultaten"] = _context.Resultaat.ToList();
+        // async task aanpassen maar dan filterbaar op naam
 
-            return View(rvm);
-        }
+        //ViewData["Student"] = _context.Student.ToList();
+        //var applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.StudentId == studentId).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
 
+        //if (!String.IsNullOrEmpty(searchString))
+        //{
+        //    ViewData["Student"] = _context.Student.Where(s => s.Voornaam.Contains(searchString)).ToList();
+        //    applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.Student.Voornaam.Contains(searchString)).Include(r => r.Vak).OrderBy(r => r.VakId);
+
+        //}
+        //else
+        //{
+        //    applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
+        //}
 
         // GET: Resultaten/Details/5
         public async Task<IActionResult> Details(int? id)

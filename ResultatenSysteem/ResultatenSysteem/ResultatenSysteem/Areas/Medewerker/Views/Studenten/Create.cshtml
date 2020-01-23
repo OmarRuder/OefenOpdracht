@@ -4,9 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Student</h4>
+<h1>Student toevoegen</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,18 +16,18 @@
                 <span asp-validation-for="Voornaam" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Achternaam" class="control-label"></label>
-                <input asp-for="Achternaam" class="form-control" />
-                <span asp-validation-for="Achternaam" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Tussenvoegsel" class="control-label"></label>
                 <input asp-for="Tussenvoegsel" class="form-control" />
                 <span asp-validation-for="Tussenvoegsel" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Achternaam" class="control-label"></label>
+                <input asp-for="Achternaam" class="form-control" />
+                <span asp-validation-for="Achternaam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Studentnummer" class="control-label"></label>
-                <input asp-for="Studentnummer" class="form-control" />
+                <input asp-for="Studentnummer" class="form-control" disabled value="n.v.t" style="cursor:not-allowed;"/>
                 <span asp-validation-for="Studentnummer" class="text-danger"></span>
             </div>
             @foreach (var g in ViewBag.Groepen)

@@ -32,20 +32,31 @@
                             <th>Voornaam</th>
                             <th>Tussenvoegsel</th>
                             <th>Achternaam</th>
+                            <th>Cijfer</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.Student)
+                        @foreach (var student in Model.Student)
                         {
-                            foreach (var g in item.Groepen)
+                            foreach (var groep in student.Groepen)
                             {
-                                if (g.GroepId == Model.Groep.Id)
+                                if (groep.GroepId == Model.Groep.Id)
                                 {
                                     <tr>
-                                        <td>@item.Studentnummer</td>
-                                        <td>@item.Voornaam</td>
-                                        <td>@item.Tussenvoegsel</td>
-                                        <td>@item.Achternaam</td>
+                                        <td>@student.Studentnummer</td>
+                                        <td>@student.Voornaam</td>
+                                        <td>@student.Tussenvoegsel</td>
+                                        <td>@student.Achternaam</td>
+                                        <td>
+                                            <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
+                                                <div class="input-group" style="color:white;">
+                                                    <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
+                                                    <div>
+                                                        <input class="btn btn-primary" type="submit" value="Invoeren" />
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </td>
                                     </tr>
                                 }
                             }
