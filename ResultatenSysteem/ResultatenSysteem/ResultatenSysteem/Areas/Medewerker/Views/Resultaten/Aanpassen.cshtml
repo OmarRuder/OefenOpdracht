@@ -1,0 +1,80 @@
+﻿@model IEnumerable<ResultatenSysteem.Models.Resultaat>
+
+@{
+    ViewData["Title"] = "Index";
+    double cijfer = 0;
+}
+
+
+<h1>
+    Resultaten aanpassen
+    @foreach (var item in ViewBag.Student)
+    {
+        <span>
+            van @item.Voornaam @item.Tussenvoegsel @item.Achternaam
+        </span>
+    }
+</h1>
+<a asp-action="Index">Terug naar overzicht</a>
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Beoordeling)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student)
+            </th>
+            <th>
+                Studentnummer
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vak)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{
+                        cijfer = item.Beoordeling;
+                    }
+                    @if (cijfer < 5.5)
+                    {
+                        <span style="color:red;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </span>
+                    }
+                    else
+                    {
+                        <span style="color:forestgreen;">
+                            @Html.DisplayFor(modelItem => item.Beoordeling)
+                        </span>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Voornaam)
+                    @Html.DisplayFor(modelItem => item.Student.Tussenvoegsel)
+                    @Html.DisplayFor(modelItem => item.Student.Achternaam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.Studentnummer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Vak.Naam)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

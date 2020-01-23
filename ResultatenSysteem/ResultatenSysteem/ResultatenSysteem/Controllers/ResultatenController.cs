@@ -22,10 +22,30 @@ namespace ResultatenSysteem.Controllers
         }
 
         // GET: Resultaten
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            ViewData["Studenten"] = _context.Student.ToList();
-            var applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak);
+            ViewData["Studenten"] = _context.Student.OrderBy(s => s.Voornaam).ToList();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                ViewData["Studenten"] = _context.Student.Where(s => s.Voornaam.Contains(searchString)).ToList();
+            }
+            var applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(r => r.VakId);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> Aanpassen(int studentId)
+        {
+            //ViewBag.Studenten = new SelectList(_context.Student.ToList(), "Id", "Naam");
+
+            // Hier wordt viewdata student gevuld met maar 1 student, om de view dynamisch te maken (aanpassen van student x) indien de view maar 1 student betreft.
+            ViewData["Student"] = _context.Student.Where(s => s.Id == studentId).ToList();
+
+            // Hier wordt de context gevuld met alle resultaten
+            var applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.StudentId == studentId).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
+            if (studentId < 1) // als er een studentid meegegeven is wordt de context gevuld met alle studenten met hetzelfde id
+            {
+                applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(r => r.VakId);
+            }
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -66,21 +86,25 @@ namespace ResultatenSysteem.Controllers
         }
 
         // GET: Resultaten/Create
-        public IActionResult Create()
+        public IActionResult Create(string forStudent)
         {
             var studenten = _context.Student.ToList();
             var studentInfo = _context.Student
                 .Select(s =>
                 new
                 {
-                    Id = s.Id,
+                    s.Id,
                     Naam = string.IsNullOrEmpty(s.Tussenvoegsel)
                     ? s.Voornaam + " " + s.Achternaam + " - " + s.Studentnummer
-                    : s.Voornaam + " " + s.Tussenvoegsel + " " + s.Achternaam + " - " + s.Studentnummer
+                    : s.Voornaam + " " + s.Tussenvoegsel + " " + s.Achternaam + " - " + s.Studentnummer,
+                    forStudent = s.Studentnummer + "-" + s.Achternaam
                 });
 
-
             ViewBag.Studenten = new SelectList(studentInfo, "Id", "Naam");
+            if (!String.IsNullOrEmpty(forStudent))
+            {
+                ViewBag.Studenten = new SelectList(studentInfo.Where(s => s.forStudent == forStudent), "Id", "Naam");
+            }
             //ViewData["Student"] = new SelectList(studentInfo, "Id", "Voornaam");
             ViewData["VakId"] = new SelectList(_context.Set<Vak>(), "Id", "Naam");
             return View();

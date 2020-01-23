@@ -60,6 +60,14 @@ namespace ResultatenSysteem.Controllers
         }
 
         // GET: Groepen/Create
+        public IActionResult ResultaatInvoeren()
+        {
+            ViewData["Vakken"] = _context.Vak.ToList();
+
+            return View();
+        }
+
+        // GET: Groepen/Create
         public IActionResult Create()
         {
             ViewData["Vakken"] = _context.Vak.ToList();
