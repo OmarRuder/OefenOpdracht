@@ -82,9 +82,12 @@ namespace ResultatenSysteem.Controllers
 
             // Hier wordt de context gevuld met alle resultaten
             var applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.StudentId == studentId).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
-            if (studentId < 1) // als er een studentid meegegeven is wordt de context gevuld met alle studenten met hetzelfde id
+            if (studentId > 0) // als er een studentid meegegeven is wordt de context gevuld met alle studenten met hetzelfde id
             {
-                applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(r => r.VakId);
+                applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.StudentId == studentId).Include(r => r.Vak).OrderBy(r => r.Vak.Naam);
+            } else
+            {
+                applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam).ThenBy(r => r.Vak.Naam);
             }
             return View(await applicationDbContext.ToListAsync());
         }
@@ -183,6 +186,18 @@ namespace ResultatenSysteem.Controllers
             {
                 return NotFound();
             }
+            var studentInfo = _context.Student
+             .Select(s =>
+             new
+             {
+                 s.Id,
+                 Naam = string.IsNullOrEmpty(s.Tussenvoegsel)
+                 ? s.Voornaam + " " + s.Achternaam + " - " + s.Studentnummer
+                 : s.Voornaam + " " + s.Tussenvoegsel + " " + s.Achternaam + " - " + s.Studentnummer,
+                 forStudent = s.Studentnummer + "-" + s.Achternaam
+             });
+
+            ViewBag.Studenten = new SelectList(studentInfo, "Id", "Naam");
             ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Achternaam", resultaat.StudentId);
             ViewData["VakId"] = new SelectList(_context.Set<Vak>(), "Id", "Naam", resultaat.VakId);
             return View(resultaat);
@@ -193,7 +208,7 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
+        public async Task<IActionResult> Edit(int id, double Cijfer, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
         {
             if (id != resultaat.Id)
             {
@@ -204,6 +219,7 @@ namespace ResultatenSysteem.Controllers
             {
                 try
                 {
+                    //resultaat.Beoordeling = Cijfer;
                     _context.Update(resultaat);
                     await _context.SaveChangesAsync();
                 }

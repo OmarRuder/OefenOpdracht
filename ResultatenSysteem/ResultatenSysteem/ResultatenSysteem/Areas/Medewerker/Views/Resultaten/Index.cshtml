@@ -63,7 +63,6 @@
             <th>Naam</th>
             <th>Studentnummer</th>
             <th>Resultaten</th>
-            <th>Groepen</th>
             <th>Cijfer acties</th>
         </tr>
     </thead>
@@ -94,30 +93,18 @@
                             @{
                                 cijfer = item.Beoordeling;
                             }
-                            @if (cijfer < 5.5)
-                            {
-
-                                <span style="color:red;">
-                                    @Html.DisplayFor(modelItem => item.Beoordeling)
-                                </span>
-
-                            }
-                            else
-                            {
-
-                                <span style="color:forestgreen;">
-                                    @Html.DisplayFor(modelItem => item.Beoordeling)
-                                </span>
-
-                            }
+                           @if (cijfer < 5.5)
+                           {
+                               <span style="color:red;">
+                                   @item.Beoordeling
+                               </span>
+                           } else
+                           {
+                               <span style="color:forestgreen;">
+                                   @item.Beoordeling
+                               </span>
+                           }
                         </span>
-                    }
-
-                </td>
-                <td>
-                    @foreach (var groep in student.Groepen)
-                    {
-                        <span>@groep.GroepId</span>
                     }
                 </td>
                 <td style="width:25%;">
