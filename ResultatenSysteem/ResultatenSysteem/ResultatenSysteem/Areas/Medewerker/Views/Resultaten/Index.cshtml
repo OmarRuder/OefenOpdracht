@@ -88,34 +88,73 @@
                 </td>
                 <td style="width:20%;">@student.Studentnummer</td>
                 <td style="padding-bottom:2%;margin-bottom:5%;">
-                    @if (student.Resultaten != null)
+
+                    @if (Enumerable.Count(ViewBag.Studenten) <= 1)
                     {
-                        <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate toggle-@student.Id"></i></a>
+                        @if (student.Resultaten != null)
+                        {
+                            <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate down toggle-@student.Id"></i></a>
+                        }
+
                     }
                     else
                     {
+                        @if (student.Resultaten != null)
+                        {
+                            <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate toggle-@student.Id"></i></a>
+                        }
+
+                    }
+                    @if (student.Resultaten == null)
+                    {
                         <span class="text-danger" style="float:left;">Deze student heeft nog geen cijfers</span>
+
                     }
                     <br />
                     @foreach (var item in Model.Where(g => g.StudentId == student.Id))
                     {
-                        <span class="student-@item.StudentId" id="studentenCijfers" style="display:none;">
-                            @Html.DisplayFor(modelItem => item.Vak.Vakcode)
-                            @{
-                                cijfer = item.Beoordeling;
-                            }
-                           @if (cijfer < 5.5)
-                           {
-                               <span style="color:red;">
-                                   @item.Beoordeling
-                               </span>
-                           } else
-                           {
-                               <span style="color:forestgreen;">
-                                   @item.Beoordeling
-                               </span>
-                           }
-                        </span>
+                        @if (Enumerable.Count(ViewBag.Studenten) <= 1)
+                        {
+                            <span class="student-@item.StudentId" id="studentenCijfers" style="display:normal;">
+                                @Html.DisplayFor(modelItem => item.Vak.Vakcode)
+                                @{
+                                    cijfer = item.Beoordeling;
+                                }
+                                @if (cijfer < 5.5)
+                                {
+                                    <span style="color:red;">
+                                        @item.Beoordeling
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="color:forestgreen;">
+                                        @item.Beoordeling
+                                    </span>
+                                }
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="student-@item.StudentId" id="studentenCijfers" style="display:none;">
+                                @Html.DisplayFor(modelItem => item.Vak.Vakcode)
+                                @{
+                                    cijfer = item.Beoordeling;
+                                }
+                                @if (cijfer < 5.5)
+                                {
+                                    <span style="color:red;">
+                                        @item.Beoordeling
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span style="color:forestgreen;">
+                                        @item.Beoordeling
+                                    </span>
+                                }
+                            </span>
+                        }
                     }
                 </td>
                 <td style="width:25%;">
