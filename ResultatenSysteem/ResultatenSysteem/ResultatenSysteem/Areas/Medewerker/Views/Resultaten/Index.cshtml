@@ -48,6 +48,19 @@
 
 <script>
     $(document).ready(function () {
+        //if ($("#studentenTabel tr").length < 3) {
+        //    $('.rotate').addClass("down");
+        //    $('#studentenCijfers').show();
+        //    console.log("studentenTabel length: " + $("#studentenTabel tr").length);
+        //} else {
+        //}
+        //$("#test").click(function () {
+        //    $('#studentenCijfers').hide();
+        //});
+        //if ($("#studentenTabel tr").length > 3) {
+        //    $('#studentenCijfers').hide();
+        //    console.log("studentenTabel lengths: " + $("#studentenTabel tr").length);
+        //}
         $(".toggler").click(function (e) {
             e.preventDefault();
             $('.student-' + $(this).attr('data-student-toggle')).fadeToggle("fast");
@@ -55,9 +68,7 @@
         });
     });
 </script>
-
-
-<table class="table" style="margin-top:2%;">
+<table id="studentenTabel" class="table" style="margin-top:2%;">
     <thead>
         <tr>
             <th>Naam</th>
@@ -88,7 +99,7 @@
                     <br />
                     @foreach (var item in Model.Where(g => g.StudentId == student.Id))
                     {
-                        <span class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
+                        <span class="student-@item.StudentId" id="studentenCijfers" style="display:none;">
                             @Html.DisplayFor(modelItem => item.Vak.Vakcode)
                             @{
                                 cijfer = item.Beoordeling;

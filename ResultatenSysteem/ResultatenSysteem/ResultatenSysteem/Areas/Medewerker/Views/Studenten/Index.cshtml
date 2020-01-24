@@ -4,22 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Studentenlijst</h1>
+
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Student Toevoegen</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Voornaam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Achternaam)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tussenvoegsel)
+              Naam
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Studentnummer)
@@ -28,26 +23,52 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Voornaam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Achternaam)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tussenvoegsel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Studentnummer)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {        
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Voornaam)
+                    @Html.DisplayFor(modelItem => item.Tussenvoegsel)
+                    @Html.DisplayFor(modelItem => item.Achternaam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Studentnummer)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a href="#" data-toggle="modal" data-target="#afrekenenFalse-@item.Id">
+                        Verwijderen
+                    </a>
+                    |
+                    <a asp-controller="Resultaten" asp-action="Index" asp-route-id="@item.Id">Resultaten bekijken</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@foreach (var item in Model)
+{
+     <div class="modal fade" id="afrekenenFalse-@item.Id" tabindex="-" role="dialog" aria-labelledby="afrekenenFalseTitle" aria-hidden="false">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content" style="text-align: center;">
+                        <span style="margin-top:1%;font-size:35px;color:orange;">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </span>
+                        <h3>U staat op het punt om een student te verwijderen</h3>
+                        <div class="modal-body">
+                            <div class="alert alert-danger">
+                                Weet u zeker dat u deze actie wilt voltooien? Dit kan niet ongedaan worden.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <span style="float:left!important;margin-right:10%;font-size:0,5rem;">@item.Voornaam @item.Tussenvoegsel @item.Achternaam (@item.Studentnummer)</span>
+                            <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-id="@item.Id">Verwijderen</a>
+                            <button type="button" class="btn" data-dismiss="modal"><i  class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+}

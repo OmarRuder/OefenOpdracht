@@ -184,6 +184,15 @@ namespace ResultatenSysteem.Controllers
             return View(student);
         }
 
+        public async Task<IActionResult> DeleteStudent(int? id)
+        {
+            var student = await _context.Student
+                .FirstOrDefaultAsync(s => s.Id == id);
+            _context.Student.Remove(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
         // POST: Studenten/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
