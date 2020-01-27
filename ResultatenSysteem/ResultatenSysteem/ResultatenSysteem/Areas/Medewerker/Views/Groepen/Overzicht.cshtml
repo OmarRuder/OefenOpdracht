@@ -85,9 +85,20 @@
                                 if (g.GroepId == Model.Groep.Id)
                                 {
                                     <tr>
+                                       
                                         <td>@item.Vakcode</td>
                                         <td>@item.Naam</td>
-                                        <td>Resultaten</td>
+                                        <td>
+                                        <form asp-controller="Resultaten" asp-action="GroepsResultaten" method="get" style="float:left;">
+                                            <div class="input-group" style="color:white;">
+                                                <input name="vakId" value="@item.Id" style="display:none;" />
+                                                <input name="groepId" value="@Model.Groep.Id"  style="display:none;" />
+                                                <div>
+                                                    <input class="btn btn-primary" type="submit" value="Invoeren" />
+                                                </div>
+                                            </div>       
+                                        </form>
+                                        </td>
                                     </tr>
                                 }
                             }

@@ -92,22 +92,7 @@ namespace ResultatenSysteem.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // async task aanpassen maar dan filterbaar op naam
-
-        //ViewData["Student"] = _context.Student.ToList();
-        //var applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.StudentId == studentId).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
-
-        //if (!String.IsNullOrEmpty(searchString))
-        //{
-        //    ViewData["Student"] = _context.Student.Where(s => s.Voornaam.Contains(searchString)).ToList();
-        //    applicationDbContext = _context.Resultaat.Include(r => r.Student).Where(s => s.Student.Voornaam.Contains(searchString)).Include(r => r.Vak).OrderBy(r => r.VakId);
-
-        //}
-        //else
-        //{
-        //    applicationDbContext = _context.Resultaat.Include(r => r.Student).Include(r => r.Vak).OrderBy(s => s.Student.Voornaam);
-        //}
-
+     
         // GET: Resultaten/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -125,6 +110,74 @@ namespace ResultatenSysteem.Controllers
                 return NotFound();
             }
 
+            return View(resultaat);
+        }
+
+        public IActionResult GroepsResultaten(int vakId, int groepId)
+        {
+            var studentenLijst = _context.Student.Join(_context.StudentGroep,
+               s => s.Id,
+               sg => sg.StudentId,
+               (s, sg) => new { Student = s, StudentGroep = sg })
+               .Where(x => x.StudentGroep.GroepId == groepId)
+               .Select(x => x.Student)
+               .ToList();
+
+            if (vakId >= 1)
+            {
+                ViewData["Vak"] = _context.Vak.Where(v => v.Id == vakId).ToList();
+            }
+            if (groepId >= 1)
+            {
+                ViewData["Groep"] = _context.Groep.Where(g => g.Id == groepId).ToList();
+                ViewData["Studenten"] = studentenLijst.ToList();
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GroepsResultaten(int vakId, int[] studentId, double [] cijfers, [Bind("Id,Beoordeling,StudentId,VakId")] List<Resultaat> resultatenLijst, Resultaat resultaat)
+        {
+            Console.WriteLine("vakId is :" + vakId);
+            if (ModelState.IsValid)
+            {
+                //foreach (var student in studentId)
+                //{
+                //    foreach (var cijfer in cijfers)
+                //    {
+                //        Resultaat res = new Resultaat
+                //        {
+                //            StudentId = student,
+                //            Beoordeling = cijfer,
+                //            VakId = vakId
+                //        };
+                //        Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
+                //        resultatenLijst.Add(res);
+                //    }
+                //    Console.WriteLine("studentId is :" + student.ToString());
+                //}
+
+                foreach (var cijfer in cijfers)
+                {
+                    foreach (var student in studentId)
+                    {
+                        Resultaat res = new Resultaat
+                        {
+                            StudentId = student,
+                            Beoordeling = cijfer,
+                            VakId = vakId
+                        };
+                        Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
+                        resultatenLijst.Add(res);
+                    }
+                }
+                _context.Resultaat.AddRange(resultatenLijst);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["StudentId"] = new SelectList(_context.Student, "Id", "Voornaam", resultaat.StudentId);
+            ViewData["VakId"] = new SelectList(_context.Set<Vak>(), "Id", "Naam", resultaat.VakId);
             return View(resultaat);
         }
 
@@ -220,6 +273,7 @@ namespace ResultatenSysteem.Controllers
                 try
                 {
                     //resultaat.Beoordeling = Cijfer;
+                    resultaat.Beoordeling = Cijfer;
                     _context.Update(resultaat);
                     await _context.SaveChangesAsync();
                 }

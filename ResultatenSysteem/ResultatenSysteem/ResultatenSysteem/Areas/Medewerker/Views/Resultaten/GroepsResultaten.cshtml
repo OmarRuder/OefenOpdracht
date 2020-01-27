@@ -1,0 +1,79 @@
+﻿@model ResultatenSysteem.Models.Resultaat
+
+@{
+    ViewData["Title"] = "Resultaten Invoeren";
+    string klasNaamDisplay = "";
+    string vakNaamDisplay = "";
+    int vakId = 0;
+    foreach (var vak in ViewBag.Vak)
+    {
+        if (Enumerable.Count(ViewBag.Groep) <= 1)
+        {
+            vakId = vak.Id;
+            vakNaamDisplay = vak.Naam + " (" + vak.Vakcode + ")";
+        }
+    }
+    foreach (var groep in ViewBag.Groep)
+    {
+        if (Enumerable.Count(ViewBag.Groep) <= 1)
+        {
+            klasNaamDisplay = groep.Naam + " (" + groep.Groepscode + ")";
+        }
+    }
+}
+<script>
+    $(document).ready(function () {
+
+        var cijfer = 0;
+        $("#CijferInput").change(function () {
+            cijfer = $("#CijferInput").val(); // stopt cijferinput in variabele
+            $("#CijferInput").val(cijfer.replace(".", ",")); // vervangt een punt in input tekst met een komma
+
+            $("#Validation").text(""); // cleart validatie tekst
+
+            if (parseInt(cijfer) > 10) {
+                $("#CijferInput").val("10");
+                $("#Validation").text("Een cijfer kan niet hoger zijn dan 10");
+            }
+            else if (parseInt(cijfer) < 1) {
+                $("#CijferInput").val("1");
+                $("#Validation").text("Een cijfer kan niet lager zijn dan 1");
+            }
+        });
+    });
+</script>
+
+<h1>@klasNaamDisplay </h1>
+<hr />
+<h2>@vakNaamDisplay</h2>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="GroepsResultaten">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @foreach (var item in ViewBag.Studenten)
+                {
+                    <input name="vakId" value="@vakId" style="display:none;"/>
+                    <input name="studentId" value="@item.Id" style="display:none;" />
+                    <label>@item.Voornaam @item.Tussenvoegsel @item.Achternaam</label>
+                    <input type="number" name="cijfers" class="form-control" min="1" max="10" step="0.2" />
+                    <span id="Validation" class="text-danger"></span>
+                    <br />
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" id="submitButton" value="Cijfer invoeren" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Terug naar overzicht</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
