@@ -142,36 +142,18 @@ namespace ResultatenSysteem.Controllers
             Console.WriteLine("vakId is :" + vakId);
             if (ModelState.IsValid)
             {
-                //foreach (var student in studentId)
-                //{
-                //    foreach (var cijfer in cijfers)
-                //    {
-                //        Resultaat res = new Resultaat
-                //        {
-                //            StudentId = student,
-                //            Beoordeling = cijfer,
-                //            VakId = vakId
-                //        };
-                //        Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
-                //        resultatenLijst.Add(res);
-                //    }
-                //    Console.WriteLine("studentId is :" + student.ToString());
-                //}
-
-                foreach (var cijfer in cijfers)
+                foreach (var student in studentId)
                 {
-                    foreach (var student in studentId)
+                    Resultaat res = new Resultaat
                     {
-                        Resultaat res = new Resultaat
-                        {
-                            StudentId = student,
-                            Beoordeling = cijfer,
-                            VakId = vakId
-                        };
-                        Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
-                        resultatenLijst.Add(res);
-                    }
+                        StudentId = student,
+                        Beoordeling = 3,
+                        VakId = vakId
+                    };
+                    ////Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
+                    resultatenLijst.Add(res);
                 }
+              
                 _context.Resultaat.AddRange(resultatenLijst);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

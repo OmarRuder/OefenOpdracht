@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResultatenSysteem.Data;
 
 namespace ResultatenSysteem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200128192941_studentGroepAndStudentHasData")]
+    partial class studentGroepAndStudentHasData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,68 +240,6 @@ namespace ResultatenSysteem.Data.Migrations
                     b.HasIndex("VakId");
 
                     b.ToTable("GroepVak");
-
-                    b.HasData(
-                        new
-                        {
-                            GroepId = 1,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            GroepId = 1,
-                            VakId = 2
-                        },
-                        new
-                        {
-                            GroepId = 1,
-                            VakId = 3
-                        },
-                        new
-                        {
-                            GroepId = 1,
-                            VakId = 4
-                        },
-                        new
-                        {
-                            GroepId = 2,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            GroepId = 2,
-                            VakId = 2
-                        },
-                        new
-                        {
-                            GroepId = 2,
-                            VakId = 3
-                        },
-                        new
-                        {
-                            GroepId = 2,
-                            VakId = 4
-                        },
-                        new
-                        {
-                            GroepId = 3,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            GroepId = 3,
-                            VakId = 4
-                        },
-                        new
-                        {
-                            GroepId = 4,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            GroepId = 4,
-                            VakId = 4
-                        });
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.Resultaat", b =>
@@ -321,57 +261,6 @@ namespace ResultatenSysteem.Data.Migrations
                     b.HasIndex("VakId");
 
                     b.ToTable("Resultaat");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Beoordeling = 7.5,
-                            StudentId = 1,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Beoordeling = 8.4000000000000004,
-                            StudentId = 1,
-                            VakId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Beoordeling = 6.4000000000000004,
-                            StudentId = 1,
-                            VakId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Beoordeling = 6.4000000000000004,
-                            StudentId = 3,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Beoordeling = 9.5,
-                            StudentId = 3,
-                            VakId = 4
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Beoordeling = 3.3999999999999999,
-                            StudentId = 5,
-                            VakId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Beoordeling = 9.5,
-                            StudentId = 6,
-                            VakId = 3
-                        });
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.Student", b =>
@@ -399,42 +288,36 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 1,
                             Achternaam = "Ruder",
-                            Studentnummer = "123054",
                             Voornaam = "Omar"
                         },
                         new
                         {
                             Id = 2,
                             Achternaam = "Ruder",
-                            Studentnummer = "142312",
                             Voornaam = "Issy"
                         },
                         new
                         {
                             Id = 3,
                             Achternaam = "Ruder",
-                            Studentnummer = "421245",
                             Voornaam = "Ruben"
                         },
                         new
                         {
                             Id = 4,
                             Achternaam = "Goodreid",
-                            Studentnummer = "236789",
                             Voornaam = "Tremaine"
                         },
                         new
                         {
                             Id = 5,
                             Achternaam = "Stiles",
-                            Studentnummer = "352553",
                             Voornaam = "Douglass"
                         },
                         new
                         {
                             Id = 6,
                             Achternaam = "Blackford",
-                            Studentnummer = "140443",
                             Voornaam = "Becky"
                         });
                 });
@@ -509,32 +392,6 @@ namespace ResultatenSysteem.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Vak");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Naam = "Engels",
-                            Vakcode = "EN"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Naam = "Wiskunde",
-                            Vakcode = "WI"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Naam = "C# Programmeren",
-                            Vakcode = "PRG1"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Naam = "Nederlands",
-                            Vakcode = "NE"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

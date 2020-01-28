@@ -83,7 +83,7 @@ namespace ResultatenSysteem
                 );
             });
 
-            DataSeed.Initialize(context).Wait();
+            //DataSeed.Initialize(context).Wait();
 
         }
 
