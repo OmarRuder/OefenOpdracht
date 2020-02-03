@@ -4,7 +4,59 @@
     ViewData["Title"] = "Index";
     double cijfer = 0;
 }
+<style>
+    .checked {
+        background-color:mistyrose;
+    }
+    .clickable:hover {
+        cursor: pointer;
+    }
+    #bewerkModusKnop {
+        float: right;
+        margin-right: 2%;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        var tableRow = "";
+        $("#bewerkModusKnop").click(function () {
+            $(this).toggleClass(' on'); // togglet of bewerkmodus aan/uit staat
+            if ($(this).hasClass('on')) {
+                $(this).removeClass("btn-warning").addClass("btn-danger on"); //als de knop aanstaat verandert de knop class naar btn-danger
+                $('.bewerkModusContent').toggle(); // laat bewerkmoduscontent zien
+                    $("#tableBody").find('tr').each(function () {
+                        $(this).addClass(' clickable'); // maakt table row clickable
+                        if ($(this).hasClass('clickable')) {
+                            $(this).click(function () {
+                               $(this).find("input:checkbox").click(); //klikt op de checkbox als er op de tablerow geklikt wordt
+                            });
+                        }
+                    });
+            } else {
+                $('.bewerkModusContent').toggle(); // verbergt bewerkmoduscontent 
+                $(this).removeClass("btn-danger").addClass("btn-warning"); //als de knop aanstaat verandert de knop class naar btn-warning
 
+                    $("#tableBody").find('tr').each(function () {
+                       $(this).removeClass(' clickable'); // maakt table row niet clickable
+                    });
+            };
+        });
+
+        //if ($("#bewerkModusKnop").hasClass('on')) {
+        //    console.log("aparte functie");
+        //};
+
+        $(".checkbox").click(function () { 
+            tableRow = $(".tableRow-" + $(this).attr('student-id')); //vult tableRow met tablerow-student-id die meegegeven wordt met de checkbox klik
+            tableRow.toggleClass(' checked');
+            if ($(this).prop("checked") == true) {
+                console.log("checked checkbox id: " + $(this).attr('student-id'));
+            } else {
+                console.log("unchecked checkbox id: " + $(this).attr('student-id'));
+            };
+        }); 
+    });
+</script>
 
 <h1>
     Resultaten aanpassen
@@ -16,8 +68,10 @@
     }
 </h1>
 <a asp-action="Index">Terug naar overzicht</a>
-<br />
-<form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+<a id="bewerkModusKnop" href="#" class="btn btn-warning ">Bewerk modus <i class="fas fa-edit"></i></a>
+
+@*<br />
+    <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
     <div class="input-group" style="color:white;">
         <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" aria-label="Search" aria-describedby="basic-addon2">
         <div class="input-group-append">
@@ -31,9 +85,9 @@
             </a>
         </div>
     </div>
-</form>
+</form>*@
 
-<table class="table">
+<table class="table" style="margin-top: 2%; ">
     <thead>
         <tr>
             <th>
@@ -49,13 +103,14 @@
                 @Html.DisplayNameFor(model => model.Vak)
             </th>
             <th></th>
+            <th class="bewerkModusContent" style="display:none;"></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tableBody">
 
         @foreach (var item in Model)
         {
-            <tr>
+            <tr class="tableRow-@item.Id " href="#">
                 <td>
                     @{
                         cijfer = item.Beoordeling;
@@ -87,9 +142,12 @@
                     @Html.DisplayFor(modelItem => item.Vak.Naam)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Bewerken</a> |
+                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                    <a asp-action="Delete" asp-route-id="@item.Id">Verwijderen</a>
+                </td>
+                <td class="bewerkModusContent" style="display:none;">
+                    <input class="checkbox" student-id="@item.Id" type="checkbox" />
                 </td>
             </tr>
         }
