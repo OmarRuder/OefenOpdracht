@@ -3,9 +3,43 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<script>
+    $(document).ready(function () {
+        var href = "";
+        var studentId = 0;
+        var studentNaam = "";
+        $(".deleteModalToggler").click(function (event) { // als de'verwijderen'link geklikt wordt runt deze functie
+            event.preventDefault();
+            href = $("#deleteStudentButton").attr("href"); //vult href variabele met href van de geklikte knop (standaard /Medewerker/Studenten/DeleteStudent/?id)
+            studentId = $(this).attr('student-id'); //vult studentId variabele met student-id attribuut gelinkt aan de geklikte knop
+            studentNaam = $(this).attr('studentDisplayNaam'); //vult studentId variabele met studentDisplayNaam attribuut gelinkt aan de geklikte knop
+            $("#deleteStudentButton").attr('href', href + "/" + studentId); // verandert href naar standaard href + /studentId
+            $("#studentDisplayNaam").text(studentNaam); //vult naam placeholder studentDisplayNaam 
+        });
+    });
+</script>
 <h1>Studentenlijst</h1>
 
+<div class="modal fade" id="verwijderStudent" tabindex="-" role="dialog" aria-labelledby="verwijderStudentTitle" aria-hidden="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="text-align: center;">
+            <span style="margin-top:1%;font-size:35px;color:orange;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            <h3>U staat op het punt om een student te verwijderen</h3>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    Weet u zeker dat u deze actie wilt voltooien? Dit kan niet ongedaan worden.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span style="float:left!important;margin-right:10%;font-size:0,5rem;" id="studentDisplayNaam"></span>
+                <a class="btn btn-danger" id="deleteStudentButton" asp-action="DeleteStudent">Verwijderen</a>
+                <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <p>
     <a asp-action="Create">Student Toevoegen</a>
@@ -14,7 +48,7 @@
     <thead>
         <tr>
             <th>
-              Naam
+                Naam
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Studentnummer)
@@ -24,10 +58,11 @@
     </thead>
     <tbody>
         @foreach (var item in Model)
-        {        
+        {
             <tr>
 
                 <td>
+                 
                     @Html.DisplayFor(modelItem => item.Voornaam)
                     @Html.DisplayFor(modelItem => item.Tussenvoegsel)
                     @Html.DisplayFor(modelItem => item.Achternaam)
@@ -38,7 +73,7 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a href="#" data-toggle="modal" data-target="#afrekenenFalse-@item.Id">
+                    <a href="#" class="deleteModalToggler" data-toggle="modal" studentDisplayNaam="@item.Voornaam  @item.Tussenvoegsel @item.Achternaam (@item.Studentnummer)" student-id="@item.Id" data-target="#verwijderStudent">
                         Verwijderen
                     </a>
                     |
@@ -48,27 +83,3 @@
         }
     </tbody>
 </table>
-
-@foreach (var item in Model)
-{
-     <div class="modal fade" id="afrekenenFalse-@item.Id" tabindex="-" role="dialog" aria-labelledby="afrekenenFalseTitle" aria-hidden="false">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content" style="text-align: center;">
-                        <span style="margin-top:1%;font-size:35px;color:orange;">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </span>
-                        <h3>U staat op het punt om een student te verwijderen</h3>
-                        <div class="modal-body">
-                            <div class="alert alert-danger">
-                                Weet u zeker dat u deze actie wilt voltooien? Dit kan niet ongedaan worden.
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <span style="float:left!important;margin-right:10%;font-size:0,5rem;">@item.Voornaam @item.Tussenvoegsel @item.Achternaam (@item.Studentnummer)</span>
-                            <a class="btn btn-danger" asp-action="DeleteStudent" asp-route-id="@item.Id">Verwijderen</a>
-                            <button type="button" class="btn" data-dismiss="modal"><i  class="fas fa-times"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-}

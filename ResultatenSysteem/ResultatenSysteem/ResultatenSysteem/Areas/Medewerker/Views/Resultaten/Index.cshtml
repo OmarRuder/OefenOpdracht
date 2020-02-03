@@ -8,6 +8,30 @@
 }
 
 
+<style>
+    .rotate {
+        -moz-transition: all .1s linear;
+        -webkit-transition: all .1s linear;
+        transition: all .1s linear;
+    }
+
+    .down {
+        -moz-transform: rotate(-90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(-180deg);
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $(".toggler").click(function (e) {
+            e.preventDefault();
+            $('.student-' + $(this).attr('data-student-toggle')).fadeToggle("fast");
+            $('.toggle-' + $(this).attr('data-student-toggle')).toggleClass("down");
+        });
+    });
+</script>
+
 <h1>Studenten</h1>
 
 <div class="form-group" style="margin:2% 0% 6% 0%;">
@@ -34,42 +58,6 @@
     </form>
 </div>
 
-<style>
-    .rotate {
-        -moz-transition: all .1s linear;
-        -webkit-transition: all .1s linear;
-        transition: all .1s linear;
-    }
-
-    .down {
-        -moz-transform: rotate(-90deg);
-        -webkit-transform: rotate(90deg);
-        transform: rotate(-180deg);
-    }
-</style>
-
-<script>
-    $(document).ready(function () {
-        //if ($("#studentenTabel tr").length < 3) {
-        //    $('.rotate').addClass("down");
-        //    $('#studentenCijfers').show();
-        //    console.log("studentenTabel length: " + $("#studentenTabel tr").length);
-        //} else {
-        //}
-        //$("#test").click(function () {
-        //    $('#studentenCijfers').hide();
-        //});
-        //if ($("#studentenTabel tr").length > 3) {
-        //    $('#studentenCijfers').hide();
-        //    console.log("studentenTabel lengths: " + $("#studentenTabel tr").length);
-        //}
-        $(".toggler").click(function (e) {
-            e.preventDefault();
-            $('.student-' + $(this).attr('data-student-toggle')).fadeToggle("fast");
-            $('.toggle-' + $(this).attr('data-student-toggle')).toggleClass("down");
-        });
-    });
-</script>
 <table id="studentenTabel" class="table" style="margin-top:2%;">
     <thead>
         <tr>
