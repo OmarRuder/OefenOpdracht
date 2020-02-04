@@ -56,25 +56,6 @@ namespace ResultatenSysteem.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-
-        // combined query om searchstring op te vullen met zowel voornaam als tussen voegsel als achternaam
-        //(niet werkend)
-        //var studentInfo = _context.Student.Join(_context.StudentGroep,
-        //st => st.Id,
-        //stg => stg.StudentId,
-        //(st, stg) => new { Student = st, StudentGroep = stg })
-        //.Where(x => x.StudentGroep.GroepId == groepId)
-        //.Select(s =>
-        //new
-        //{
-        //    s.Student,
-
-        //    searchString = string.IsNullOrEmpty(s.Student.Tussenvoegsel)
-        //       ? s.Student.Voornaam + " " + s.Student.Achternaam
-        //       : s.Student.Voornaam + " " + s.Student.Tussenvoegsel + " " + s.Student.Achternaam,
-        //})
-        //.ToList();
-
         public async Task<IActionResult> Aanpassen(int studentId)
         {
             // Hier wordt viewdata student gevuld met maar 1 student, om de view dynamisch te maken (aanpassen van student x) indien de view maar 1 student betreft.
@@ -280,32 +261,10 @@ namespace ResultatenSysteem.Controllers
         // GET: Resultaten/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var resultaat = await _context.Resultaat
-                .Include(r => r.Student)
-                .Include(r => r.Vak)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (resultaat == null)
-            {
-                return NotFound();
-            }
-
-            return View(resultaat);
-        }
-
-        // POST: Resultaten/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
             var resultaat = await _context.Resultaat.FindAsync(id);
             _context.Resultaat.Remove(resultaat);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Aanpassen));
         }
 
         private bool ResultaatExists(int id)

@@ -6,55 +6,114 @@
 }
 <style>
     .checked {
-        background-color:mistyrose;
+        background-color: mistyrose;
     }
+
     .clickable:hover {
         cursor: pointer;
     }
-    #bewerkModusKnop {
+
+    #bewerkModusKnop, #verwijderRijenKnop {
         float: right;
         margin-right: 2%;
     }
-</style>
-<script>
-    $(document).ready(function () {
-        var tableRow = "";
-        $("#bewerkModusKnop").click(function () {
-            $(this).toggleClass(' on'); // togglet of bewerkmodus aan/uit staat
-            if ($(this).hasClass('on')) {
-                $(this).removeClass("btn-warning").addClass("btn-danger on"); //als de knop aanstaat verandert de knop class naar btn-danger
-                $('.bewerkModusContent').toggle(); // laat bewerkmoduscontent zien
-                    $("#tableBody").find('tr').each(function () {
-                        $(this).addClass(' clickable'); // maakt table row clickable
-                        if ($(this).hasClass('clickable')) {
-                            $(this).click(function () {
-                               $(this).find("input:checkbox").click(); //klikt op de checkbox als er op de tablerow geklikt wordt
-                            });
-                        }
-                    });
-            } else {
-                $('.bewerkModusContent').toggle(); // verbergt bewerkmoduscontent 
-                $(this).removeClass("btn-danger").addClass("btn-warning"); //als de knop aanstaat verandert de knop class naar btn-warning
 
-                    $("#tableBody").find('tr').each(function () {
-                       $(this).removeClass(' clickable'); // maakt table row niet clickable
-                    });
+    .deleteModalToggler:hover {
+        cursor: pointer;
+    }
+</style>
+
+@* 
+        $("#verwijderRijenKnop").click(function () {
+            $(tableBody).find('tr').each(function () {
+                if ($(this).find('input:checkbox').prop("checked") == true) {
+                    resultatenList.fill(parseInt($(this).find('input:checkbox').attr('resultaat-id')));
+                }
+            });
+               for (let i = 0; i < resultatenList.length; i++) {
+              console.log(resultatenList[i])
+            }
+        });
+*@
+
+<script>
+    //bewerkmodus (niet af)
+    $(document).ready(function () {
+        tableBody = $('tbody');
+        href = $("#deleteResultaatButton").attr("href");
+        studentNaam = "";
+        vak = "";
+        color = "";
+        resultaatId = 0;
+        cijfer = 0;
+        resultatenList = [0];
+        function bewerkModusAan() { //alles wat gedaan moet kunnen worden als bewerkmodus aan staat
+            $("#bewerkModusKnop").removeClass('btn-warning').addClass('btn-success'); // verandert de knop naar groen als bewerkmodus aanstaat
+            $("#bewerkModusKnop").text("Bewerk Modus staat aan");
+            $("#verwijderRijenKnop").fadeIn(); //verwijder rijenknop verschijnt
+            $(".tableActieKnoppen").fadeIn();
+            $('.bewerkModusContent').fadeIn(); //togglet content van bewerkmodus
+            // textbox met de huidige cijfers
+            $(".beoordelingData").each(function () {
+                cijfer = $(this).attr('value');
+                //if (parseInt(cijfer) > 4) {
+                //    color = "forestgreen";
+                //} else {
+                //    color: "red";
+                //}
+                $(this).html('<input type="text" class="form-control" style="width:75%;color:' + color + '" value="' + cijfer + '"/>')
+            });
+          
+        }
+        function bewerkModusUit() {
+            $("#bewerkModusKnop").removeClass('btn-success').addClass('btn-warning'); // verandert de knop naar groen als bewerkmodus aanstaat
+            $("#bewerkModusKnop").text("Bewerk Modus");
+            $("#verwijderRijenKnop").fadeOut();
+            $(".tableActieKnoppen").fadeOut();
+            $('.bewerkModusContent').fadeOut(); //togglet content van bewerkmodus
+            $(tableBody).find('tr').each(function () { //zoekt alle tablerows in tablebody
+                $(this).removeClass('checked') //verwijdert checked klas
+                $(this).find('input:checkbox').prop("checked", false); //zet alle checkboxes automatisch op false
+            });
+        }
+
+        $("#bewerkModusKnop").click(function () {
+            $(this).toggleClass('on'); //togglet of bewerkmodus aanstaat
+            if ($(this).hasClass('on')) { //checkt of bewerkmodus aanstaat
+                bewerkModusAan();
+            } else {
+                bewerkModusUit();
             };
         });
 
-        //if ($("#bewerkModusKnop").hasClass('on')) {
-        //    console.log("aparte functie");
-        //};
-
-        $(".checkbox").click(function () { 
-            tableRow = $(".tableRow-" + $(this).attr('student-id')); //vult tableRow met tablerow-student-id die meegegeven wordt met de checkbox klik
-            tableRow.toggleClass(' checked');
-            if ($(this).prop("checked") == true) {
-                console.log("checked checkbox id: " + $(this).attr('student-id'));
+        $('.deleteModalToggler').click(function (event) {
+            event.preventDefault();
+            resultaatId = $(this).attr('resultaat-id');
+            studentNaam = $(this).attr('studentDisplayNaam');
+            vak = $(this).attr('vak');
+            cijfer = $(this).attr('cijfer');
+            $("#deleteResultaatButton").attr("href", href + "/" + resultaatId);
+            $("#naamDisplay").text(studentNaam);
+            $("#vakDisplay").text(vak);
+            $("#beoordelingDisplay").text(cijfer);
+            if (parseInt(cijfer) > 5.5) {
+                $("#beoordelingDisplay").css('color', 'forestgreen');
             } else {
-                console.log("unchecked checkbox id: " + $(this).attr('student-id'));
+                $("#beoordelingDisplay").css('color', 'red');
+            }
+            //$("#resultaatGegevens").html("<dl><dt>Naam</dt><dd>" + studentNaam + "</dd><dt>Vak</dt><dd>" + vak + "</dd><dt>Beoordeling:</dt><dd>" + cijfer + "</dd></dl>");
+        });
+
+        $(".checkbox").click(function () {
+            tableRow = $(".tableRow-" + $(this).attr('resultaat-id')); //vult tableRow met tablerow-student-id die meegegeven wordt met de checkbox klik
+            if ($(this).prop("checked") == true) {
+                tableRow.addClass(' checked');
+                console.log("checked checkbox id: " + $(this).attr('resultaat-id'));
+            } else {
+                tableRow.removeClass(' checked');
+                console.log("unchecked checkbox id: " + $(this).attr('resultaat-id'));
             };
-        }); 
+        });
     });
 </script>
 
@@ -68,24 +127,8 @@
     }
 </h1>
 <a asp-action="Index">Terug naar overzicht</a>
-<a id="bewerkModusKnop" href="#" class="btn btn-warning ">Bewerk modus <i class="fas fa-edit"></i></a>
-
-@*<br />
-    <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-    <div class="input-group" style="color:white;">
-        <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" aria-label="Search" aria-describedby="basic-addon2">
-        <div class="input-group-append">
-            <select class="form-control bg-light border-0 small" name="groepId">
-                <option value="">Alle groepen</option>
-             
-            </select>
-            <input class="btn btn-primary" type="submit" value="Zoeken" />
-            <a class="btn btn-primary" asp-action="Index">
-                <i class="fas fa-sync"></i>
-            </a>
-        </div>
-    </div>
-</form>*@
+<a id="bewerkModusKnop" href="#" class="btn btn-warning">Bewerk modus</a>
+<a id="verwijderRijenKnop" href="#" class="btn btn-danger" style="display:none;">Verwijder rijen</a>
 
 <table class="table" style="margin-top: 2%; ">
     <thead>
@@ -102,7 +145,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Vak)
             </th>
-            <th></th>
+            <th class="tableActieKnoppen" style="display:none;"></th>
             <th class="bewerkModusContent" style="display:none;"></th>
         </tr>
     </thead>
@@ -110,8 +153,8 @@
 
         @foreach (var item in Model)
         {
-            <tr class="tableRow-@item.Id " href="#">
-                <td>
+            <tr class="tableRow-@item.Id">
+                <td class="beoordelingData" value="@item.Beoordeling">
                     @{
                         cijfer = item.Beoordeling;
                     }
@@ -136,20 +179,53 @@
                     </a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Student.Studentnummer)
+                        @Html.DisplayFor(modelItem => item.Student.Studentnummer)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Vak.Naam)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Bewerken</a> |
-                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                    <a asp-action="Delete" asp-route-id="@item.Id">Verwijderen</a>
+                <td class="tableActieKnoppen" style="display:none;color:white!important;">
+                    <a asp-action="Edit" class="btn btn-primary editKnop" asp-route-id="@item.Id">Bewerken</a>
+                    <a class="btn btn-danger deleteModalToggler" data-toggle="modal" data-target="#verwijderResultaat" cijfer="@item.Beoordeling" vak="@item.Vak.Naam" resultaat-id="@item.Id" studentDisplayNaam="@item.Student.Voornaam @item.Student.Tussenvoegsel @item.Student.Achternaam"><i class="fas fa-trash-alt"></i></a>
                 </td>
                 <td class="bewerkModusContent" style="display:none;">
-                    <input class="checkbox" student-id="@item.Id" type="checkbox" />
+                    <input class="checkbox" resultaat-id="@item.Id" type="checkbox" />
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+
+
+
+<div class="modal fade" id="verwijderResultaat" tabindex="-" role="dialog" aria-labelledby="verwijderResultaatTitle" aria-hidden="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="text-align: center;">
+            <span style="margin-top:1%;font-size:35px;color:orange;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            <h3>U staat op het punt om dit resultaat te verwijderen</h3>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    Weet u zeker dat u deze actie wilt voltooien? Dit kan niet ongedaan worden.
+                </div>
+                <div id="resultaatGegevens">
+                    <dl class="row">
+                        <dt class="col-sm-2">Naam:</dt>
+                        <dd class="col-sm-10" id="naamDisplay"></dd>
+                        <dt class="col-sm-2">Vak:</dt>
+                        <dd class="col-sm-10" id="vakDisplay"></dd>
+                        <dt class="col-sm-2">Beoordeling:</dt>
+                        <dd class="col-sm-10" id="beoordelingDisplay"></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span style="float:left!important;margin-right:10%;font-size:0,5rem;" id="studentDisplayNaam"></span>
+                <a class="btn btn-danger" id="deleteResultaatButton" asp-action="Delete">Verwijderen</a>
+                <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+</div>

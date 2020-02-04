@@ -5,12 +5,11 @@
 }
 <script>
     $(document).ready(function () {
-        var href = "";
+        href = $("#deleteStudentButton").attr("href"); //vult href variabele met href van de geklikte knop (standaard /Medewerker/Studenten/DeleteStudent/?id)
         var studentId = 0;
         var studentNaam = "";
         $(".deleteModalToggler").click(function (event) { // als de'verwijderen'link geklikt wordt runt deze functie
             event.preventDefault();
-            href = $("#deleteStudentButton").attr("href"); //vult href variabele met href van de geklikte knop (standaard /Medewerker/Studenten/DeleteStudent/?id)
             studentId = $(this).attr('student-id'); //vult studentId variabele met student-id attribuut gelinkt aan de geklikte knop
             studentNaam = $(this).attr('studentDisplayNaam'); //vult studentId variabele met studentDisplayNaam attribuut gelinkt aan de geklikte knop
             $("#deleteStudentButton").attr('href', href + "/" + studentId); // verandert href naar standaard href + /studentId
