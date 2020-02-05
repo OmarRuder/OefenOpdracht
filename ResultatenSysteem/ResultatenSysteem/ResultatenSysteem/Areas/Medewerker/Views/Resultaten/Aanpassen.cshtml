@@ -88,16 +88,16 @@
             if (shouldShow) {
                 $("#bewerkModusKnop").removeClass('btn-warning').addClass('btn-success'); // verandert de knop naar groen als bewerkmodus aanstaat
                 $("#bewerkModusKnop").text("Bewerk Modus uitzetten");
-                $(".tableActieKnoppen").fadeIn();
-                $(".bewerkModusContent").fadeIn();
+                $(".deleteModalToggler").fadeIn();
+                //$('.bewerkModusContent').fadeIn(); checkbox en table head blijven hidden (design keuze)
                 $(".beoordeling").hide();
                 $(".cijferInput").fadeIn();
             } else {
                 $("#bewerkModusKnop").removeClass('btn-success').addClass('btn-warning'); // verandert de knop naar geeel als bewerkmodus uitstaat
                 $("#bewerkModusKnop").text("Bewerk Modus aanzetten");
                 $("#verwijderRijenKnop").fadeOut();
-                $(".tableActieKnoppen").fadeOut();
-                $('.bewerkModusContent').fadeOut();
+                $(".deleteModalToggler").fadeOut();
+                //$('.bewerkModusContent').fadeOut(); checkbox en table head blijven hidden (design keuze)
                 $(".cijferInput").hide();
                 $(".beoordeling").slideDown(200);
             }
@@ -180,6 +180,23 @@
             }
             $("#resultatenLijstInput").html(inputFields); 
         });
+
+        $(".cijferInput").change(function () {
+        cijfer = $(".cijferInput").val(); // stopt cijferinput in variabele
+
+        $(".cijferInput").val(cijfer.replace(".", ",")); // vervangt een punt in input tekst met een komma
+
+        $("#Validation").text(""); // cleart validatie tekst
+
+        if (parseInt(cijfer) > 10) {
+            $(".cijferInput").val("10");
+            $("#Validation").text("Een cijfer kan niet hoger zijn dan 10");
+        }
+        else if (parseInt(cijfer) < 1) {
+            $(".cijferInput").val("1");
+            $("#Validation").text("Een cijfer kan niet lager zijn dan 1");
+        }
+        });
     });
 </script>
 
@@ -199,19 +216,19 @@
 <table id="demo2" class="table" style="margin-top: 2%; ">
     <thead>
         <tr>
-            <th>
+            <th style="width:20%;">
                 @Html.DisplayNameFor(model => model.Beoordeling)
             </th>
-            <th>
+            <th style="width:20%;">
                 @Html.DisplayNameFor(model => model.Student)
             </th>
-            <th>
+            <th style="width:20%;">
                 Studentnummer
             </th>
-            <th>
+            <th style="width:20%;">
                 @Html.DisplayNameFor(model => model.Vak)
             </th>
-            <th class="tableActieKnoppen" style="display:none;"></th>
+            <th class="tableActieKnoppen" style="margin:0;"></th>
             <th class="bewerkModusContent" style="display:none;"></th>
         </tr>
     </thead>
@@ -232,13 +249,16 @@
                     {
                         color = "forestgreen";
                     }
-                  
-                    <div class="input-group cijferInput" style="width:50%;display:none;">
-                        <input type="text" class="form-control" value="@item.Beoordeling" style="color:@color;" />
-                        <div class="input-group-append">
-                            <a asp-action="Edit" class="btn btn-primary editKnop" asp-route-id="@item.Id"><i class="fas fa-upload"></i></a>
+
+                    <form asp-action="UpdateCijfer" method="get">
+                        <div class="input-group cijferInput" style="width:50%;display:none;">
+                            <input type="text" class="form-control" name="Cijfer" value="@item.Beoordeling" style="color:@color;" />
+                            <input type="text" name="resultaatId" value="@item.Id" style="display:none;" />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary editKnop" type="submit"><i class="fas fa-upload"></i></button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                     <span class="beoordeling" style="color:@color;">
                         @Html.DisplayFor(modelItem => item.Beoordeling)
                     </span>
@@ -256,11 +276,11 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Vak.Naam)
                 </td>
-                <td class="tableActieKnoppen" style="display:none;color:white!important;">
-                    <a class="btn btn-danger deleteModalToggler" data-toggle="modal" data-target="#verwijderResultaat" cijfer="@item.Beoordeling" vak="@item.Vak.Naam" resultaat-id="@item.Id" studentDisplayNaam="@item.Student.Voornaam @item.Student.Tussenvoegsel @item.Student.Achternaam"><i class="fas fa-trash-alt"></i></a>
+                <td class="tableActieKnoppen" style="color:white!important;">
+                    <a style="display:none;"class="btn btn-danger deleteModalToggler" data-toggle="modal" data-target="#verwijderResultaat" cijfer="@item.Beoordeling" vak="@item.Vak.Naam" resultaat-id="@item.Id" studentDisplayNaam="@item.Student.Voornaam @item.Student.Tussenvoegsel @item.Student.Achternaam"><i class="fas fa-trash-alt"></i></a>
                 </td>
                 <td class="bewerkModusContent" style="display:none;">
-                    <input class="checkbox" resultaat-id="@item.Id" type="checkbox" />
+                    <input class="checkbox" style="" resultaat-id="@item.Id" type="checkbox" />
                 </td>
             </tr>
         }

@@ -258,6 +258,28 @@ namespace ResultatenSysteem.Controllers
             return View(resultaat);
         }
 
+        public async Task<IActionResult> UpdateCijfer(int resultaatId, double Cijfer/*, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat*/)
+        {
+            Console.WriteLine("we zitten in de functie, en meegegven id en cijfer zijn: " + resultaatId + " - " + Cijfer);
+            var resultaat = await _context.Resultaat.FindAsync(resultaatId);
+            Console.WriteLine("bijbehorende gegevens uit database");
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Resultaat Id uit database:" + resultaat.Id);
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Resultaat beoordeling uit database:" + resultaat.Beoordeling);
+            if (Cijfer < 10 )
+            {
+                resultaat.Beoordeling = Cijfer;
+                _context.Resultaat.Update(resultaat);
+            } else
+            {
+                return NotFound();
+            }
+         
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Aanpassen));
+        }
+
         // GET: Resultaten/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -269,7 +291,7 @@ namespace ResultatenSysteem.Controllers
 
         public async Task<IActionResult> DeleteMultipleRows(int[] resultatenLijst, List<Resultaat> resultList)
         {
-            var resultaat = await _context.Resultaat.FindAsync(0);
+            var resultaat = await _context.Resultaat.FindAsync(0); 
             foreach (var resultaatId in resultatenLijst)
             {
                 resultaat = await _context.Resultaat.FindAsync(resultaatId);
