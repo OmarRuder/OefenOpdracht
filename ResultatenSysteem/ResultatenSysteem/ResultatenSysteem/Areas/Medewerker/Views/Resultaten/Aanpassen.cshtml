@@ -3,92 +3,129 @@
 @{
     ViewData["Title"] = "Index";
     double cijfer = 0;
+    string color = "";
 }
-<style>
-    .checked {
-        background-color: mistyrose;
-    }
-
-    .clickable:hover {
-        cursor: pointer;
-    }
-
-    #bewerkModusKnop, #verwijderRijenKnop {
-        float: right;
-        margin-right: 2%;
-    }
-
-    .deleteModalToggler:hover {
-        cursor: pointer;
-    }
-</style>
-
-@* 
-        $("#verwijderRijenKnop").click(function () {
-            $(tableBody).find('tr').each(function () {
-                if ($(this).find('input:checkbox').prop("checked") == true) {
-                    resultatenList.fill(parseInt($(this).find('input:checkbox').attr('resultaat-id')));
-                }
-            });
-               for (let i = 0; i < resultatenList.length; i++) {
-              console.log(resultatenList[i])
+    <head>
+        <style>
+            .checked {
+                background-color: mistyrose;
+                animation: selectRow 0.4s;
             }
-        });
-*@
 
+            .unchecked {
+                animation: unselectRow 0.4s;
+            }
+
+            .clickable:hover {
+                cursor: pointer;
+            }
+
+            #bewerkModusKnop, #verwijderRijenKnop {
+                float: right;
+                margin-right: 2%;
+            }
+
+            .deleteModalToggler:hover {
+                cursor: pointer;
+            }
+
+            .editCijfer {
+                width: 50%;
+                display: none;
+            }
+
+            #verwijderRijenKnop {
+                display: none;
+            }
+
+            @@keyframes unselectRow {
+                from {
+                    background-color: #ffa0a8;
+                }
+            }
+
+            @@keyframes selectRow {
+                from {
+                    background-color: #ffa0a8;
+                }
+            }
+        </style>
+    </head>
 <script>
-    //bewerkmodus (niet af)
+    //bewerkmodus (v2, bijna af)
     $(document).ready(function () {
         tableBody = $('tbody');
         href = $("#deleteResultaatButton").attr("href");
         studentNaam = "";
         vak = "";
         color = "";
+        inputFields = ""; 
         resultaatId = 0;
         cijfer = 0;
         resultatenList = [0];
-        function bewerkModusAan() { //alles wat gedaan moet kunnen worden als bewerkmodus aan staat
-            $("#bewerkModusKnop").removeClass('btn-warning').addClass('btn-success'); // verandert de knop naar groen als bewerkmodus aanstaat
-            $("#bewerkModusKnop").text("Bewerk Modus staat aan");
-            $("#verwijderRijenKnop").fadeIn(); //verwijder rijenknop verschijnt
-            $(".tableActieKnoppen").fadeIn();
-            $('.bewerkModusContent').fadeIn(); //togglet content van bewerkmodus
-            // textbox met de huidige cijfers
-            $(".beoordelingData").each(function () {
-                cijfer = $(this).attr('value');
-                //if (parseInt(cijfer) > 4) {
-                //    color = "forestgreen";
-                //} else {
-                //    color: "red";
-                //}
-                $(this).html('<input type="text" class="form-control" style="width:75%;color:' + color + '" value="' + cijfer + '"/>')
-            });
-          
+        var isClickable = false;
+        var shouldShow = false;
+        var canEdit = false;
+
+        function clickableTableRow(isClickable) { 
+            if (isClickable) { //wordt aangeroepen door bewerkModus als canEdit true is
+                $(tableBody).find('tr').each(function () {
+                    $(this).addClass("clickable");  //voegt clickable class toe waardoor je rijen kan selecteren
+                    $(this).click(function () {
+                        $(this).find('input[type=checkbox]').click(); 
+                    });
+                })
+            } else {
+                $(tableBody).find('tr').each(function () {
+                    $(this).removeClass("checked").removeClass("clickable"); //verwijdert clickable class (voor stijling)
+                    $(this).find('input[type=checkbox]').prop("checked", false); //verandert alle checkboxes naar false
+                    $(this).off('click'); //zet eventhandler click uit zodat je tablerows niet meer klikbaar zijn
+                })
+            }
         }
-        function bewerkModusUit() {
-            $("#bewerkModusKnop").removeClass('btn-success').addClass('btn-warning'); // verandert de knop naar groen als bewerkmodus aanstaat
-            $("#bewerkModusKnop").text("Bewerk Modus");
-            $("#verwijderRijenKnop").fadeOut();
-            $(".tableActieKnoppen").fadeOut();
-            $('.bewerkModusContent').fadeOut(); //togglet content van bewerkmodus
-            $(tableBody).find('tr').each(function () { //zoekt alle tablerows in tablebody
-                $(this).removeClass('checked') //verwijdert checked klas
-                $(this).find('input:checkbox').prop("checked", false); //zet alle checkboxes automatisch op false
-            });
+
+        function showContent(shouldShow) { //should show wordt gedefinieerd in bewerkmodus (canEdit), dit bepaalt de content die getoond wordt met bewerkmodus = true
+            if (shouldShow) {
+                $("#bewerkModusKnop").removeClass('btn-warning').addClass('btn-success'); // verandert de knop naar groen als bewerkmodus aanstaat
+                $("#bewerkModusKnop").text("Bewerk Modus uitzetten");
+                $(".tableActieKnoppen").fadeIn();
+                $(".bewerkModusContent").fadeIn();
+                $(".beoordeling").hide();
+                $(".cijferInput").fadeIn();
+            } else {
+                $("#bewerkModusKnop").removeClass('btn-success').addClass('btn-warning'); // verandert de knop naar geeel als bewerkmodus uitstaat
+                $("#bewerkModusKnop").text("Bewerk Modus aanzetten");
+                $("#verwijderRijenKnop").fadeOut();
+                $(".tableActieKnoppen").fadeOut();
+                $('.bewerkModusContent').fadeOut();
+                $(".cijferInput").hide();
+                $(".beoordeling").slideDown(200);
+            }
+        }
+
+        function bewerkModus(canEdit) { //can edit wordt bepaald in bewerkmodusknop.click (als class 'on' is roept hij bewerkmodus aan met canEdit = true)
+            if (canEdit) {
+                clickableTableRow(true); //roept clickabletable row aan met isClickable = true
+                showContent(true); //roept showcontent aan met shouldShow = true
+            } else {
+                clickableTableRow(false);
+                showContent(false);
+            }
         }
 
         $("#bewerkModusKnop").click(function () {
             $(this).toggleClass('on'); //togglet of bewerkmodus aanstaat
             if ($(this).hasClass('on')) { //checkt of bewerkmodus aanstaat
-                bewerkModusAan();
+                bewerkModus(true); // als bewerkmodus aanstaat wordt bewerkmodus functie aangeroepn met canEdit = true
             } else {
-                bewerkModusUit();
+                bewerkModus(false);
             };
         });
 
         $('.deleteModalToggler').click(function (event) {
             event.preventDefault();
             resultaatId = $(this).attr('resultaat-id');
+            console.log(resultaatId + "result id");
             studentNaam = $(this).attr('studentDisplayNaam');
             vak = $(this).attr('vak');
             cijfer = $(this).attr('cijfer');
@@ -107,19 +144,48 @@
         $(".checkbox").click(function () {
             tableRow = $(".tableRow-" + $(this).attr('resultaat-id')); //vult tableRow met tablerow-student-id die meegegeven wordt met de checkbox klik
             if ($(this).prop("checked") == true) {
-                tableRow.addClass(' checked');
-                console.log("checked checkbox id: " + $(this).attr('resultaat-id'));
+                tableRow.addClass(' checked').removeClass("unchecked");
+                //console.log("checked checkbox id: " + $(this).attr('resultaat-id'));
             } else {
-                tableRow.removeClass(' checked');
-                console.log("unchecked checkbox id: " + $(this).attr('resultaat-id'));
+                tableRow.removeClass(' checked').addClass('unchecked');
+                //console.log("unchecked checkbox id: " + $(this).attr('resultaat-id'));
             };
+            resultatenList = $(tableBody).find("tr input[type=checkbox]") //zoekt in tablebody naar alle checkboxen
+                .filter(function () { return this.checked; }) //filtert en return alleen aangevinkte checkboxen
+                .map(function () {
+                    return this.getAttribute("resultaat-id"); //returnt van alle aangevinkte checkboxen het attribuut resultaat-id
+                })
+                .get();
+            if (resultatenList.length >= 1) {
+                $("#verwijderRijenKnop").fadeIn(); //laat verwijder rijen knop zien als er 1 of meer rijen geselcteerd zijn
+                $("#verwijderRijenKnop").text("Verwijder rijen (" + resultatenList.length + ")");
+            } else {
+                $("#verwijderRijenKnop").fadeOut();
+            }
+        });
+
+        $('#verwijderRijenKnop').click(function (event) {
+            event.preventDefault();
+               if (resultatenList.length == 1) {
+                $("#verwijderResultatenMessage").text("U staat op het punt om 1 resultaat te verwijderen");
+               } else {
+                $("#verwijderResultatenMessage").text("U staat op het punt om " + resultatenList.length + " resultaten te verwijderen");
+            }
+        });
+
+        $("#deleteResultatenButton").click(function () {
+            inputFields = ""; // maakt inPut fields eerst leeg om rommel te voorkomen
+            for (r = 0; r < resultatenList.length; r++) {
+                inputFields += "<input name='resultatenLijst' value='" + resultatenList[r] + "'/>"; //vult inputfields variabele met onzichtbare input fields 
+            }
+            $("#resultatenLijstInput").html(inputFields); 
         });
     });
 </script>
 
 <h1>
     Resultaten aanpassen
-    @foreach (var item in ViewBag.Student)
+    @foreach (var item in ViewBag.Student) //wordt alleen displayt als er maar 1 student is (viewbag is gevuld met ?id en anders is viewbag leeg)
     {
         <span>
             van @item.Voornaam @item.Tussenvoegsel @item.Achternaam
@@ -128,9 +194,9 @@
 </h1>
 <a asp-action="Index">Terug naar overzicht</a>
 <a id="bewerkModusKnop" href="#" class="btn btn-warning">Bewerk modus</a>
-<a id="verwijderRijenKnop" href="#" class="btn btn-danger" style="display:none;">Verwijder rijen</a>
+<a id="verwijderRijenKnop" href="#" class="btn btn-danger" data-target="#verwijderResultaten" data-toggle="modal" style="display: none;">Verwijder rijen</a>
 
-<table class="table" style="margin-top: 2%; ">
+<table id="demo2" class="table" style="margin-top: 2%; ">
     <thead>
         <tr>
             <th>
@@ -160,16 +226,22 @@
                     }
                     @if (cijfer < 5.5)
                     {
-                        <span style="color:red;">
-                            @Html.DisplayFor(modelItem => item.Beoordeling)
-                        </span>
+                        color = "red";
                     }
                     else
                     {
-                        <span style="color:forestgreen;">
-                            @Html.DisplayFor(modelItem => item.Beoordeling)
-                        </span>
+                        color = "forestgreen";
                     }
+                  
+                    <div class="input-group cijferInput" style="width:50%;display:none;">
+                        <input type="text" class="form-control" value="@item.Beoordeling" style="color:@color;" />
+                        <div class="input-group-append">
+                            <a asp-action="Edit" class="btn btn-primary editKnop" asp-route-id="@item.Id"><i class="fas fa-upload"></i></a>
+                        </div>
+                    </div>
+                    <span class="beoordeling" style="color:@color;">
+                        @Html.DisplayFor(modelItem => item.Beoordeling)
+                    </span>
                 </td>
                 <td>
                     <a asp-action="Index" asp-route-id="@item.Student.Id" name="studentId">
@@ -185,7 +257,6 @@
                     @Html.DisplayFor(modelItem => item.Vak.Naam)
                 </td>
                 <td class="tableActieKnoppen" style="display:none;color:white!important;">
-                    <a asp-action="Edit" class="btn btn-primary editKnop" asp-route-id="@item.Id">Bewerken</a>
                     <a class="btn btn-danger deleteModalToggler" data-toggle="modal" data-target="#verwijderResultaat" cijfer="@item.Beoordeling" vak="@item.Vak.Naam" resultaat-id="@item.Id" studentDisplayNaam="@item.Student.Voornaam @item.Student.Tussenvoegsel @item.Student.Achternaam"><i class="fas fa-trash-alt"></i></a>
                 </td>
                 <td class="bewerkModusContent" style="display:none;">
@@ -196,8 +267,33 @@
     </tbody>
 </table>
 
-
-
+<div class="modal fade" id="verwijderResultaten" tabindex="-" role="dialog" aria-labelledby="verwijderResultatenTitle" aria-hidden="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="text-align: center;">
+            <span style="margin-top:1%;font-size:35px;color:orange;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </span>
+            <h3 id="verwijderResultatenMessage">U staat op het punt om resultaten te verwijderen</h3>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    Weet u zeker dat u deze actie wilt voltooien? Dit kan niet ongedaan worden.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form asp-controller="Resultaten" asp-action="DeleteMultipleRows" method="get">
+                    <div class="input-group" style="color:white;">
+                        <div id="resultatenLijstInput" style="display:none;">
+                        </div>
+                        <div>
+                            <input class="btn btn-danger" id="deleteResultatenButton" type="submit" value="Verwijderen" />
+                        </div>
+                    </div>
+                </form>
+                <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="verwijderResultaat" tabindex="-" role="dialog" aria-labelledby="verwijderResultaatTitle" aria-hidden="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
