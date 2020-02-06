@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResultatenSysteem.Data;
 
 namespace ResultatenSysteem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200206081533_StudentMail")]
+    partial class StudentMail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,21 +382,7 @@ namespace ResultatenSysteem.Data.Migrations
                             Id = 7,
                             Beoordeling = 9.5,
                             StudentId = 6,
-                            VakId = 2
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Beoordeling = 4.2999999999999998,
-                            StudentId = 7,
                             VakId = 3
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Beoordeling = 5.5,
-                            StudentId = 8,
-                            VakId = 4
                         });
                 });
 
@@ -425,65 +413,43 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 1,
                             Achternaam = "Ruder",
-                            Email = "omarruder@wrx.hgs",
-                            Studentnummer = "140553",
+                            Studentnummer = "123054",
                             Voornaam = "Omar"
                         },
                         new
                         {
                             Id = 2,
                             Achternaam = "Ruder",
-                            Email = "issyruder@wrx.sdt",
                             Studentnummer = "142312",
                             Voornaam = "Issy"
                         },
                         new
                         {
                             Id = 3,
-                            Achternaam = "Bruins",
-                            Email = "wiibebruins@wrx.sdt",
+                            Achternaam = "Ruder",
                             Studentnummer = "421245",
-                            Voornaam = "Wiibe"
+                            Voornaam = "Ruben"
                         },
                         new
                         {
                             Id = 4,
-                            Achternaam = "Otay",
-                            Email = "othmanotay@wrx.sdt",
-                            Studentnummer = "134902",
-                            Voornaam = "Othman"
+                            Achternaam = "Goodreid",
+                            Studentnummer = "236789",
+                            Voornaam = "Tremaine"
                         },
                         new
                         {
                             Id = 5,
-                            Achternaam = "Rafik",
-                            Email = "zahirarafik@wrx.sdt",
+                            Achternaam = "Stiles",
                             Studentnummer = "352553",
-                            Voornaam = "Zahira"
+                            Voornaam = "Douglass"
                         },
                         new
                         {
                             Id = 6,
-                            Achternaam = "Roeder",
-                            Email = "daveroeder@wrx.sdt",
-                            Studentnummer = "drA231",
-                            Voornaam = "Dave"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Achternaam = "Vlaar",
-                            Email = "lesleyvlaar@wrx.sdt",
-                            Studentnummer = "691420",
-                            Voornaam = "Lesley"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Achternaam = "Bijl",
-                            Email = "jannobijl@wrx.sdt",
-                            Studentnummer = "132431",
-                            Voornaam = "Janno"
+                            Achternaam = "Blackford",
+                            Studentnummer = "140443",
+                            Voornaam = "Becky"
                         });
                 });
 
@@ -539,21 +505,6 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             StudentId = 6,
                             GroepId = 1
-                        },
-                        new
-                        {
-                            StudentId = 7,
-                            GroepId = 2
-                        },
-                        new
-                        {
-                            StudentId = 7,
-                            GroepId = 4
-                        },
-                        new
-                        {
-                            StudentId = 8,
-                            GroepId = 3
                         });
                 });
 

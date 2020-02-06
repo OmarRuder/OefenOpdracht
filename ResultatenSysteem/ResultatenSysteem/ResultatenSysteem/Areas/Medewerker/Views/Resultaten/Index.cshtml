@@ -1,12 +1,22 @@
 ﻿@model IEnumerable<ResultatenSysteem.Models.Resultaat>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<ApplicationRole> RoleManager
 
 @{
-    ViewData["Title"] = "Index";
     double cijfer = 0;
     string display = "hidden";
     string arrowClass = "";
+    if (User.IsInRole("Medewerker") == false)
+    {
+        ViewData["Title"] = "Mijn resultaten";
+    }
+    else
+    {
+        ViewData["Title"] = "Resultaten bekijken";
+    }
 }
-
 
 <style>
     .rotate {
@@ -32,234 +42,215 @@
     });
 </script>
 
-<h1>Studenten</h1>
+<h1>@ViewData["Title"]</h1>
+<h3>Welkom @User.Identity.Name</h3>
 
-<div class="form-group" style="margin:2% 0% 6% 0%;">
-    <a class="btn btn-primary" style="float:left;margin-right:20%;color:white;" asp-action="Create">
-        Cijfer invoeren
-    </a>
-    <form asp-controller="Resultaten" asp-action="Index" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-        <div class="input-group" style="color:white;">
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" aria-label="Search" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <select class="form-control bg-light border-0 small" name="groepId">
-                    <option value="">Alle groepen</option>
-                    @foreach (var groep in ViewBag.Groepen)
-                    {
-                        <option value="@groep.Id">@groep.Naam (@groep.Groepscode)</option>
-                    }
-                </select>
-                <input class="btn btn-primary" type="submit" value="Zoeken" />
-                <a class="btn btn-primary" asp-action="Index" asp-route-id="0">
-                    <i class="fas fa-sync"></i>
-                </a>
+@if (User.IsInRole("Medewerker"))
+{
+    <div class="form-group" style="margin:2% 0% 8% 0%;">
+        <a class="btn btn-primary" style="float:left;margin-right:20%;color:white;" asp-action="Create">
+            Cijfer invoeren
+        </a>
+        <form asp-controller="Resultaten" asp-action="Index" method="get" style="float:right;margin-right:15%!important" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group" style="color:white;">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Student opzoeken..." name="searchString" aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <select class="form-control bg-light border-0 small" name="groepId">
+                        <option value="">Alle groepen</option>
+                        @foreach (var groep in ViewBag.Groepen)
+                        {
+                            <option value="@groep.Id">@groep.Naam (@groep.Groepscode)</option>
+                        }
+                    </select>
+                    <input class="btn btn-primary" type="submit" value="Zoeken" />
+                    <a class="btn btn-primary" asp-action="Index" asp-route-id="0">
+                        <i class="fas fa-sync"></i>
+                    </a>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
+}
 
-<table id="studentenTabel" class="table" style="margin-top:2%;">
+<table id="studentenTabel" class="table">
     <thead>
         <tr>
             <th>Naam</th>
             <th>Studentnummer</th>
             <th>Resultaten</th>
+            <th>Mailen</th>
             <th>Cijfer acties</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var student in ViewBag.Studenten)
         {
-            @if (Enumerable.Count(ViewBag.Studenten) <= 1)
+            @if (User.IsInRole("Medewerker") == false)
             {
-                display = "normal";
-                arrowClass = "down";
-            }
-            else
-            {
-                display = "none";
-            }
-            <tr>
-                <td style="width:20%;">
-                    @student.Voornaam
-                    @student.Tussenvoegsel
-                    @student.Achternaam
-                </td>
-                <td style="width:20%;">@student.Studentnummer</td>
-                <td style="padding-bottom:2%;margin-bottom:5%;">
-                    @if (student.Resultaten != null)
+                @if (student.Email == User.Identity.Name)
+                {
+
+                    @if (Enumerable.Count(ViewBag.Studenten) <= 1)
                     {
-                        <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate @arrowClass toggle-@student.Id"></i></a>
+                        display = "normal";
+                        arrowClass = "down";
                     }
                     else
                     {
-                        <span class="text-danger" style="float:left;">Deze student heeft nog geen cijfers</span>
+                        display = "none";
                     }
-                    <br />
-                    @foreach (var item in Model.Where(g => g.StudentId == student.Id))
-                    {
-                        <span class="student-@item.StudentId" id="studentenCijfers" style="display:@display;">
-                            @Html.DisplayFor(modelItem => item.Vak.Vakcode)
-                            @{
-                                cijfer = item.Beoordeling;
-                            }
-                            @if (cijfer < 5.5)
+                    <tr>
+                        <td style="width:20%;">
+                            @student.Voornaam
+                            @student.Tussenvoegsel
+                            @student.Achternaam
+                        </td>
+                        <td style="width:20%;">@student.Studentnummer</td>
+                        <td style="padding-bottom:2%;margin-bottom:5%;">
+                            @if (student.Resultaten != null)
                             {
-                                <span style="color:red;">
-                                    @item.Beoordeling
-                                </span>
+                                <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate @arrowClass toggle-@student.Id"></i></a>
                             }
                             else
                             {
-                                <span style="color:forestgreen;">
-                                    @item.Beoordeling
+                                <span class="text-danger" style="float:left;">Je hebt nog geen resultaten behaald</span>
+                            }
+                            <br />
+                            @foreach (var item in Model.Where(g => g.StudentId == student.Id))
+                            {
+                                <span class="student-@item.StudentId" id="studentenCijfers" style="display:@display;">
+                                    @Html.DisplayFor(modelItem => item.Vak.Vakcode)
+                                    @{
+                                        cijfer = item.Beoordeling;
+                                    }
+                                    @if (cijfer < 5.5)
+                                    {
+                                        <span style="color:red;">
+                                            @item.Beoordeling
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:forestgreen;">
+                                            @item.Beoordeling
+                                        </span>
+                                    }
                                 </span>
                             }
-                        </span>
-                    }
-                </td>
-                <td style="width:25%;">
-                    <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
-                        <div class="input-group" style="color:white;">
-                            <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
-                            <div>
-                                <input class="btn btn-primary" type="submit" value="Invoeren" />
-                            </div>
-                        </div>
-                    </form>
-                    @if (student.Resultaten != null)
-                    {
-                        <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:45%;">
-                            <div class="input-group" style="color:white;">
-                                <input name="studentId" value="@student.Id" style="display:none;">
-                                <div>
-                                    <input class="btn btn-primary" type="submit" value="Aanpassen" />
+                        </td>
+                        <td>
+                            <a href="#">@student.Email</a>
+                        </td>
+                        <td style="width:25%;">
+                            <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
+                                <div class="input-group" style="color:white;">
+                                    <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
+                                    <div>
+                                        <input class="btn btn-primary" type="submit" value="Invoeren" />
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    }
-                    else
-                    {
-                        <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
-                    }
+                            </form>
+                            @if (student.Resultaten != null)
+                            {
+                                <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:45%;">
+                                    <div class="input-group" style="color:white;">
+                                        <input name="studentId" value="@student.Id" style="display:none;">
+                                        <div>
+                                            <input class="btn btn-primary" type="submit" value="Aanpassen" />
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
+                            }
 
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@*
-    table studenten met dropdown resultaten, cijfers in een dl
-    <table class="table" style="margin-top:2%;">
-        <thead>
-            <tr>
-                <th>
-                    Naam
-                </th>
-                <th>
-                    Studentnummer
-                </th>
-                <th>Resultaten</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in ViewBag.Studenten)
+                        </td>
+                    </tr>
+                }
+            }
+            else // als user admin is alle studenten laten zien
             {
+                @if (Enumerable.Count(ViewBag.Studenten) <= 1)
+                {
+                    display = "normal";
+                    arrowClass = "down";
+                }
+                else
+                {
+                    display = "none";
+                }
                 <tr>
-                    <td>
+                    <td style="width:20%;">
                         @student.Voornaam
                         @student.Tussenvoegsel
                         @student.Achternaam
-                     </td>
-                    <td>@student.Studentnummer</td>
-                    <td>
-                        <a href="#" class="toggler" data-student-toggle="@student.Id">Resultaten bekijken</a>
+                    </td>
+                    <td style="width:20%;">@student.Studentnummer</td>
+                    <td style="padding-bottom:2%;margin-bottom:5%;">
+                        @if (student.Resultaten != null)
+                        {
+                            <a href="#" class="toggler" data-student-toggle="@student.Id" style="float:left;">Resultaten bekijken <i class="fas fa-angle-down rotate @arrowClass toggle-@student.Id"></i></a>
+                        }
+                        else
+                        {
+                            <span class="text-danger" style="float:left;">Deze student heeft nog geen cijfers</span>
+                        }
+                        <br />
                         @foreach (var item in Model.Where(g => g.StudentId == student.Id))
                         {
-                            <dl class="student-@item.StudentId" id="@item.StudentId" style="display:none;">
-                                <dt>@Html.DisplayFor(modelItem => item.Vak.Vakcode)</dt>
+                            <span class="student-@item.StudentId" id="studentenCijfers" style="display:@display;">
+                                @Html.DisplayFor(modelItem => item.Vak.Vakcode)
                                 @{
                                     cijfer = item.Beoordeling;
                                 }
                                 @if (cijfer < 5.5)
                                 {
-                                    <dd style="color:red;">
-                                        @Html.DisplayFor(modelItem => item.Beoordeling)
-                                    </dd>
+                                    <span style="color:red;">
+                                        @item.Beoordeling
+                                    </span>
                                 }
                                 else
                                 {
-                                    <dd style="color:forestgreen;">
-                                        @Html.DisplayFor(modelItem => item.Beoordeling)
-                                    </dd>
+                                    <span style="color:forestgreen;">
+                                        @item.Beoordeling
+                                    </span>
                                 }
-                            </dl>
-                        }
-
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
-
-@*
-        table met ALLE resultaten
-        <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Beoordeling)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Student)
-                </th>
-                <th>
-                    Studentnummer
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Vak)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @{
-                            cijfer = item.Beoordeling;
-                        }
-                        @if (cijfer < 5.5)
-                        {
-                            <span style="color:red;">
-                                @Html.DisplayFor(modelItem => item.Beoordeling)
                             </span>
+                        }
+                    </td>
+                    <td>
+                        <a href="#">@student.Email</a>
+                    </td>
+                    <td style="width:25%;">
+                        <form asp-controller="Resultaten" asp-action="Create" method="get" style="float:left;">
+                            <div class="input-group" style="color:white;">
+                                <input name="forStudent" value="@student.Studentnummer-@student.Achternaam" style="display:none;">
+                                <div>
+                                    <input class="btn btn-primary" type="submit" value="Invoeren" />
+                                </div>
+                            </div>
+                        </form>
+                        @if (student.Resultaten != null)
+                        {
+                            <form asp-controller="Resultaten" asp-action="Aanpassen" method="get" style="float:right;margin-right:45%;">
+                                <div class="input-group" style="color:white;">
+                                    <input name="studentId" value="@student.Id" style="display:none;">
+                                    <div>
+                                        <input class="btn btn-primary" type="submit" value="Aanpassen" />
+                                    </div>
+                                </div>
+                            </form>
                         }
                         else
                         {
-                            <span style="color:forestgreen;">
-                                @Html.DisplayFor(modelItem => item.Beoordeling)
-                            </span>
+                            <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
                         }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Student.Voornaam)
-                        @Html.DisplayFor(modelItem => item.Student.Achternaam)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Student.Studentnummer)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vak.Naam)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
                     </td>
                 </tr>
             }
-        </tbody>
-    </table>*@
+        }
+    </tbody>
+</table>

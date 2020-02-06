@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +25,6 @@ namespace ResultatenSysteem.Controllers
         // GET: Studenten
         public async Task<IActionResult> Index()
         {
-            long studentnummer = DateTime.MaxValue.Ticks;
-            Console.WriteLine(studentnummer);
             return View(await _context.Student.ToListAsync());
         }
 
@@ -40,7 +39,8 @@ namespace ResultatenSysteem.Controllers
             var student = await _context.Student
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            //ViewData["Groepen"] = _context.Groep.Include(s => s.Groepen).Where(sg => sg.Id == id).ToList();
+            //ViewData["Groepen"] = _context.Groep.Include(s => s.Studenten).Where(sg => sg.Id == id).ToList();
+            ViewData["Groepen"] = _context.StudentGroep.Where(sg => sg.StudentId == id).Include(s => s.Groep).Where(g => g.Groep.Id == g.GroepId).ToList();
             if (student == null)
             {
                 return NotFound();
@@ -57,6 +57,15 @@ namespace ResultatenSysteem.Controllers
             ViewData["Groepen"] = _context.Groep.ToList();
             return View();
         }
+
+        //public static string RandomPassword()
+        //{
+        //    string rs = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 2);
+        //    Random generator = new Random();
+        //    int ri = generator.Next(9999, 99999);
+        //    string pass = rs + ri.ToString();
+        //    return pass;
+        //}
 
         // POST: Studenten/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -137,8 +146,10 @@ namespace ResultatenSysteem.Controllers
                     existingStudent.Groepen.Clear();
                     foreach (var item in GroepId)
                     {
-                        StudentGroep sg = new StudentGroep();
-                        sg.GroepId = item;
+                        StudentGroep sg = new StudentGroep
+                        {
+                            GroepId = item
+                        };
                         existingStudent.Groepen.Add(sg);
                     }
                     existingStudent.Voornaam = student.Voornaam;

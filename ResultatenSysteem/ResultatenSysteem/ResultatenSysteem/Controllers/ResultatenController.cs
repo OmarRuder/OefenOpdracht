@@ -13,7 +13,6 @@ using ResultatenSysteem.ViewModels;
 namespace ResultatenSysteem.Controllers
 {
     [Area("Medewerker")]
-    [Authorize(Roles = "Medewerker")]
     public class ResultatenController : Controller
     {
         private readonly ApplicationDbContext _context;

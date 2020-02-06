@@ -56,15 +56,15 @@ namespace ResultatenSysteem.Models
                 medewerkerId = user.Id;
             }
 
-            if (await userManager.FindByNameAsync("hadverwacht@wrx.sdt") == null)
+            if (await userManager.FindByNameAsync("issyruder@wrx.sdt") == null)
             {
                 var user = new ApplicationUser
                 {
-                    UserName = "hadverwacht@wrx.sdt",
-                    Email = "hadverwacht@wrx.sdt",
-                    Voornaam = "Had",
-                    Achternaam = "Verwacht",
-                    Gebruikersnummer = "210312"
+                    UserName = "issyruder@wrx.sdt",
+                    Email = "issyruder@wrx.sdt",
+                    Voornaam = "Issy",
+                    Achternaam = "Ruder",
+                    Gebruikersnummer = "142312"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -83,7 +83,7 @@ namespace ResultatenSysteem.Models
                     Email = "wiibebruins@wrx.sdt",
                     Voornaam = "Wiibe",
                     Achternaam = "Bruins",
-                    Gebruikersnummer = "003221"
+                    Gebruikersnummer = "421245"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -122,7 +122,7 @@ namespace ResultatenSysteem.Models
                     Email = "zahirarafik@wrx.sdt",
                     Voornaam = "Zahira",
                     Achternaam = "Rafik",
-                    Gebruikersnummer = "902134"
+                    Gebruikersnummer = "352553"
                 };
 
                 var result = await userManager.CreateAsync(user);

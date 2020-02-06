@@ -15,7 +15,8 @@ namespace ResultatenSysteem.Models
         public string Achternaam { get; set; }
         public string Tussenvoegsel { get; set; }
         public string Studentnummer { get; set; }
-
+        [EmailAddress]
+        public string Email { get; set; }
         public List<Resultaat> Resultaten { get; set; }
         public List<StudentGroep> Groepen { get; set; }
     }

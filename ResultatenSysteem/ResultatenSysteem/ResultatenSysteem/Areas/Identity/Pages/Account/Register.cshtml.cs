@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using ResultatenSysteem.Data;
 using ResultatenSysteem.Models;
 
 namespace ResultatenSysteem.Areas.Identity.Pages.Account
@@ -18,15 +19,18 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            ApplicationDbContext context,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
@@ -40,7 +44,6 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
             [EmailAddress]
             [Display(Name = "E-Mail")]
             public string Email { get; set; }
@@ -78,11 +81,20 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                string rs = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 2);
+                Random generator = new Random();
+                int ri = generator.Next(9999, 99999);
+                var sgNummer = rs + ri.ToString();
+                var email = Input.Voornaam + Input.Achternaam + "@wrx.sdt";
+                Console.WriteLine("4206942069" + email);
                 //string username = Input.Voornaam + " " + Input.Achternaam;
-                var user = new ApplicationUser { UserName = Input.Voornaam + "-" + Input.Achternaam, Email = Input.Email };
+                var user = new ApplicationUser { UserName = email, Email = email, Gebruikersnummer = sgNummer};
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    var student = new Student { Voornaam = Input.Voornaam, Tussenvoegsel = Input.Tussenvoegsel, Achternaam = Input.Achternaam, Email = email, Studentnummer = sgNummer };
+                    _context.Student.Add(student);
+                    await _context.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
