@@ -39,17 +39,28 @@ namespace ResultatenSysteem
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
+            
+            //default identity 
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddDefaultUI(UIFramework.Bootstrap4)
+            //    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddDefaultTokenProviders();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager
+            )
         {
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -83,9 +94,7 @@ namespace ResultatenSysteem
                 );
             });
 
-            //DataSeed.Initialize(context).Wait();
-
+            DummyData.Initialize(context, userManager, roleManager).Wait();
         }
-
     }
 }

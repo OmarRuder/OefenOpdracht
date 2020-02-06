@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResultatenSysteem.Data;
 
 namespace ResultatenSysteem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200205155614_ApplicationUserNameChanged")]
+    partial class ApplicationUserNameChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,6 +135,22 @@ namespace ResultatenSysteem.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c654d7fb-c169-40e7-93e8-fffb3ce8b98c",
+                            ConcurrencyStamp = "afb8e518-4fe4-4b9c-9e72-d14f12b8eb21",
+                            Description = "Medewerker van WRX Hogere School",
+                            Name = "Medewerker"
+                        },
+                        new
+                        {
+                            Id = "ad4b9aee-bff4-4f00-93ae-dbbeb7e4c654",
+                            ConcurrencyStamp = "29cdff1e-e3bb-476d-9ae1-b3c44a3caa3d",
+                            Description = "Student van WRX Hogere School",
+                            Name = "Student"
+                        });
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.ApplicationUser", b =>
@@ -192,6 +210,72 @@ namespace ResultatenSysteem.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "22c83364-97b1-49c2-b5a3-1a0636f58734",
+                            AccessFailedCount = 0,
+                            Achternaam = "Verwacht",
+                            ConcurrencyStamp = "cfe1ad0d-11b1-4234-8403-017b5ffe4c0f",
+                            Email = "hadverwacht@wrx.sdt",
+                            EmailConfirmed = false,
+                            Gebruikersnummer = "210312",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            Tussenvoegsel = "",
+                            TwoFactorEnabled = false,
+                            UserName = "hadverwacht@wrx.sdt",
+                            Voornaam = "Had"
+                        },
+                        new
+                        {
+                            Id = "b603e36c-17ac-4047-af6d-507b4a89f96c",
+                            AccessFailedCount = 0,
+                            Achternaam = "Bruins",
+                            ConcurrencyStamp = "727f0e9c-5fa1-412c-afd5-478af7fdb9ec",
+                            Email = "wiibebruins@wrx.sdt",
+                            EmailConfirmed = false,
+                            Gebruikersnummer = "003221",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            Tussenvoegsel = "",
+                            TwoFactorEnabled = false,
+                            UserName = "wiibebruins@wrx.sdt",
+                            Voornaam = "Wiibe"
+                        },
+                        new
+                        {
+                            Id = "e88004ec-c94e-4431-9fec-63177c43efa4",
+                            AccessFailedCount = 0,
+                            Achternaam = "Otay",
+                            ConcurrencyStamp = "72211069-0d69-4bfc-8aee-2ff4d65f3988",
+                            Email = "othmanotay@wrx.sdt",
+                            EmailConfirmed = false,
+                            Gebruikersnummer = "134902",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            Tussenvoegsel = "",
+                            TwoFactorEnabled = false,
+                            UserName = "othmanotay@wrx.sdt",
+                            Voornaam = "Othman"
+                        },
+                        new
+                        {
+                            Id = "82508b4b-1ee3-49f2-b10b-7e4d9405f1ca",
+                            AccessFailedCount = 0,
+                            Achternaam = "Rafik",
+                            ConcurrencyStamp = "a3592463-b4e6-4840-b2af-839282b0cc5f",
+                            Email = "zahirarafik@wrx.sdt",
+                            EmailConfirmed = false,
+                            Gebruikersnummer = "902134",
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            Tussenvoegsel = "",
+                            TwoFactorEnabled = false,
+                            UserName = "zahirarafik@wrx.sdt",
+                            Voornaam = "Zahira"
+                        });
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.Groep", b =>

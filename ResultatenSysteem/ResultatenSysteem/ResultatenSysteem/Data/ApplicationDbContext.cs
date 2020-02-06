@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Models;
 
 namespace ResultatenSysteem.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
 
+        //dataseed
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -76,8 +78,6 @@ namespace ResultatenSysteem.Data
                 new StudentGroep { StudentId = 5, GroepId = 1 },
                 new StudentGroep { StudentId = 6, GroepId = 1 });
         }
-
-
 
         public DbSet<ResultatenSysteem.Models.Student> Student { get; set; }
         public DbSet<ResultatenSysteem.Models.StudentGroep> StudentGroep { get; set; }

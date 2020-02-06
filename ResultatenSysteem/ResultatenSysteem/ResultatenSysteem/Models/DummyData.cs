@@ -1,0 +1,196 @@
+﻿using Microsoft.AspNetCore.Identity;
+using ResultatenSysteem.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace ResultatenSysteem.Models
+{
+    public class DummyData
+    {
+        public static async Task Initialize(ApplicationDbContext context,
+                                            UserManager<ApplicationUser> userManager,                            
+                                            RoleManager<ApplicationRole> roleManager)
+        {
+            context.Database.EnsureCreated();
+
+            string medewerkerId = "";
+            string medewerker = "Medewerker";
+            string medewerkerDesc = "Medewerker van WRX Hogere School";
+
+            string student = "Student";
+            string studentDesc = "Student van WRX Hogere School";
+
+            string password = "P@$$w0rd";
+
+            if (await roleManager.FindByNameAsync(medewerker) == null)
+            {
+                await roleManager.CreateAsync(new ApplicationRole(medewerker, medewerkerDesc));
+            }
+            if (await roleManager.FindByNameAsync(student) == null)
+            {
+                await roleManager.CreateAsync(new ApplicationRole(student, studentDesc));
+            }
+
+            if (await userManager.FindByNameAsync("omarruder@wrx.hgs") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "omarruder@wrx.hgs",
+                    Email = "omarruder@wrx.hgs",
+                    Voornaam = "Omar",
+                    Achternaam = "Ruder",
+                    Gebruikersnummer = "140553"
+                };
+
+                Console.WriteLine("omarruder@wrx.hgs bestaat nog niet en we zitten nu in de functie!");
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    Console.WriteLine("het is gelukt");
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, medewerker);
+                }
+                medewerkerId = user.Id;
+            }
+
+            if (await userManager.FindByNameAsync("hadverwacht@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "hadverwacht@wrx.sdt",
+                    Email = "hadverwacht@wrx.sdt",
+                    Voornaam = "Had",
+                    Achternaam = "Verwacht",
+                    Gebruikersnummer = "210312"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+            if (await userManager.FindByNameAsync("wiibebruins@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "wiibebruins@wrx.sdt",
+                    Email = "wiibebruins@wrx.sdt",
+                    Voornaam = "Wiibe",
+                    Achternaam = "Bruins",
+                    Gebruikersnummer = "003221"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+
+            if (await userManager.FindByNameAsync("othmanotay@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "othmanotay@wrx.sdt",
+                    Email = "othmanotay@wrx.sdt",
+                    Voornaam = "Othman",
+                    Achternaam = "Otay",
+                    Gebruikersnummer = "134902"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+            if (await userManager.FindByNameAsync("zahirarafik@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "zahirarafik@wrx.sdt",
+                    Email = "zahirarafik@wrx.sdt",
+                    Voornaam = "Zahira",
+                    Achternaam = "Rafik",
+                    Gebruikersnummer = "902134"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+            if (await userManager.FindByNameAsync("daveroeder@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "daveroeder@wrx.sdt",
+                    Email = "daveroeder@wrx.sdt",
+                    Voornaam = "Dave",
+                    Achternaam = "Roeder",
+                    Gebruikersnummer = "drA231"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+            if (await userManager.FindByNameAsync("lesleyvlaar@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "lesleyvlaar@wrx.sdt",
+                    Email = "lesleyvlaar@wrx.sdt",
+                    Voornaam = "Lesley",
+                    Achternaam = "Vlaar",
+                    Gebruikersnummer = "691420"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+
+            if (await userManager.FindByNameAsync("jannobijl@wrx.sdt") == null)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = "jannobijl@wrx.sdt",
+                    Email = "jannobijl@wrx.sdt",
+                    Voornaam = "Janno",
+                    Achternaam = "Bijl",
+                    Gebruikersnummer = "132431"
+                };
+
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    await userManager.AddPasswordAsync(user, password);
+                    await userManager.AddToRoleAsync(user, student);
+                }
+            }
+
+        }
+    }
+}

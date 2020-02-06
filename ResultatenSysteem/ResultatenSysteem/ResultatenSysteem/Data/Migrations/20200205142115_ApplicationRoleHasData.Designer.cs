@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ResultatenSysteem.Data;
 
 namespace ResultatenSysteem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200205142115_ApplicationRoleHasData")]
+    partial class ApplicationRoleHasData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,6 +135,22 @@ namespace ResultatenSysteem.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "4dac0a77-a6fd-49ac-99a0-38ec6332542d",
+                            ConcurrencyStamp = "2cd5c1ee-3474-4100-9f48-37f7680e71bb",
+                            Description = "Medewerker van WRX Hogere School",
+                            Name = "Medewerker"
+                        },
+                        new
+                        {
+                            Id = "5a419cdb-89d1-4d8a-80f5-7a0720553095",
+                            ConcurrencyStamp = "dc88cee0-0e35-479d-858b-2f010881786c",
+                            Description = "Student van WRX Hogere School",
+                            Name = "Student"
+                        });
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.ApplicationUser", b =>
