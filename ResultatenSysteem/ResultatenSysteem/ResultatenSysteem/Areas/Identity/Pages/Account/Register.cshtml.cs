@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +15,8 @@ using ResultatenSysteem.Models;
 
 namespace ResultatenSysteem.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [Area("Medewerker")]
+    [Authorize(Roles = "Medewerker")]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -41,14 +43,12 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
-
         public class InputModel
         {
             [EmailAddress]
             [Display(Name = "E-Mail")]
             public string Email { get; set; }
 
-            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Wachtwoord")]
@@ -72,11 +72,13 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
 
         public void OnGet(string returnUrl = null)
         {
+            ViewData["Groepen"] = _context.Groep.ToList();
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public async Task<IActionResult> OnPostAsync(int[] GroepId, string returnUrl = null)
         {
+            ViewData["Groepen"] = _context.Groep.ToList();
 
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
@@ -85,14 +87,24 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
                 Random generator = new Random();
                 int ri = generator.Next(9999, 99999);
                 var sgNummer = rs + ri.ToString();
-                var email = Input.Voornaam + Input.Achternaam + "@wrx.sdt";
-                Console.WriteLine("4206942069" + email);
+                string password = "P@$$w0rd!";
+                var email = sgNummer + "@wrx.sdt";
                 //string username = Input.Voornaam + " " + Input.Achternaam;
                 var user = new ApplicationUser { UserName = email, Email = email, Gebruikersnummer = sgNummer};
-                var result = await _userManager.CreateAsync(user, Input.Password);
+                var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
+                    List<StudentGroep> UpdateList = new List<StudentGroep>();
+                    foreach (var groep in GroepId)
+                    {
+                        StudentGroep sg = new StudentGroep
+                        {
+                            GroepId = groep
+                        };
+                        UpdateList.Add(sg);
+                    }
                     var student = new Student { Voornaam = Input.Voornaam, Tussenvoegsel = Input.Tussenvoegsel, Achternaam = Input.Achternaam, Email = email, Studentnummer = sgNummer };
+                    student.Groepen = UpdateList;
                     _context.Student.Add(student);
                     await _context.SaveChangesAsync();
                     _logger.LogInformation("User created a new account with password.");

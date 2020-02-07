@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 <script>
+    var aantal = 0;
+    var lowerCaseMail = "";
     $(document).ready(function () {
         href = $("#deleteStudentButton").attr("href"); //vult href variabele met href van de geklikte knop (standaard /Medewerker/Studenten/DeleteStudent/?id)
         var studentId = 0;
@@ -14,6 +16,13 @@
             studentNaam = $(this).attr('studentDisplayNaam'); //vult studentId variabele met studentDisplayNaam attribuut gelinkt aan de geklikte knop
             $("#deleteStudentButton").attr('href', href + "/" + studentId); // verandert href naar standaard href + /studentId
             $("#studentDisplayNaam").text(studentNaam); //vult naam placeholder studentDisplayNaam 
+        });
+        $('tbody').find('tr').each(function () {
+            aantal++;
+            $(this).find('.studentMail').each(function () {
+                lowerCaseMail = $(this).text().toLowerCase();
+                $(this).attr("href", "mailto:" + lowerCaseMail);
+            });
         });
     });
 </script>
@@ -41,6 +50,7 @@
 </div>
 <p>
     <a asp-action="Create">Student Toevoegen</a>
+    <a asp-area="Identity" asp-page="/Account/Register">Student met user account aanmaken</a>
 </p>
 <table class="table">
     <thead>
@@ -49,7 +59,7 @@
                 Naam
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Studentnummer)
+                E-Mail
             </th>
             <th></th>
         </tr>
@@ -58,15 +68,14 @@
         @foreach (var item in Model)
         {
             <tr>
-
                 <td>
-                 
+                    (@Html.DisplayFor(modelItem => item.Studentnummer))
                     @Html.DisplayFor(modelItem => item.Voornaam)
                     @Html.DisplayFor(modelItem => item.Tussenvoegsel)
                     @Html.DisplayFor(modelItem => item.Achternaam)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Studentnummer)
+                    <a class="studentMail" href="mailto:@item.Email" style="text-transform:lowercase;">@item.Email</a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

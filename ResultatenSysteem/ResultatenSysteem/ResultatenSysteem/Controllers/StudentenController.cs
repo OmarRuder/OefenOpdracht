@@ -87,11 +87,11 @@ namespace ResultatenSysteem.Controllers
             }
 
             List<StudentGroep> UpdateList = new List<StudentGroep>();
-            foreach (var item in GroepId)
+            foreach (var groep in GroepId)
             {
                 StudentGroep sg = new StudentGroep
                 {
-                    GroepId = item
+                    GroepId = groep
                 };
                 //sg.StudentId = student.Id;
                 UpdateList.Add(sg);
