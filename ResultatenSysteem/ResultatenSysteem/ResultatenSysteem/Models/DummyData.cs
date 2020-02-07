@@ -41,6 +41,7 @@ namespace ResultatenSysteem.Models
                     Email = "omarruder@wrx.hgs",
                     Voornaam = "Omar",
                     Achternaam = "Ruder",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "140553"
                 };
 
@@ -64,6 +65,7 @@ namespace ResultatenSysteem.Models
                     Email = "issyruder@wrx.sdt",
                     Voornaam = "Issy",
                     Achternaam = "Ruder",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "142312"
                 };
 
@@ -83,6 +85,7 @@ namespace ResultatenSysteem.Models
                     Email = "wiibebruins@wrx.sdt",
                     Voornaam = "Wiibe",
                     Achternaam = "Bruins",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "421245"
                 };
 
@@ -103,6 +106,7 @@ namespace ResultatenSysteem.Models
                     Email = "othmanotay@wrx.sdt",
                     Voornaam = "Othman",
                     Achternaam = "Otay",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "134902"
                 };
 
@@ -122,6 +126,7 @@ namespace ResultatenSysteem.Models
                     Email = "zahirarafik@wrx.sdt",
                     Voornaam = "Zahira",
                     Achternaam = "Rafik",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "352553"
                 };
 
@@ -141,6 +146,7 @@ namespace ResultatenSysteem.Models
                     Email = "daveroeder@wrx.sdt",
                     Voornaam = "Dave",
                     Achternaam = "Roeder",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "drA231"
                 };
 
@@ -160,6 +166,7 @@ namespace ResultatenSysteem.Models
                     Email = "lesleyvlaar@wrx.sdt",
                     Voornaam = "Lesley",
                     Achternaam = "Vlaar",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "691420"
                 };
 
@@ -180,6 +187,7 @@ namespace ResultatenSysteem.Models
                     Email = "jannobijl@wrx.sdt",
                     Voornaam = "Janno",
                     Achternaam = "Bijl",
+                    ImgNaam = "default.png",
                     Gebruikersnummer = "132431"
                 };
 

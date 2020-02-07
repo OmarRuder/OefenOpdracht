@@ -1,11 +1,41 @@
-﻿@{
-    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    Layout = "/Views/Shared/_MedewerkerLayout.cshtml";
+    var activeUser = await UserManager.GetUserAsync(User);
 }
-
-<h1>Manage your account</h1>
-
+<style>
+    #roleSpan {
+        position: absolute;
+        font-size:20px;
+        z-index: 99;
+        padding: 0.5%;
+        margin-top: 5%;
+        margin-left: 3%;
+    }
+    .accountdetails {
+        margin-top: 4%;
+        margin-right: 20%;
+        text-align: center;
+    }
+    .accountdetails > img {
+        width: 125px;
+        border-radius: 50%;
+        height: auto;
+    }
+</style>
+<h1>Account beheren</h1>
+<div class="accountdetails" style="float:right;">
+    @if (User.IsInRole("Medewerker"))
+    {<span id="roleSpan">Medewerker</span>
+    }
+    <img src="~/userImg/@activeUser.ImgNaam" />
+    <hr />
+    <h3>@activeUser.Voornaam @activeUser.Tussenvoegsel @activeUser.Achternaam <span style="font-size:15px;">(@activeUser.Gebruikersnummer)</span></h3>
+</div>
 <div>
-    <h4>Change your account settings</h4>
+    <h4>Verander je account opties:</h4>
     <hr />
     <div class="row">
         <div class="col-md-3">

@@ -1,9 +1,22 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-
+@{
+    var activeUser = await UserManager.GetUserAsync(User);
+}
 @if (SignInManager.IsSignedIn(User))
 {
+    <script>
+        $(document).ready(function () {
+            $(document).find('#profilePicture').each(function () {
+                console.log("item found");
+                console.log($(this).attr("src"));
+                $(this).on('load', function () { console.log("image loaded correctly"); });
+                $(this).on('error', function () { console.log("error loading image"); });
+
+            }); 
+        });
+    </script>
     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
     <li class="nav-item dropdown no-arrow d-sm-none">
 
@@ -24,7 +37,7 @@
             </form>
         </div>
     </li>
-  
+
     <!-- Nav Item - Alerts -->
     <li class="nav-item dropdown no-arrow mx-1">
 
@@ -134,8 +147,9 @@
     <div class="topbar-divider d-none d-sm-block"></div>
     <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@User.Identity.Name</span>
-            <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small">@activeUser.Email</span>
+            @*<span>@activeUser.ImgNaam</span>*@
+            <img id="profilePicture" class="img-profile rounded-circle" src="~/userImg/@activeUser.ImgNaam" />
             @if (User.IsInRole("Medewerker"))
             {
                 <span class="badge badge-danger badge-counter"><i style="color:white;font-size:20px;" class="fas fa-user-shield"></i></span>

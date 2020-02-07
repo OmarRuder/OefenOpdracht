@@ -13,5 +13,6 @@ namespace ResultatenSysteem.Models
         public string Tussenvoegsel { get; set; }
         public string Achternaam { get; set; }
         public string Gebruikersnummer { get; set; }
+        public string ImgNaam { get; set; }
     }
 }

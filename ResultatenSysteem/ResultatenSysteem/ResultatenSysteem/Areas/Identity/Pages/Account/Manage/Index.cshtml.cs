@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -17,15 +20,18 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IHostingEnvironment _env;
+        private static string generatedImgName;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender, IHostingEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _env = env;
         }
 
         public string Username { get; set; }
@@ -47,6 +53,8 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public string ImgNaam { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -57,16 +65,18 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var userName = await _userManager.GetUserNameAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var userName = user.UserName;
+            var email = user.Email;
+            var imgNaam = user.ImgNaam;
+            var phoneNumber = user.PhoneNumber;
 
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                ImgNaam = imgNaam
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -74,14 +84,20 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(IFormFile file)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
             var user = await _userManager.GetUserAsync(User);
+            UploadFile(file, _env);
+            if (user.ImgNaam != "default.png")
+            {
+                DeleteFile(file, _env, user.ImgNaam, user);
+            }
+            user.ImgNaam = generatedImgName;
+            await _userManager.UpdateAsync(user);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -112,6 +128,33 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
+        }
+
+        private void UploadFile(IFormFile file, IHostingEnvironment env)
+        {
+            Random random = new Random();
+            string RandomString(int length)
+            {
+                const string allowedChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                return new string(Enumerable.Repeat(allowedChar, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+            }
+            var imgName = RandomString(15) + ".png";
+            generatedImgName = imgName; //private generatedImgName = generated imgname
+            var path = Path.Combine(env.WebRootPath + "/userImg/" + generatedImgName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+        }
+
+        private void DeleteFile(IFormFile file, IHostingEnvironment env, string existingFile, ApplicationUser user)
+        {
+            Console.WriteLine("current existing file is: " + existingFile);
+            Console.WriteLine("userfile is:" + user.ImgNaam);
+            var path = (Path.Combine(env.WebRootPath + "/userImg/" + existingFile));
+            //System.IO.File.Copy(Path.Combine(env.WebRootPath + "/userImg/", existingFile), Path.Combine(env.WebRootPath + "/userImg/", existingFile));
+            System.IO.File.Delete(existingFile);
         }
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()

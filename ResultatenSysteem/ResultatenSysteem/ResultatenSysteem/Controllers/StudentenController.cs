@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -52,11 +53,12 @@ namespace ResultatenSysteem.Controllers
         // GET: Studenten/Create
         public IActionResult Create()
         {
-            var student = _context.Student.ToList();
+            //var student = _context.Student.ToList();
        
             ViewData["Groepen"] = _context.Groep.ToList();
             return View();
         }
+
 
         //public static string RandomPassword()
         //{
