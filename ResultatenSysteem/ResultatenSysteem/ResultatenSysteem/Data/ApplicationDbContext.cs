@@ -60,15 +60,15 @@ namespace ResultatenSysteem.Data
                 new Student { Id = 8, Voornaam = "Janno", Achternaam = "Bijl", Studentnummer = "132431", Email = "jannobijl@wrx.sdt" } );
 
             modelBuilder.Entity<Resultaat>().HasData(
-                new Resultaat { Id = 1, Beoordeling = 7.5, StudentId = 1, VakId = 1},
-                new Resultaat { Id = 2, Beoordeling = 8.4, StudentId = 1, VakId = 2 },
-                new Resultaat { Id = 3, Beoordeling = 6.4, StudentId = 1, VakId = 3 },
-                new Resultaat { Id = 4, Beoordeling = 6.4, StudentId = 3, VakId = 1 },
-                new Resultaat { Id = 5, Beoordeling = 9.5, StudentId = 3, VakId = 4 },
-                new Resultaat { Id = 6, Beoordeling = 3.4, StudentId = 5, VakId = 1 },
-                new Resultaat { Id = 7, Beoordeling = 9.5, StudentId = 6, VakId = 2 },
-                new Resultaat { Id = 8, Beoordeling = 4.3, StudentId = 7, VakId = 3 },
-                new Resultaat { Id = 9, Beoordeling = 5.5, StudentId = 8, VakId = 4 }
+                new Resultaat { Id = 1, Beoordeling = 7.5, StudentId = 1, VakId = 1, InvoerDatum = DateTime.Now},
+                new Resultaat { Id = 2, Beoordeling = 8.4, StudentId = 1, VakId = 2, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 3, Beoordeling = 6.4, StudentId = 1, VakId = 3, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 4, Beoordeling = 6.4, StudentId = 3, VakId = 1, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 5, Beoordeling = 9.5, StudentId = 3, VakId = 4, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 6, Beoordeling = 3.4, StudentId = 5, VakId = 1, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 7, Beoordeling = 9.5, StudentId = 6, VakId = 2, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 8, Beoordeling = 4.3, StudentId = 7, VakId = 3, InvoerDatum = DateTime.Now },
+                new Resultaat { Id = 9, Beoordeling = 5.5, StudentId = 8, VakId = 4, InvoerDatum = DateTime.Now }
                 );
 
 
@@ -92,6 +92,7 @@ namespace ResultatenSysteem.Data
         public DbSet<ResultatenSysteem.Models.Groep> Groep{ get; set; }
         public DbSet<ResultatenSysteem.Models.Resultaat> Resultaat { get; set; }
         public DbSet<ResultatenSysteem.Models.Vak> Vak { get; set; }
+        public DbSet<ResultatenSysteem.Models.OpleidingAanvraag> OpleidingAanvraag { get; set; }
 
     }
 }

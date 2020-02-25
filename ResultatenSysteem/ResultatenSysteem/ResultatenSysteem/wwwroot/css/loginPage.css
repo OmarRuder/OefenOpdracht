@@ -1,0 +1,107 @@
+﻿
+h1 {
+    font-weight: normal !important;
+    color: #202020 !important;
+}
+body {
+    font-family: 'Lato', sans-serif;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    backface-visibility: hidden;
+    /*animation: slideBackground 10s linear infinite 0s;*/
+    animation-direction: alternate;
+    animation-timing-function: linear;
+    background-image: url('../img/loginpagebackground4.jpg');
+}
+@keyframes slideBackground {
+    50% {
+        background-image: url('../img/loginpagebackground3.jpg');
+    }
+
+}
+::selection {
+    background-color: #202020;
+    color: white;
+}
+.container {
+    z-index: 99;
+    padding: 2%;
+    margin: 0% 10% 10% 10%;
+}
+.backgroundImgCover {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 5;
+    opacity: 0.5;
+}
+.loginCardContainer {
+    margin-top: 5%;
+    text-align: center;
+}
+.loginCard {
+    -webkit-box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
+    -moz-box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
+    box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
+    background-color: white;
+    width: 30%;
+    display: inline-block;
+}
+#loginSection {
+    margin: 10%;
+}
+.loginCard label {
+    float: left;
+    display: block;
+}
+.loginCard input, select {
+    background-color: #f7f7f7;
+    font-size: 13px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border-radius: 0px;
+    border: 0px;
+    border-bottom: 1px solid #6ea8ff;
+}
+.checkBoxRow {
+    white-space: nowrap;
+    margin: 0;
+    float: left;
+    margin-left: -15%;
+}
+.checkBoxRow:hover {
+    cursor: pointer!important;
+    color: #3472cf;
+}
+a {
+    text-decoration: none;
+    color: #3472cf;
+}
+a:hover {
+    text-decoration: underline;
+    color: #3449cf;
+}
+
+@media only screen and (max-width: 1530px) {
+    .loginCard {
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width: 1147px) {
+   .loginCard {
+       width: 75%;
+   }
+}
+
+@media only screen and (max-width: 400px) {
+    .loginCard {
+        width: 100%;
+    }
+}

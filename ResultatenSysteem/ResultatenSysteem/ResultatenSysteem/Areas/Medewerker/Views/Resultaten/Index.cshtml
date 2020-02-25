@@ -6,8 +6,24 @@
 
 @{
     double cijfer = 0;
+    string tableStyle = "";
     string display = "hidden";
     string arrowClass = "";
+    int aantalVoldoende = 0;
+    int aantalOnvoldoende = 0;
+    int studentAantalVoldoende = 0;
+    int studentAantalOnvoldoende = 0;
+    var activeUser = await UserManager.GetUserAsync(User);
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        string userFullName = activeUser.Voornaam + " " + activeUser.Tussenvoegsel + " " + activeUser.Achternaam;
+        ViewData["WelkomMessage"] = "Welkom " + userFullName;
+        if (activeUser.ChosenTheme == "dark-sb-admin-2")
+        {
+            tableStyle = "table-dark table-hover table-striped";
+        }
+    }
     if (User.IsInRole("Medewerker") == false)
     {
         ViewData["Title"] = "Mijn resultaten";
@@ -24,7 +40,6 @@
         -webkit-transition: all .1s linear;
         transition: all .1s linear;
     }
-
     .down {
         -moz-transform: rotate(-90deg);
         -webkit-transform: rotate(90deg);
@@ -32,21 +47,15 @@
     }
 </style>
 
-<script>
-    $(document).ready(function () {
-        $(".toggler").click(function (e) {
-            e.preventDefault();
-            $('.student-' + $(this).attr('data-student-toggle')).fadeToggle("fast");
-            $('.toggle-' + $(this).attr('data-student-toggle')).toggleClass("down");
-        });
-    });
-</script>
-
 <h1>@ViewData["Title"]</h1>
-<h3>Welkom @User.Identity.Name</h3>
+<h3>@ViewData["WelkomMessage"]</h3>
+
 
 @if (User.IsInRole("Medewerker"))
 {
+    <div id="chartpieholder" class="chart-pie">
+        <canvas width="200" height="100" aria-label="Resultatenlijst Cijfers Canvas" id="myPieChart"></canvas>
+    </div>
     <div class="form-group" style="margin:2% 0% 8% 0%;">
         <a class="btn btn-primary" style="float:left;margin-right:20%;color:white;" asp-action="Create">
             Cijfer invoeren
@@ -71,8 +80,7 @@
         </form>
     </div>
 }
-
-<table id="studentenTabel" class="table">
+<table id="studentenTabel" class="table @tableStyle">
     <thead>
         <tr>
             @if (User.IsInRole("Medewerker"))
@@ -119,22 +127,25 @@
                             <br />
                             @foreach (var item in Model.Where(g => g.StudentId == student.Id))
                             {
-                                <span class="student-@item.StudentId" id="studentenCijfers" style="display:@display;">
+                                <span class="student-@item.StudentId" style="display:@display;">
                                     @Html.DisplayFor(modelItem => item.Vak.Vakcode)
                                     @{
                                         cijfer = item.Beoordeling;
                                     }
                                     @if (cijfer < 5.5)
                                     {
+                                        aantalOnvoldoende++;
                                         <span style="color:red;">
                                             @item.Beoordeling
                                         </span>
                                     }
                                     else
                                     {
+                                        aantalVoldoende++;
                                         <span style="color:forestgreen;">
                                             @item.Beoordeling
                                         </span>
+
                                     }
                                 </span>
                             }
@@ -144,7 +155,9 @@
             }
             else // als user admin is alle studenten laten zien
             {
-                @if (Enumerable.Count(ViewBag.Studenten) <= 1)
+                studentAantalOnvoldoende = 0;
+                studentAantalVoldoende = 0;
+                @if (Enumerable.Count(ViewBag.Studenten) <= 1) //kijken hoeveel studenten er in viewbag zitten (als het 1 is worden de cijfers gelijk getoond ipv dat een gebruiker moet klikken op resultaten bekijken)
                 {
                     display = "normal";
                     arrowClass = "down";
@@ -172,25 +185,34 @@
                         <br />
                         @foreach (var item in Model.Where(g => g.StudentId == student.Id))
                         {
-                            <span class="student-@item.StudentId" id="studentenCijfers" style="display:@display;">
+                            <span class="student-@item.StudentId" style="display:@display;">
                                 @Html.DisplayFor(modelItem => item.Vak.Vakcode)
                                 @{
                                     cijfer = item.Beoordeling;
                                 }
                                 @if (cijfer < 5.5)
                                 {
+                                    studentAantalOnvoldoende++;
+                                    aantalOnvoldoende++;
                                     <span style="color:red;">
                                         @item.Beoordeling
                                     </span>
                                 }
                                 else
                                 {
+                                    studentAantalVoldoende++;
+                                    aantalVoldoende++;
                                     <span style="color:forestgreen;">
                                         @item.Beoordeling
                                     </span>
                                 }
                             </span>
                         }
+                        <span id="studentAantalVoldoende-@student.Id" style="display:none;">@studentAantalVoldoende</span>
+                        <span id="studentAantalOnvoldoende-@student.Id" style="display:none;">@studentAantalOnvoldoende</span>
+                        <div class="chart-pie student-@student.Id studentPieChartContainer" style="display:@display;">
+                            <canvas width="100" height="100" aria-label="Resultatenlijst Cijfers Canvas" id="studentPieChart-@student.Id"></canvas>
+                        </div>
                     </td>
                     <td>
                         <a href="#">@student.Email</a>
@@ -217,7 +239,7 @@
                         }
                         else
                         {
-                            <span class="btn btn" style="background-color:#859EE7;color:white;float:right;margin-right:45%;cursor:not-allowed;">Aanpassen</span>
+                            <span class="btn" id="notAllowedBtn">Aanpassen</span>
                         }
 
                     </td>
@@ -226,3 +248,11 @@
         }
     </tbody>
 </table>
+
+<span id="aantalVoldoende" style="display:none;">@aantalVoldoende</span>
+<span id="aantalOnvoldoende" style="display:none;">@aantalOnvoldoende</span>
+
+<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="~/js/sb-admin-2.min.js"></script>
+<script src="~/vendor/chart.js/Chart.min.js"></script>
+<script src="~/js/demo/resultatenlijst.js"></script>

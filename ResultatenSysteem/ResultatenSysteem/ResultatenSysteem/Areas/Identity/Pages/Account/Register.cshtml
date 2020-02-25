@@ -2,6 +2,10 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Student Registreren";
+    if (ViewBag.Actie != null)
+    {
+        ViewData["Title"] = "Student toewijzen aan aanvraag";
+    } 
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,43 +14,40 @@
     <div class="col-md-4">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <hr />
+            @if (ViewBag.Opmerking != null)
+            {
+                <span><b>Opmerking:</b></span>
+                <span> @ViewBag.Opmerking</span>
+            }
             <div asp-validation-summary="All" class="text-danger"></div>
             @*<div class="form-group">
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>*@
+            <label asp-for="Input.Email"></label>
+            <input asp-for="Input.Email" class="form-control" />
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>*@
             <div class="form-group">
                 <label asp-for="Input.Voornaam"></label>
-                <input asp-for="Input.Voornaam" class="form-control" />
+                <input asp-for="Input.Voornaam" class="form-control" value="@ViewBag.Voornaam" />
                 <span asp-validation-for="Input.Voornaam" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Tussenvoegsel"></label>
-                <input asp-for="Input.Tussenvoegsel" class="form-control" />
+                <input asp-for="Input.Tussenvoegsel" class="form-control" value="@ViewBag.Tussenvoegsel" />
                 <span asp-validation-for="Input.Tussenvoegsel" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Achternaam">Achternaam</label>
-                <input asp-for="Input.Achternaam" class="form-control" />
+                <input asp-for="Input.Achternaam" class="form-control" value="@ViewBag.Achternaam" />
                 <span asp-validation-for="Input.Achternaam" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-                <label asp-for="Input.Password"></label>
-                <input asp-for="Input.Password" class="form-control" />
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ConfirmPassword"> </label>
-                <input asp-for="Input.ConfirmPassword" class="form-control" />
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>*@
+
             @foreach (var g in ViewBag.Groepen)
             {
-                <input type="checkbox" name="GroepId" value="@g.Id">
+                <input type="checkbox" name="GroepId" class="custom-checkbox" value="@g.Id">
                 <span>@g.Naam (@g.Groepscode)</span>
                 <br />
             }
+
             <button type="submit" class="btn btn-primary">Account aanmaken</button>
         </form>
     </div>

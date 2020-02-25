@@ -42,6 +42,7 @@ namespace ResultatenSysteem.Controllers
 
             //ViewData["Groepen"] = _context.Groep.Include(s => s.Studenten).Where(sg => sg.Id == id).ToList();
             ViewData["Groepen"] = _context.StudentGroep.Where(sg => sg.StudentId == id).Include(s => s.Groep).Where(g => g.Groep.Id == g.GroepId).ToList();
+            ViewData["Resultaten"] = _context.Resultaat.Where(r => r.StudentId == id);
             if (student == null)
             {
                 return NotFound();

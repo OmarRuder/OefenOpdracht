@@ -2,10 +2,34 @@
 
 @{
     ViewData["Title"] = "Details";
+    //double[] Cijfers = new double[] { };
+    List<double> cijfers = new List<double>();
+    int aantalVoldoende = 0;
+    int aantalOnvoldoende = 0;
+    @foreach (var item in ViewBag.Resultaten)
+    {
+        Console.WriteLine("Cijfer is" + item.Beoordeling);
+        if (item.Beoordeling > 5.5)
+        {
+            aantalVoldoende++;
+        }
+        else
+        {
+            aantalOnvoldoende++;
+        }
+        cijfers.Add(item.Beoordeling);
+    }
+
+    @foreach (var c in cijfers)
+    {
+        Console.WriteLine("Cijfer vanuit hier is" + c);
+    }
+
 }
 
 <h1>Details</h1>
-
+<div id="aantalOnvoldoende" style="display:none;">@aantalOnvoldoende</div>
+<div id="aantalVoldoende" style="display:none;">@aantalVoldoende</div>
 <div>
     <h4>Student</h4>
     <hr />
@@ -35,17 +59,26 @@
             @Html.DisplayFor(model => model.Studentnummer)
         </dd>
         <dt class="col-sm-2">
-            Groepen:
+            Resultaten:
         </dt>
         <dd class="col-sm-10">
-            @foreach (var item in ViewBag.Groepen)
-            {
-             <p>@item</p>
-            }
+            <a asp-controller="Resultaten" asp-action="Index" asp-route-id="@Model.Id">Resultaten bekijken</a>
+        </dd>
+        <dd class="col-sm-10">
+
         </dd>
     </dl>
+    <div id="studentDetailsChartPie" class="chart-pie">
+        <canvas id="myPieChart"></canvas>
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="~/js/sb-admin-2.min.js"></script>
+<script src="~/vendor/chart.js/Chart.min.js"></script>
+<script src="~/js/demo/studentdetails.js"></script>

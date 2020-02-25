@@ -20,6 +20,7 @@ namespace ResultatenSysteem.Controllers
         public ResultatenController(ApplicationDbContext context)
         {
             _context = context;
+            ViewData["Notifications"] = _context.OpleidingAanvraag.ToList();
         }
 
         // GET: Resultaten
@@ -27,7 +28,6 @@ namespace ResultatenSysteem.Controllers
         {
             ViewData["Studenten"] = _context.Student.OrderBy(s => s.Voornaam).ToList();
             ViewData["Groepen"] = _context.Groep.Include(g => g.Studenten).ToList();
-
             var studentInfo = _context.Student.Join(_context.StudentGroep,
             s => s.Id,
             sg => sg.StudentId,
@@ -130,6 +130,7 @@ namespace ResultatenSysteem.Controllers
                     {
                         StudentId = student,
                         Beoordeling = 3,
+                        InvoerDatum = DateTime.Now,
                         VakId = vakId
                     };
                     ////Console.WriteLine("current student is: " + student + " with grade: " + cijfer + " and subjectid: " + vakId);
@@ -177,7 +178,7 @@ namespace ResultatenSysteem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(double Cijfer, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
         {
-
+            resultaat.InvoerDatum = DateTime.Now;
             resultaat.Beoordeling = Cijfer;
             if (ModelState.IsValid)
             {

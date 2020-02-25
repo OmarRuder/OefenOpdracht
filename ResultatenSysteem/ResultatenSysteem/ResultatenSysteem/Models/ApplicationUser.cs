@@ -8,11 +8,12 @@ namespace ResultatenSysteem.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public ApplicationUser() : base() { } 
+        public ApplicationUser() : base() { }
         public string Voornaam { get; set; }
         public string Tussenvoegsel { get; set; }
         public string Achternaam { get; set; }
         public string Gebruikersnummer { get; set; }
         public string ImgNaam { get; set; }
+        public string ChosenTheme { get; set; }
     }
 }

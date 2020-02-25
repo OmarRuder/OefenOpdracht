@@ -55,6 +55,9 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             public string ImgNaam { get; set; }
+
+            public string StyleSheet { get; set; }
+            public string[] AvailableStyleSheets = new[] { "sb-admin-2", "purple-sb-admin-2", "green-sb-admin-2", "dark-sb-admin-2" };
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -68,6 +71,7 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             var userName = user.UserName;
             var email = user.Email;
             var imgNaam = user.ImgNaam;
+            var styleSheet = user.ChosenTheme;
             var phoneNumber = user.PhoneNumber;
 
             Username = userName;
@@ -76,7 +80,8 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             {
                 Email = email,
                 PhoneNumber = phoneNumber,
-                ImgNaam = imgNaam
+                ImgNaam = imgNaam,
+                StyleSheet = styleSheet
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -91,12 +96,23 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
             var user = await _userManager.GetUserAsync(User);
-            UploadFile(file, _env);
-            if (user.ImgNaam != "default.png")
+            if (Input.ImgNaam != null)
             {
-                DeleteFile(file, _env, user.ImgNaam, user);
+                UploadFile(file, _env);
+                if (user.ImgNaam != "default.png")
+                {
+                    DeleteFile(file, _env, user.ImgNaam, user);
+                }
+                user.ImgNaam = generatedImgName;
             }
-            user.ImgNaam = generatedImgName;
+
+            if(!Input.AvailableStyleSheets.Contains(Input.StyleSheet))
+            {
+                Input.StyleSheet = Input.AvailableStyleSheets[0];
+            }
+
+            user.ChosenTheme = Input.StyleSheet;
+          
             await _userManager.UpdateAsync(user);
             if (user == null)
             {

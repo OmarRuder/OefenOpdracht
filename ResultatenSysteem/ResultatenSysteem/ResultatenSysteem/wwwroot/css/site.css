@@ -55,3 +55,93 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.card {
+    height: 321px;
+    width: 220px;
+    background: #fff;
+    margin-top: 25px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    text-decoration: none;
+    box-shadow: 0 14px 26px rgba(0,0,0,0.04);
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.005) translateZ(0);
+    box-shadow: 0 24px 36px rgba(0,0,0,0.05), 0 24px 36px rgba(188, 210, 255, 0.4);
+}
+
+.circle {
+    position: absolute;
+    text-align: center;
+    background-color: #BCD2FF;
+    text-shadow: 4px 4px 6px rgba(19, 60, 85, 0.5);
+    color: white;
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    line-height: 100%;
+    font-size: 50px;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.card a {
+    width: 125px;
+    color: white!important;
+}
+
+.oPrimary {
+    color: white;
+    background-color: #6ea8ff;
+    background-image: linear-gradient(#6ea8ff, #4375bf);
+}
+.oPrimary:hover {
+    background-color: #5e9fff;
+    background-image: linear-gradient(#5e9fff, #2561ba);
+}
+.oDelete {
+    color: white;
+    background-color: #ff7a6e;
+    background-image: linear-gradient(#ff7a6e, #d4453d);
+}
+.oDelete:hover {
+    background-color: #fc6b5d;
+    background-image: linear-gradient(#fc6b5d, #c72b22)
+}
+.oButton:hover {
+    cursor:pointer;
+}
+.oButton {
+    width: 25%;
+    background-color: grey;
+    color: white;
+    border-radius: 2px;
+    border: 0px;
+    padding: 8px;
+    font-size: 13.33px;
+}
+.w100 {
+    width: 100%!important;
+}
+a.oButton {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: grey;
+    color: white;
+    border-radius: 2px;
+    border: 0px;
+    padding: 8px;
+    font-size: 13.33px;
+    color: white;
+    background-color: #6ea8ff;
+    background-image: linear-gradient(#6ea8ff, #4375bf);
+}

@@ -43,6 +43,7 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
+
         public class InputModel
         {
             [EmailAddress]
@@ -70,8 +71,15 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account
             
         }
 
-        public void OnGet(string returnUrl = null)
+        public void OnGet(string actie, string voorNaam, string tussenVoegsel, string achterNaam, string aanvraagOpmerking, string returnUrl = null)
         {
+
+            ViewData["Actie"] = actie;
+            ViewData["Voornaam"] = voorNaam;
+            ViewData["Tussenvoegsel"] = tussenVoegsel;
+            ViewData["Achternaam"] = achterNaam;
+            ViewData["Opmerking"] = aanvraagOpmerking;
+
             ViewData["Groepen"] = _context.Groep.ToList();
             ReturnUrl = returnUrl;
         }
