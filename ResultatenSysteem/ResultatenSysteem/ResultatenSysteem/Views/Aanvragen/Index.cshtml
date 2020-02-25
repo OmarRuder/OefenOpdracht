@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ResultatenSysteem.Models.OpleidingAanvraag>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Voornaam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tussenvoegsel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Achternaam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Opmerking)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AanvraagStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AanvraagDatum)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voornaam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tussenvoegsel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Achternaam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Opmerking)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AanvraagStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AanvraagDatum)
+            </td>
+            <td>
+                <form asp-area="Identity" asp-page="/Account/Register" method="get">
+                    <input type="text" name="actie" value="aanvraagToewijzen" style="display:none;" />
+                    <input type="text" name="voorNaam" value="@item.Voornaam" style="display:none;" />
+                    <input type="text" name="tussenVoegsel" value="@item.Tussenvoegsel" style="display:none;" />
+                    <input type="text" name="achterNaam" value="@item.Achternaam" style="display:none;" />
+                    <input type="text" name="aanvraagOpmerking" value="@item.Opmerking" style="display:none;" />
+                    <button type="submit" class="btn btn-primary">Opleiding toewijzen</button>
+                </form>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Verwijderen</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

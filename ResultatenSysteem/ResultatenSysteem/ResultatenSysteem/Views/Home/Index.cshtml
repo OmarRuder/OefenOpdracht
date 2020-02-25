@@ -1,8 +1,52 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using ResultatenSysteem.Data
+@using ResultatenSysteem.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var activeUser = await UserManager.GetUserAsync(User);
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <head>
+        <link href="~/css/site.css" rel="stylesheet" />
+    </head>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole("Medewerker"))
+    {
+        <h1>Welkom @activeUser.Voornaam</h1>
+        <hr />
+        <h2>Snel zaken regelen:</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <a href="#" class="card">
+                    <div class="overlay">
+                    </div>
+                    <div class="circle">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <p>Cijfers</p>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="card">
+                    <div class="overlay">
+                    </div>
+                    <div class="circle">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <p>Cijfers</p>
+                </a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+}

@@ -144,6 +144,8 @@ namespace ResultatenSysteem.Data.Migrations
 
                     b.Property<string>("Achternaam");
 
+                    b.Property<string>("ChosenTheme");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -208,7 +210,11 @@ namespace ResultatenSysteem.Data.Migrations
                     b.Property<string>("Naam")
                         .IsRequired();
 
+                    b.Property<int?>("OpleidingAanvraagId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OpleidingAanvraagId");
 
                     b.ToTable("Groep");
 
@@ -314,6 +320,29 @@ namespace ResultatenSysteem.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("ResultatenSysteem.Models.OpleidingAanvraag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AanvraagDatum");
+
+                    b.Property<int>("AanvraagStatus");
+
+                    b.Property<string>("Achternaam");
+
+                    b.Property<string>("Opmerking");
+
+                    b.Property<string>("Tussenvoegsel");
+
+                    b.Property<string>("Voornaam");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OpleidingAanvraag");
+                });
+
             modelBuilder.Entity("ResultatenSysteem.Models.Resultaat", b =>
                 {
                     b.Property<int>("Id")
@@ -321,6 +350,8 @@ namespace ResultatenSysteem.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Beoordeling");
+
+                    b.Property<DateTime>("InvoerDatum");
 
                     b.Property<int>("StudentId");
 
@@ -339,6 +370,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 1,
                             Beoordeling = 7.5,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 877, DateTimeKind.Local).AddTicks(9908),
                             StudentId = 1,
                             VakId = 1
                         },
@@ -346,6 +378,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 2,
                             Beoordeling = 8.4000000000000004,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6018),
                             StudentId = 1,
                             VakId = 2
                         },
@@ -353,6 +386,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 3,
                             Beoordeling = 6.4000000000000004,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6032),
                             StudentId = 1,
                             VakId = 3
                         },
@@ -360,6 +394,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 4,
                             Beoordeling = 6.4000000000000004,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6036),
                             StudentId = 3,
                             VakId = 1
                         },
@@ -367,6 +402,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 5,
                             Beoordeling = 9.5,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6039),
                             StudentId = 3,
                             VakId = 4
                         },
@@ -374,6 +410,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 6,
                             Beoordeling = 3.3999999999999999,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6042),
                             StudentId = 5,
                             VakId = 1
                         },
@@ -381,6 +418,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 7,
                             Beoordeling = 9.5,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6045),
                             StudentId = 6,
                             VakId = 2
                         },
@@ -388,6 +426,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 8,
                             Beoordeling = 4.2999999999999998,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6048),
                             StudentId = 7,
                             VakId = 3
                         },
@@ -395,6 +434,7 @@ namespace ResultatenSysteem.Data.Migrations
                         {
                             Id = 9,
                             Beoordeling = 5.5,
+                            InvoerDatum = new DateTime(2020, 2, 14, 12, 10, 52, 880, DateTimeKind.Local).AddTicks(6052),
                             StudentId = 8,
                             VakId = 4
                         });
@@ -645,6 +685,13 @@ namespace ResultatenSysteem.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("ResultatenSysteem.Models.Groep", b =>
+                {
+                    b.HasOne("ResultatenSysteem.Models.OpleidingAanvraag")
+                        .WithMany("Groepen")
+                        .HasForeignKey("OpleidingAanvraagId");
                 });
 
             modelBuilder.Entity("ResultatenSysteem.Models.GroepVak", b =>

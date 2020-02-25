@@ -1,9 +1,13 @@
 @using Microsoft.AspNetCore.Identity
+@using ResultatenSysteem.Data
+@using ResultatenSysteem.Models
+@*@model OpleidingAanvraag;*@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
     var activeUser = await UserManager.GetUserAsync(User);
 }
+
 @if (SignInManager.IsSignedIn(User))
 {
     <script>
@@ -14,7 +18,7 @@
                 $(this).on('load', function () { console.log("image loaded correctly"); });
                 $(this).on('error', function () { console.log("error loading image"); });
 
-            }); 
+            });
         });
     </script>
     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -49,8 +53,23 @@
         <!-- Dropdown - Alerts -->
         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
             <h6 class="dropdown-header">
-                Alerts Center
+                Inkomende Studieaanvragen
             </h6>
+            @*@foreach (var item in Model)
+                {
+                    <a class="dropdown-item d-flex align-items-center" href="#">
+                        <div class="mr-3">
+                            <div class="icon-circle bg-primary">
+                                <i class="fas fa-university text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500">@item.AanvraagDatum</div>
+                            <span>@item.Voornaam @item.Tussenvoegsel @item.Achternaam</span><br />
+                            <span class="font-weight-bold">@item.Opmerking</span>
+                        </div>
+                    </a>
+                }*@
             <a class="dropdown-item d-flex align-items-center" href="#">
                 <div class="mr-3">
                     <div class="icon-circle bg-primary">

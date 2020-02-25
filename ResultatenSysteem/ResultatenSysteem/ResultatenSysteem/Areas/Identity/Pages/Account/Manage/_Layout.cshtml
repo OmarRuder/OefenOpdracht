@@ -2,7 +2,7 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
-    Layout = "/Views/Shared/_MedewerkerLayout.cshtml";
+    Layout = "/Views/Shared/_AccountLayout.cshtml";
     var activeUser = await UserManager.GetUserAsync(User);
 }
 <style>
@@ -25,16 +25,18 @@
         height: auto;
     }
 </style>
-<h1>Account beheren</h1>
-<div class="accountdetails" style="float:right;">
+
+
+
+@*<div class="accountdetails" style="float:right;">
     @if (User.IsInRole("Medewerker"))
     {<span id="roleSpan">Medewerker</span>
     }
     <img src="~/userImg/@activeUser.ImgNaam" />
     <hr />
     <h3>@activeUser.Voornaam @activeUser.Tussenvoegsel @activeUser.Achternaam <span style="font-size:15px;">(@activeUser.Gebruikersnummer)</span></h3>
-</div>
-<div>
+</div>*@
+@*<div>
     <h4>Verander je account opties:</h4>
     <hr />
     <div class="row">
@@ -42,7 +44,34 @@
             <partial name="_ManageNav" />
         </div>
         <div class="col-md-9">
-            @RenderBody()
+        </div>
+    </div>
+</div>*@
+
+<div class="container">
+    <div class="loginCardContainer">
+        <div class="loginCard" style="width:50%;float:left;margin-left:-20%;">
+            <section id="loginSection">
+                <h1>Account beheren</h1>
+                <div>
+                    <h4>Verander je account opties:</h4>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <partial name="_ManageNav" />
+                        </div>
+                        <div class="col-md-9">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="loginCardContainer">
+        <div class="loginCard" style="width:50%;">
+            <section id="loginSection">
+                @RenderBody()
+            </section>
         </div>
     </div>
 </div>

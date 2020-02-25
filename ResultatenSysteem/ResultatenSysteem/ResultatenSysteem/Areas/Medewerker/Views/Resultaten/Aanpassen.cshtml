@@ -114,7 +114,7 @@
         }
 
         $("#bewerkModusKnop").click(function () {
-            $(this).toggleClass('on'); //togglet of bewerkmodus aanstaat
+            $(this).toggleClass('on'); //togglet of bewerkmodus aanstaat (geeft knop on class of verwijdert deze class)
             if ($(this).hasClass('on')) { //checkt of bewerkmodus aanstaat
                 bewerkModus(true); // als bewerkmodus aanstaat wordt bewerkmodus functie aangeroepn met canEdit = true
             } else {
@@ -141,7 +141,7 @@
             //$("#resultaatGegevens").html("<dl><dt>Naam</dt><dd>" + studentNaam + "</dd><dt>Vak</dt><dd>" + vak + "</dd><dt>Beoordeling:</dt><dd>" + cijfer + "</dd></dl>");
         });
 
-        $(".checkbox").click(function () {
+        $(".checkbox").click(function () { //vult bij elke klik resultatenList met checked items (als er 0 gecheckt zijn gaat verwijder knop automatisch weg)
             tableRow = $(".tableRow-" + $(this).attr('resultaat-id')); //vult tableRow met tablerow-student-id die meegegeven wordt met de checkbox klik
             if ($(this).prop("checked") == true) {
                 tableRow.addClass(' checked').removeClass("unchecked");
@@ -199,7 +199,7 @@
         });
     });
 </script>
-
+ 
 <h1>
     Resultaten aanpassen
     @foreach (var item in ViewBag.Student) //wordt alleen displayt als er maar 1 student is (viewbag is gevuld met ?id en anders is viewbag leeg)

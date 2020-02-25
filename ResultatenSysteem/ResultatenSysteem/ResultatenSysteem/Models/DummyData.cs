@@ -42,7 +42,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Omar",
                     Achternaam = "Ruder",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "140553"
+                    Gebruikersnummer = "140553",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 Console.WriteLine("omarruder@wrx.hgs bestaat nog niet en we zitten nu in de functie!");
@@ -66,7 +67,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Issy",
                     Achternaam = "Ruder",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "142312"
+                    Gebruikersnummer = "142312",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -86,7 +88,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Wiibe",
                     Achternaam = "Bruins",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "421245"
+                    Gebruikersnummer = "421245",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -107,7 +110,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Othman",
                     Achternaam = "Otay",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "134902"
+                    Gebruikersnummer = "134902",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -127,7 +131,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Zahira",
                     Achternaam = "Rafik",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "352553"
+                    Gebruikersnummer = "352553",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -147,7 +152,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Dave",
                     Achternaam = "Roeder",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "drA231"
+                    Gebruikersnummer = "drA231",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -167,7 +173,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Lesley",
                     Achternaam = "Vlaar",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "691420"
+                    Gebruikersnummer = "691420",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);
@@ -188,7 +195,8 @@ namespace ResultatenSysteem.Models
                     Voornaam = "Janno",
                     Achternaam = "Bijl",
                     ImgNaam = "default.png",
-                    Gebruikersnummer = "132431"
+                    Gebruikersnummer = "132431",
+                    ChosenTheme = "sb-admin-2.min"
                 };
 
                 var result = await userManager.CreateAsync(user);

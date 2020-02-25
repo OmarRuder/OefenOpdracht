@@ -9,6 +9,7 @@ namespace ResultatenSysteem.Areas.Medewerker.Controllers
     [Area("Medewerker")]
     public class DashboardController : Controller
     {
+
         public IActionResult Index()
         {
             return View();
