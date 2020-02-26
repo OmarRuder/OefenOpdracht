@@ -1,5 +1,10 @@
-﻿
-
+﻿@model ResultatenSysteem.ViewModels.DashboardViewModel
+@{ 
+    var totaalOnvoldoende = 0;
+    var aantalOnvoldoende = 0;
+    var totaalVoldoende = 0;
+    var aantalVoldoende = 0;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,143 +13,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link href="~/css/loginPage.css" rel="stylesheet" />
+    <script src="~/js/demo/chart-area-demo.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/sb-admin-2.min.js"></script>
+    <script src="~/vendor/chart.js/Chart.min.js"></script>
+    <script src="~/js/demo/dashboard.js"></script>
+    <script src="~/js/demo/chart-bar-demo.js"></script>
     <title>Dashboard</title>
+    <style>
+        .col {
+            margin-top: 2%;
+        }
+    </style>
 </head>
 <body>
-    <div class="col-lg-6">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Studenten</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Studenten" asp-action="Index">Index</a>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Studenten" asp-action="Create">Student toevoegen</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="chartCard">
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myBarChart"></canvas>
+                        </div>
+                        <hr>
+                        Hier ziet u het aantal behaalde voldoendes dat het totaal aantal studenten in een groep behaald heeft <br /><code>Dit is niet het aantal behaalde voldoendes in een groep</code>
                     </div>
                 </div>
             </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <a class="btn btn-info btn-icon-split" asp-area="Medewerker" asp-controller="Studenten" asp-action="Index">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-info-circle"></i>
-                    </span>
-                    <span class="text">Studenten Index</span>
-                </a>
-                <a class="btn btn-success btn-icon-split" asp-area="Medewerker" asp-controller="Studenten" asp-action="Create">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Student Toevoegen</span>
-                </a>
-            </div>
-        </div>
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Vakken</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Vakken" asp-action="Index">Index</a>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Vakken" asp-action="Create">Vak toevoegen</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
+            <div class="col">
+                <div class="chartCard">
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                        <hr>
+                        Dit is het percentage aan totaal behaalde voldoendes
                     </div>
                 </div>
             </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <a class="btn btn-info btn-icon-split" asp-area="Medewerker" asp-controller="Vakken" asp-action="Index">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-info-circle"></i>
-                    </span>
-                    <span class="text">Vakken Index</span>
-                </a>
-                <a class="btn btn-success btn-icon-split" asp-area="Medewerker" asp-controller="Vakken" asp-action="Create">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Vak Toevoegen</span>
-                </a>
-            </div>
         </div>
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Groepen</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Groepen" asp-action="Index">Index</a>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Groepen" asp-action="Create">Groep toevoegen</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <a class="btn btn-info btn-icon-split" asp-area="Medewerker" asp-controller="Groepen" asp-action="Index">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-info-circle"></i>
-                    </span>
-                    <span class="text">Groepen Index</span>
-                </a>
-                <a class="btn btn-success btn-icon-split" asp-area="Medewerker" asp-controller="Groepen" asp-action="Create">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Groep Toevoegen</span>
-                </a>
-            </div>
+        <hr />
+        <div id="groupCharts">
         </div>
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Resultaten</h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                        <div class="dropdown-header">Dropdown Header:</div>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Resultaten" asp-action="Index">Index</a>
-                        <a class="dropdown-item" asp-area="Medewerker" asp-controller="Resultaten" asp-action="Create">Resultaat toevoegen</a>
-
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <a class="btn btn-info btn-icon-split" asp-area="Medewerker" asp-controller="Resultaten" asp-action="Index">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-info-circle"></i>
-                    </span>
-                    <span class="text">Medewerker Index</span>
-                </a>
-                <a class="btn btn-success btn-icon-split"  asp-area="Medewerker" asp-controller="Resultaten" asp-action="Create">
-                    <span class="icon text-white-50">
-                        <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Medewerker Toevoegen</span>
-                </a>
-            </div>
-        </div>
+   
+    </div>
+    <div id="groepData">
+        @foreach (var groep in Model.Groepen)
+        {
+            aantalVoldoende = 0;
+            aantalOnvoldoende = 0;
+            <span id="groep-@groep.Groepscode" groepscode="@groep.Groepscode" groep-id="@groep.Id" class="groepsCode"></span>
+            @foreach (var student in groep.Studenten)
+            {
+                @foreach (var beoordeling in Model.Resultaten)
+                {
+                    @if (beoordeling.Student.Id == student.Student.Id)
+                    {
+                        @if (beoordeling.Beoordeling >= 5.5)
+                        {
+                            totaalVoldoende++;
+                            aantalVoldoende++;
+                        }
+                        else
+                        {
+                            totaalOnvoldoende++;
+                            aantalOnvoldoende++;
+                        }
+                    }
+                }
+            }
+            <span style="color:green;" class="groepsVoldoendes" aantalVoldoendes="@aantalVoldoende"></span>
+            <span style="color:red;" class="groepsOnvoldoendes" aantalOnvoldoendes="@aantalOnvoldoende"></span>
+        }
+        <span id="totaalVoldoende" aantalVoldoendes="@totaalVoldoende"></span>
+        <span id="totaalOnvoldoende" aantalOnvoldoendes="@totaalOnvoldoende"></span>
     </div>
 </body>
 </html>

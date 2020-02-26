@@ -74,7 +74,7 @@ $(document).ready(function () {
 
         $('.chartjs-size-monitor').remove();
         ctx = $("#studentPieChart-" + $(this).attr('data-student-toggle'));
-        var myPieChart = new Chart(ctx, {
+        myPieChart = new Chart(ctx, {
             type: 'doughnut',
             data: {
                 labels: ["Voldoende", "Onvoldoende"],
