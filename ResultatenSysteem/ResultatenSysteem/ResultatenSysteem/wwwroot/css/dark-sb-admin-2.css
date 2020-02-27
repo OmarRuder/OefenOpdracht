@@ -11971,7 +11971,7 @@ body.sidebar-toggled footer.sticky-footer {
     background-color: #4e4f52;
 }
 h1, h2, h3, h4, h5, h6, a, p, span, label, body, tr {
-    color: rgba(255, 255, 255, 0.87);
+    color: rgba(255, 255, 255, 0.7);
 }
 .bg-white {
     background-color: #242323 !important;

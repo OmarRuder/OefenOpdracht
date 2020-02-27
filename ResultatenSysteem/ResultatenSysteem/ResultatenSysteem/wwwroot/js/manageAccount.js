@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+   
     $("#opslaanButton").click(function () {
         var selectedStyleSheet = $("#styleSheetSelect option:selected").val();
         if (selectedStyleSheet == "dark-sb-admin-2") {

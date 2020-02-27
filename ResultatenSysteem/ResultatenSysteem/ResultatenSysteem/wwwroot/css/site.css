@@ -326,13 +326,45 @@ span.aanvraagStatus {
 #snelActies a:hover {
     text-decoration: none;
 }
+/*snel bekijken/ snelinvoeren divs*/
 .selected {
     transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-left: -100% !important;
     position: relative;
 }
+/*snel bekijken/ snelinvoeren divs*/
 .unselected {
     transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-left: -115%;
     position: absolute;
+}
+#submitButtonSnelToevoegenModal {
+    color: white!important;
+}
+#actieTitel.toevoegModal {
+    margin-top: 2%;
+}
+#inputSection.toevoegModal h3 {
+    text-align: left;
+    margin-left: 10%;
+    margin-bottom: 2%;
+}
+#inputSection.toevoegModal span {
+    float: left;
+    margin-left: 10%;
+}
+#inputSection.toevoegModal input, #inputSection.toevoegModal select {
+    display: block;
+    background-color: #f7f7f7;
+    font-size: 13px;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 8px;
+    margin-left: 40%;
+    margin-bottom: 5%;
+    border-radius: 0px;
+    border: 0px;
+    border-bottom: 1px solid #6ea8ff;
+}
+#inputSection.toevoegModal input[type=submit] {
 }

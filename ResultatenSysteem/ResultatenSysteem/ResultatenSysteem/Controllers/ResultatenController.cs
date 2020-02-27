@@ -192,6 +192,33 @@ namespace ResultatenSysteem.Controllers
             return View(resultaat);
         }
 
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> QuickCreate(double Cijfer, int vakId, int studentId, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
+        {
+            var cijfer = "";
+
+            if (Cijfer > 10)
+            {
+               cijfer = Cijfer.ToString();
+            }
+
+            resultaat.InvoerDatum = DateTime.Now;
+            resultaat.Beoordeling = Cijfer;
+            Console.WriteLine("____------ " + Cijfer);
+            resultaat.VakId = vakId;
+            resultaat.StudentId = studentId;
+            if (ModelState.IsValid)
+            {
+                _context.Add(resultaat);
+                await _context.SaveChangesAsync();
+                //return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Dashboard");
+
+            }
+            return View("../Views/Dashboard/Index.cshtml");
+            //return View();
+        }
         // GET: Resultaten/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

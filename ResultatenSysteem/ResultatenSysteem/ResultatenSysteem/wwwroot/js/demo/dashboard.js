@@ -285,5 +285,78 @@ $(document).ready(function () {
         $("#snel-bekijken").toggleClass("selected");
         $("#snel-invoeren").toggleClass("unselected");
     });
+
+    console.log(vakken);
+    console.log(studenten);
+    //snel toevoegen modal
+    $("#groepSnelToevoegenButton").click(function () {
+        $("#inputContent").remove(); //verwijder oude modal content
+        $("#submitButtonSnelToevoegenModal").text("Groep toevoegen"); //verander knoptext
+        html = `<div id="inputContent">` //opbouwen html, inputcontent bevat de input fields
+        html += 
+        `<div id="inputContent">
+        <h3>Groep toevoegen</h3>
+        <hr />
+        <span>Naam</span><input type="text" name="groepNaam" placeholder="Naam invoeren..." />
+        <span>Groepscode</span><input type="text" name="groepsCode" placeholder="Code invoeren..." />
+        <hr />`;
+        for (i = 0; i < vakken.length; i++) {
+            html += `<span>${vakken[i].naam}</span><input type="checkbox" />`; //foreach vak een checkbox maken
+        }
+        html += `</div>` //eindig inputcontent div
+        $("#inputSection").append(html); //inputcontent div in inputsection div zetten
+    });
+
+
+    $("#cijferInput").change(function () {
+        console.log("change");
+    });
+
+    $("#resultaatSnelToevoegenButton").click(function () {
+        $("#tester").click(function () {
+            
+        });
+        $("#inputContent").remove();
+        $("#submitButtonSnelToevoegenModal").text("Resultaat toevoegen");
+        html = `<div id="inputContent">
+        <form action="/Medewerker/Resultaten/QuickCreate" method="post">`
+        html +=`
+        <div id="inputContent">
+        <h3>Cijfer invoeren</h3>
+        <hr />
+        <span>Beoordeling</span><input type="number" min="1" max="10" step="0.1" id="cijferInput" name="Cijfer" placeholder="Cijfer invoeren..." />
+        <span>Student</span><select id="studentSelect" name="studentId">`;
+        for (i = 0; i < studenten.length; i++) {
+            html += `<option value=${studenten[i].Id}>${studenten[i].voorNaam} ${studenten[i].tussenVoegsel} ${studenten[i].achterNaam} (${studenten[i].studentNummer})</option>`;
+        }
+        html += `
+        </select>
+        <span>Vak</span>
+        <select id="vakSelect" name="vakId">`;
+        for (i = 0; i < vakken.length; i++) {
+            html += `<option  value=${vakken[i].Id}>${vakken[i].naam}</option>`;
+        }
+        html += `
+        </select><div class="modal-footer">
+        <input type="submit" class="oButton oPrimary w100" id="submitButtonSnelToevoegenModal" value="Cijfer invoeren" />
+        <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>
+        </div></form></div>`
+        $("#inputSection").append(html);
+    });
+
+    $("#vakSnelToevoegenButton").click(function () {
+        $("#inputContent").remove();
+        $("#submitButtonSnelToevoegenModal").text("Vak toevoegen");
+        html = `<div id="inputContent">`
+        html +=
+            `<div id="inputContent">
+        <h3>Vakdetails</h3>
+        <hr />
+        <span>Naam</span><input type="text" name="vakNaam" placeholder="Naam invoeren..." />
+        <span>Vakcode</span><input type="text" name="vakCode" placeholder="Code invoeren..." />
+        `;
+        html += `</div>`
+        $("#inputSection").append(html);
+    });
 });
 

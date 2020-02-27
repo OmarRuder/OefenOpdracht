@@ -3,6 +3,8 @@ h1 {
     font-weight: normal !important;
 }
 body {
+    height: 100%;
+    width: 100%;
     color: #e3e3e3 !important;
     font-family: 'Lato', sans-serif;
     backface-visibility: hidden;
@@ -135,6 +137,10 @@ a:hover {
     animation-duration: 1s;
     animation-fill-mode:forwards;
     animation-iteration-count: 1;
+}
+.switchedToLight input:disabled {
+    color: red!important;
+    background-color: #e9ecef;
 }
 @keyframes lightSwitchBackground {
     from {

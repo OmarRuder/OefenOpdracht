@@ -43,28 +43,28 @@
                             <h1>Snel invoeren:</h1>
                             <div class="row">
                                 <div class="col">
-                                    <a asp-controller="Groepen" asp-action="Create">
+                                    <a id="groepSnelToevoegenButton" data-toggle="modal" data-target="#snelToevoegenModal">
                                         <div class="buttonCard green grow clickable">
                                             <i class="fas fa-users"></i> +
                                         </div>
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a asp-controller="Resultaten" asp-action="Create">
+                                    <a id="resultaatSnelToevoegenButton" data-toggle="modal" data-target="#snelToevoegenModal">
                                         <div class="buttonCard green grow clickable">
                                             <i class="fas fa-list-ol"></i> +
                                         </div>
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a asp-controller="Studenten" asp-action="Create">
+                                    <a id="studentSnelToevoegenButton" data-toggle="modal" data-target="#snelToevoegenModal">
                                         <div class="buttonCard green grow clickable">
                                             <i class="fas fa-graduation-cap"></i> +
                                         </div>
                                     </a>
                                 </div>
                                 <div class="col">
-                                    <a asp-controller="Vakken" asp-action="Create">
+                                    <a id="vakSnelToevoegenButton" data-toggle="modal" data-target="#snelToevoegenModal">
                                         <div class="buttonCard green grow clickable">
                                             <i class="fas fa-book"></i> +
                                         </div>
@@ -111,7 +111,7 @@
             </div>
         </div>
         <div class="row" style="margin-top:2%;">
-            <div class="col-4">
+            <div class="col">
                 <div class="chartCard">
                     <div class="card-body">
                         <div class="chart-area">
@@ -122,18 +122,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <div class="chartCard">
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myBarChart"></canvas>
+            @*<div class="col-4">
+                    <div class="chartCard">
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myBarChart"></canvas>
+                            </div>
+                            <hr>
+                            Hier ziet u het aantal behaalde voldoendes dat het totaal aantal studenten in een groep behaald heeft <br /><code>Dit is niet het aantal behaalde voldoendes in een groep</code>
                         </div>
-                        <hr>
-                        Hier ziet u het aantal behaalde voldoendes dat het totaal aantal studenten in een groep behaald heeft <br /><code>Dit is niet het aantal behaalde voldoendes in een groep</code>
                     </div>
-                </div>
-            </div>
-            <div class="col-4">
+                </div>*@
+            <div class="col">
                 <div class="chartCard">
                     <div class="card-body">
                         <div class="chart-area">
@@ -176,6 +176,8 @@
         <script>
             var aantalVoldoendesarray = [];
             var groepData = [];
+            var vakken = [];
+            var studenten = [];
             var aantalOnvoldoendes = [];
         </script>
         @foreach (var groep in Model.Groepen)
@@ -217,7 +219,42 @@
         </script>
     </div>
 
+    <div class="modal fade" id="snelToevoegenModal" tabindex="-" role="dialog" aria-labelledby="verwijderResultaatTitle" aria-hidden="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="text-align: center;">
+                @*<h3 class="toevoegModal" id="actieTitel">U staat op het punt om dit resultaat te verwijderen</h3>*@
+                <div class="modal-body">
+                    <div class="toevoegModal" id="inputSection">
+                    </div>
+                </div>
+             @*   <a id="tester" href="#">Test</a>*@
+            </div>
+        </div>
+    </div>
 
+
+    @foreach (var vak in Model.Vakken)
+    {
+        <script>
+            vakken.push({
+                Id: @vak.Id,
+                naam: '@vak.Naam',
+                vakCode: '@vak.Vakcode'
+            });
+        </script>
+    }
+    @foreach (var student in Model.Studenten)
+    {
+        <script>
+            studenten.push({
+                Id: @student.Id,
+                voorNaam: '@student.Voornaam',
+                tussenVoegsel: `@student.Tussenvoegsel`,
+                achterNaam: '@student.Achternaam',
+                studentNummer: `@student.Studentnummer`
+            });
+        </script>
+    }
 
 </body>
 </html>

@@ -28,7 +28,8 @@ namespace ResultatenSysteem.Areas.Medewerker.Controllers
                 Groepen = _context.Groep.Include(g => g.Studenten).ToList(),
                 Resultaten = _context.Resultaat.ToList(),
                 Aanvragen = _context.OpleidingAanvraag.ToList(),
-                Studenten = _context.Student.ToList()
+                Studenten = _context.Student.ToList(),
+                Vakken = _context.Vak.ToList()
             };
 
             return View(dvm);

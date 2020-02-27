@@ -12,5 +12,6 @@ namespace ResultatenSysteem.ViewModels
         public List<Student> Studenten { get; set; }
         public List<Resultaat> Resultaten { get; set; }
         public List<OpleidingAanvraag> Aanvragen { get; set; }
+        public List<Vak> Vakken { get; set; }
     }
 }
