@@ -97,7 +97,6 @@ body {
 }
 
 .oPrimary {
-    color: white;
     background-color: #6ea8ff;
     background-image: linear-gradient(#6ea8ff, #4375bf);
 }
@@ -120,12 +119,14 @@ body {
 .oButton {
     width: 25%;
     background-color: grey;
-    color: white;
+    color: white!important;
     border-radius: 2px;
     border: 0px;
     padding: 8px;
     font-size: 13.33px;
+    display: block;
 }
+
 .w100 {
     width: 100%!important;
 }
@@ -133,7 +134,6 @@ a.oButton {
     color: white;
     text-decoration: none;
 }
-
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     background-color: grey;
     color: white;
@@ -147,41 +147,192 @@ a.oButton {
 }
 
 .chartCard {
+    text-align: center;
     background-color: white;
-    padding: 20px;
+    padding: 5px;
     height: 100%;
     -webkit-box-shadow: 0px 0px 31px -15px rgba(0,0,0,0.10);
     -moz-box-shadow: 0px 0px 31px -15px rgba(0,0,0,0.10);
     box-shadow: 0px 0px 31px -15px rgba(0,0,0,0.10);
 }
-
+.chartCard h1 {
+    text-align: left;
+}
+.buttonCard {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    padding: 10px;
+    height: 100%;
+    border-radius: 5px;
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.green {
+    background-color: #1cc88a;
+}
+.red {
+    background-color: #eb4034;
+}
+.green:hover {
+    background-color: #139e6c;
+}
+.red:hover {
+    background-color: #99170e;
+}
 .small {
     text-align: center;
     margin-left: 25%;
-    height: 50%!important;
-    width: 50%!important;
+    height: 50% !important;
+    width: 50% !important;
 }
-
-.body {
+.cartBody {
     height: 120%;
-    margin-top: 2%;
-}
-.ignoreA {
-    color: inherit;
-    text-decoration: none;
-    height: 100%;
-    width: 50%;
 }
 .groupChartCol {
-    margin-bottom: 3%!important;
+    margin-top: 0%!important;
+    margin-bottom: 6%!important;
 }
 .clickable:hover {
     cursor: pointer;
 }
 .grow:hover {
-    color: #b8bbcf;
+    /*color: #b8bbcf;*/
     transform: scale(1.05);
+    transform: rotateY(90);
 }
 .grow {
-    transition: all .2s ease-in-out;
+    -webkit-transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.shadow::after {
+    position: absolute;
+    content: "";
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; 
+    border-radius: 2%;
+    box-shadow: 0px 0px 31px -15px rgba(0,0,0,0.50);
+    -webkit-transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.shadow:hover::after {
+    opacity: 1;
+}
+.innerPieChartText {
+    font-size: 25px !important;
+    color: red;
+    margin-left: 0;
+    position: absolute;
+    margin-top: -20%;
+    display: none;
+}
+#opleidingAanvraagHoofdRow {
+    margin-top: -3%;
+}
+.opleidingAanvraagRow {
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-left: 2px solid #ff5e5e;
+    line-height: normal;
+    margin-top: 2%;
+    margin-left: 10%;
+    background-color: #f5f5f5;
+}
+.opleidingAanvraagRow:hover {
+    background-color: #d6d6d6;
+}
+.opleidingAanvraagRow p {
+    white-space: nowrap;
+    margin-left: 2%;
+}
+.opleidingAanvraagRow span.name {
+    font-weight: bold;
+}
+.opleidingAanvraagRow span.name::after {
+    content: ": ";
+}
+span.aanvraagDatum, span.aanvraagStatus {
+    position: absolute;
+    font-size: 12px;
+    right: 2px;
+    float: right!important;
+}
+span.aanvraagDatum {
+    position: absolute;
+    font-size: 12px;
+    right: 2px;
+    margin-top: 1%;
+    float: right!important;
+}
+span.aanvraagStatus {
+    position: absolute;
+    font-size: 12px;
+    right: 2px;
+    margin-top: -1%;
+    float: right!important;
+}
+.opleidingAanvraagRow a {
+    margin-top: 2%;
+    color: inherit;
+}
+#nextPageButton, #previousPageButton {
+    transition: all 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-top: 5%;
+    /*margin-right: -5%;*/
+    /*margin-left: 60%;*/
+    position: absolute;
+    font-size: 50px;
+}
+#nextPageButton {
+    right: -100px;
+}
+#previousPageButton {
+    display: none;
+    left: -100px;
+}
+#previousPage {
+    width: 100%;
+    margin-top: -2%;
+}
+#nextPage {
+    margin-top: -2%;
+}
+#nextPageButton:hover, #previousPageButton:hover i{
+    color: #b8bbcf;
+    cursor: pointer;
+    transform: scale(1.25);
+}
+#nextPage:hover #snel-bekijken  {
+    margin-left: 10%;
+}
+#previousPageButton:hover .unselected  {
+    background-color: red;
+    margin-left: -110%;
+}
+#snel-invoeren {
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+#snel-bekijken {
+    transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-top: 0;
+    margin-left: 15%;
+    position: absolute;
+}
+#snelActies a {
+    text-decoration: none;
+}
+#snelActies a:hover {
+    text-decoration: none;
+}
+.selected {
+    transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-left: -100% !important;
+    position: relative;
+}
+.unselected {
+    transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-left: -115%;
+    position: absolute;
 }

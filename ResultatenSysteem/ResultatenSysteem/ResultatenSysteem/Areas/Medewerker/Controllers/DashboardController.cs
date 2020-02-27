@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ResultatenSysteem.Data;
@@ -10,6 +11,7 @@ using ResultatenSysteem.ViewModels;
 
 namespace ResultatenSysteem.Areas.Medewerker.Controllers
 {
+    [Authorize]
     [Area("Medewerker")]
     public class DashboardController : Controller
     {

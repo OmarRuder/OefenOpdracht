@@ -1,43 +1,69 @@
 $(document).ready(function () {
-
     // Set new default font family and font color to mimic Bootstrap's default styling
+    Chart.pluginService.register({
+        beforeDraw: function (chart) {
+            if (chart.config.options.elements.center) {
+                //Get ctx from string
+                var ctx = chart.chart.ctx;
+
+                //Get options from the center object in options
+                var centerConfig = chart.config.options.elements.center;
+                var fontStyle = centerConfig.fontStyle || 'Arial';
+                var txt = centerConfig.text;
+                var color = centerConfig.color || '#000';
+                var sidePadding = centerConfig.sidePadding || 20;
+                var sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+                //Start with a base font of 30px
+                ctx.font = "30px " + fontStyle;
+
+                //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+                var stringWidth = ctx.measureText(txt).width;
+                var elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+
+                // Find out how much the font can grow in width.
+                var widthRatio = elementWidth / stringWidth;
+                var newFontSize = Math.floor(30 * widthRatio);
+                var elementHeight = (chart.innerRadius * 2);
+
+                // Pick a new font size so it will not be larger than the height of label.
+                var fontSizeToUse = Math.min(newFontSize, elementHeight);
+
+                //Set font settings to draw it correctly.
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                var centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+                var centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+                ctx.font = fontSizeToUse + "px " + fontStyle;
+                ctx.fillStyle = color;
+
+                //Draw text in center
+                ctx.fillText(txt, centerX, centerY);
+            }
+        }
+    });
     Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
     Chart.defaults.global.defaultFontColor = '#858796';
 
-    var aantalVoldoende = parseInt($("#totaalVoldoende").attr('aantalVoldoendes'));
-    var aantalOnvoldoende = parseInt($("#totaalOnvoldoende").attr('aantalOnvoldoendes'));
     var html = "<div class='row'>";
-    groepsVoldoendes = [0];
-    groepsOnvoldoendes = [0];
-    groepsCodes = [""];
+    groepsVoldoendes = [];
+    groepsOnvoldoendes = [];
+    groepsCodes = [];
     groepId = 0;
+    var displayText = "";
 
-    var percentageVoldoende = aantalVoldoende * 100 / (aantalVoldoende + aantalOnvoldoende);
+    var percentageVoldoende = totaalVoldoende * 100 / (totaalVoldoende + totaalOnvoldoende);
     if (Number.isNaN(percentageVoldoende)) {
         percentageVoldoende = "";
     } else {
         percentageVoldoende = percentageVoldoende.toString().substring(0, 5);
     }
 
-    // groepsVoldoendes vullen met data 
-    groepsVoldoendes = $("#groepData").find(".groepsVoldoendes")
-        .map(function () {
-            return parseInt(this.getAttribute('aantalVoldoendes'));
-        })
-        .get();
-
-    groepsOnvoldoendes = $("#groepData").find(".groepsOnvoldoendes")
-        .map(function () {
-            return parseInt(this.getAttribute('aantalOnvoldoendes'));
-        })
-        .get();
-
-    // groepsCodes vullen met data 
-    groepsCodes = $("#groepData").find(".groepsCode")
-        .map(function () {
-            return this.getAttribute('groepscode');
-        })
-        .get();
+    //groepdata arrays vullen
+    for (i = 0; i < groepData.length; i++) {
+        groepsCodes.push(groepData[i].groepsCode); //groepscodes vullen
+        groepsVoldoendes.push(groepData[i].aantalVoldoendes);
+        groepsOnvoldoendes.push(groepData[i].aantalOnvoldoendes);
+    }
 
     function number_format(number, decimals, dec_point, thousands_sep) {
         // *     example: number_format(1234.56, 2, ',', ' ');
@@ -73,7 +99,7 @@ $(document).ready(function () {
         data: {
             labels: ["Voldoende", "Onvoldoende"],
             datasets: [{
-                data: [aantalVoldoende, aantalOnvoldoende],
+                data: [totaalVoldoende, totaalOnvoldoende],
                 backgroundColor: ['#1cc88a', '#eb4034'],
                 hoverBorderColor: "rgba(234, 236, 244, 1)",
             }],
@@ -183,23 +209,21 @@ $(document).ready(function () {
         }
     });
 
-
-    for (i = 0; i < groepsCodes.length; i++) {
-        groepId = $("#groep-" + groepsCodes[i]).attr('groep-id');
+    for (i = 0; i < groepData.length; i++) {
+        groepId = groepData[i].Id;
+        displayText = groepData[i].groepNaam + " (" + groepData[i].groepsCode + ")";
+        percentageVoldoende = groepsVoldoendes[i] * 100 / (groepsVoldoendes[i] + groepsOnvoldoendes[i]);
         if (i % 4 == 0 && i != 0) { //checken of i gedeeld door 4 gelijk is aan 0, zo check je of je elke keer 4x door de loop heen bent gegaan.
             html += "</div>"; //als het de 4e is eindig je de row div
             html += "<div class='row'>"; //en maak je een nieuwe row div (elke 4 columns een nieuwe row)
         }
-        html += "<div class='col groupChartCol'><div class='chartCard body clickable grow'><a class='stretched-link' href='/Medewerker/Groepen/Overzicht/" + groepId + "'></a><div class='chart-area small'><canvas id='pieChart-" + groepsCodes[i] + "'></canvas></div><hr><span>" + groepsCodes[i] + "</span></div></div><br>"
+        html += `<div class='col groupChartCol'><div class='chartCard cartBody clickable grow shadow'><a class='stretched-link' href='/Medewerker/Groepen/Overzicht/${groepId}'></a><div class='chart-area small'><canvas id='pieChart-${groepsCodes[i]}'></canvas><span class='innerPieChartText'>${percentageVoldoende.toString().substring(0, 5)}</span></div><hr><span>${displayText}</span></div></div><br>`;
     }
     //hier voeren we de opgebouwde html in de groupCharts div
     $("#groupCharts").append(html);
 
-
-    for (i = 0; i < groepsCodes.length; i++) {
-
+    for (i = 0; i < groepData.length; i++) {
         percentageVoldoende = groepsVoldoendes[i] * 100 / (groepsVoldoendes[i] + groepsOnvoldoendes[i]);
-
         if (Number.isNaN(percentageVoldoende)) {
             percentageVoldoende = "";
         } else {
@@ -218,13 +242,18 @@ $(document).ready(function () {
                 }],
             },
             options: {
-                title: {
-                    display: true,
-                    fontSize: 20,
-                    position: "bottom",
-                    padding: -65,
-                    text: percentageVoldoende + "%",
+                center: {
+                    text: 'Desktop',
+                    color: '#36A2EB', //Default black
+                    sidePadding: 15 //Default 20 (as a percentage)
                 },
+                //title: {
+                //    display: true,
+                //    fontSize: 20,
+                //    position: "bottom",
+                //    padding: -55,
+                //    text:  "%",
+                //},
                 maintainAspectRatio: false,
                 tooltips: {
                     backgroundColor: "rgb(255,255,255)",
@@ -244,5 +273,17 @@ $(document).ready(function () {
         });
     }
 
+    $("#nextPageButton").click(function () {
+        $(this).toggle();
+        $("#previousPageButton").toggle();
+        $("#snel-bekijken").toggleClass("selected");
+        $("#snel-invoeren").toggleClass("unselected");
+    });
+    $("#previousPageButton").click(function () {
+        $(this).toggle();
+        $("#nextPageButton").toggle();
+        $("#snel-bekijken").toggleClass("selected");
+        $("#snel-invoeren").toggleClass("unselected");
+    });
 });
 

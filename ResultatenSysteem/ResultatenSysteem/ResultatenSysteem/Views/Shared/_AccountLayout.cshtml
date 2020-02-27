@@ -1,6 +1,24 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using ResultatenSysteem.Data
+@using ResultatenSysteem.Models
+@*@model OpleidingAanvraag;*@
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!DOCTYPE html>
 <html>
 <head>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var activeUser = await UserManager.GetUserAsync(User);
+        if (activeUser.ChosenTheme == "dark-sb-admin-2")
+        {
+            <link rel="stylesheet" type="text/css" href="~/css/dark-accountOptions.css">
+        }
+        else
+        {
+            <link href="~/css/loginPage.css" rel="stylesheet" />
+        }
+    }
     <style>
         html, body {
             overflow: hidden;
@@ -26,7 +44,6 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
             crossorigin="anonymous"></script>
-    <link href="~/css/loginPage.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">

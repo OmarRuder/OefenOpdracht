@@ -1,67 +1,85 @@
 ﻿@page
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @model IndexModel
 @{
     ViewData["Title"] = "Profiel";
     ViewData["ActivePage"] = ManageNavPages.Index;
+
+    if (SignInManager.IsSignedIn(User))
+    {
+        var activeUser = await UserManager.GetUserAsync(User);
+        if (activeUser.ChosenTheme == "dark-sb-admin-2")
+        {
+            <script>
+                var isInDarkMode = true;
+            </script>
+        } else
+        {
+            <script>
+                var isInDarkMode = false;
+            </script>
+        }
+    }
 }
-
+<script src="~/js/manageAccount.js"></script>
 <h4>@ViewData["Title"]</h4>
-<partial name="_StatusMessage" for="StatusMessage" />
-    <div>
-        <form id="profile-form" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div>
-                <label asp-for="Username">Huidig e-mail adres</label>
-                <input asp-for="Username" class="form-control" disabled />
-            </div>
-            <div>
-                <label asp-for="Input.Email">E-mail</label>
-                @if (Model.IsEmailConfirmed)
-                {
-                    <div class="input-group">
-                        <input asp-for="Input.Email" class="form-control" />
-                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
-                    </div>
-                }
-                else
-                {
+<partial name="_StatusMessage" for="StatusMessage" id="test" />
+<div>
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <label asp-for="Username">Huidig e-mail adres</label>
+            <input asp-for="Username" class="form-control" disabled />
+        </div>
+        <div>
+            <label asp-for="Input.Email">E-mail</label>
+            @if (Model.IsEmailConfirmed)
+            {
+                <div class="input-group">
                     <input asp-for="Input.Email" class="form-control" />
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Stuur verificatiemail</button>
-                }
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Input.PhoneNumber">Telefoonnummer</label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <div> 
-                <label asp-for="Input.StyleSheet">Theme:</label>
-                <br />
-                <select asp-for="Input.StyleSheet" class="">
-                    <option name="stylesheet" value="sb-admin-2">Standaard</option>
-                    <option name="stylesheet" value="purple-sb-admin-2">Paarse Highlights</option>
-                    <option name="stylesheet" value="green-sb-admin-2">Groene Highlights</option>
-                    <option name="stylesheet" value="dark-sb-admin-2">Dark Mode</option>
-                </select>
-                <span asp-validation-for="Input.StyleSheet" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="Input.ImgNaam" class="control-label"><i class="fa fa-file-image-o"></i> Foto</label>
-                <br />
-                <input type="file" name="file" asp-for="Input.ImgNaam" />
-                <span asp-validation-for="Input.ImgNaam" class="text-danger"></span>
-            </div>
+                    <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                </div>
+            }
+            else
+            {
+                <input asp-for="Input.Email" class="form-control" />
+                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Stuur verificatiemail</button>
+            }
+            <span asp-validation-for="Input.Email" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Input.PhoneNumber">Telefoonnummer</label>
+            <input asp-for="Input.PhoneNumber" class="form-control" />
+            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Input.StyleSheet">Theme:</label>
+            <br />
+            <select id="styleSheetSelect" asp-for="Input.StyleSheet" class="">
+                <option name="stylesheet" value="sb-admin-2">Standaard</option>
+                <option name="stylesheet" value="purple-sb-admin-2">Paarse Highlights</option>
+                <option name="stylesheet" value="green-sb-admin-2">Groene Highlights</option>
+                <option name="stylesheet" value="dark-sb-admin-2">Dark Mode</option>
+            </select>
+            <span asp-validation-for="Input.StyleSheet" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="Input.ImgNaam" class="control-label"><i class="fa fa-file-image-o"></i> Foto</label>
+            <br />
+            <input type="file" name="file" asp-for="Input.ImgNaam" />
+            <span asp-validation-for="Input.ImgNaam" class="text-danger"></span>
+        </div>
 
-            @*<div class="input-group mb-3">
-            <div class="custom-file">
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                <input type="file" class="custom-file-input" asp-for="Input.ImgNaam" id="inputGroupFile01">
-            </div>
-        </div>*@
-            <button id="update-profile-button" type="submit" class="oButton oPrimary w100">Opslaan</button>
-        </form>
-    </div>
+        @*<div class="input-group mb-3">
+                <div class="custom-file">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    <input type="file" class="custom-file-input" asp-for="Input.ImgNaam" id="inputGroupFile01">
+                </div>
+            </div>*@
+        <a id="opslaanButton" class="oButton oPrimary w100">Opslaan</a>
+    </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

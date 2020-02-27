@@ -14,7 +14,15 @@
 /*
     ZELF TOEGEVOEGD :
 */
-
+.chartCard {
+    background-color: #202020;
+}
+.chartCard h1 {
+    color: #e3e3e3!important;
+}
+.opleidingAanvraagRow {
+    background-color: #3b3b3b;
+}
 .studentPieChartContainer {
     width: 40% !important;
     height: 10%;

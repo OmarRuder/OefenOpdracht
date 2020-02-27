@@ -1,27 +1,27 @@
 ﻿
 h1 {
     font-weight: normal !important;
-    color: #202020 !important;
 }
 body {
+    color: #e3e3e3 !important;
     font-family: 'Lato', sans-serif;
     backface-visibility: hidden;
-    animation-direction: alternate;
-    animation-timing-function: linear;
-    /*background-image: url('../img/loginpagebackground4.jpg');*/
-    background: linear-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0) ), url('../img/loginpagebackground4.jpg');
+    /*animation: slideBackground 1s ease-in;*/
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    background: linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url('../img/loginpagebackground4.jpg');
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 @keyframes slideBackground {
-    50% {
+    100% {
         background-image: url('../img/loginpagebackground3.jpg');
     }
 }
 ::selection {
-    background-color: #202020;
-    color: white;
+    background-color: white;
+    color: black;
 }
 .container {
     z-index: 99;
@@ -45,7 +45,7 @@ body {
     -webkit-box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
     -moz-box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
     box-shadow: 14px 18px 40px 0px rgba(0,0,0,0.29);
-    background-color: white;
+    background-color: #202020;
     width: 30%;
     display: inline-block;
 }
@@ -57,7 +57,8 @@ body {
     display: block;
 }
 .loginCard input, select {
-    background-color: #f7f7f7;
+    color: #e3e3e3 !important;
+    background-color: #3d3d3d;
     font-size: 13px;
     width: 100%;
     box-sizing: border-box;
@@ -68,14 +69,10 @@ body {
     border-bottom: 1px solid #6ea8ff;
 }
 .loginCard select {
-    background-color: #f7f7f7;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 8px;
     margin-bottom: 5%;
-    border-radius: 0px;
-    border: 0px;
-    border-bottom: 1px solid #6ea8ff;
+}
+.loginCard input:disabled {
+    background-color: #6e6e6e;
 }
 .checkBoxRow {
     white-space: nowrap;
@@ -113,59 +110,64 @@ a:hover {
         width: 100%;
     }
 }
-.switchToDarkBackground {
-    animation-name: darkSwitchBackground;
+.switchToLightBackground {
+    color: #212529!important;
+    animation-name: lightSwitchBackground;
     animation-duration: 1s;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
-.switchedToDark h1 {
-    color: #e3e3e3!important;
+.switchedToLight h1 {
+    color: #212529 !important;
 }
-.switchedToDark {
-    color: #e3e3e3 !important;
+.switchedToLight {
+    color: #212529 !important;
     background-color: #202020;
-    animation-name: darkSwitch;
+    animation-name: lightSwitch;
     animation-duration: 1s;
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
 }
-.switchedToDark input, .switchedToDark select {
-    animation-name: darkSwitchInput;
+.switchedToLight input, .switchedToLight select {
+    color: #212529 !important;
+    animation-name: lightSwitchInput;
     animation-duration: 1s;
     animation-fill-mode:forwards;
     animation-iteration-count: 1;
 }
-@keyframes darkSwitchBackground {
+@keyframes lightSwitchBackground {
     from {
-        background: linear-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0) ), url('../img/loginpagebackground4.jpg');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-    to {
         background: linear-gradient( rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45) ), url('../img/loginpagebackground4.jpg');
         background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
     }
+    to {
+        background: linear-gradient( rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.0) ), url('../img/loginpagebackground4.jpg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 }
-@keyframes darkSwitchInput {
+@keyframes lightSwitchInput {
     from {
+        color: #e3e3e3;
+        background-color: #3d3d3d;
+    }
+
+    to {
         color: #495057;
         background-color: #f7f7f7;
     }
-    to {
-        background-color: #3d3d3d;
-        color: #e3e3e3;
-    }
 }
-@keyframes darkSwitch {
+@keyframes lightSwitch {
     from {
-        background-color: white;
+        color: #e3e3e3 !important;
+        background-color: #202020;
     }
     to {
-        background-color: #202020;
+        color: #212529 !important;
+        background-color: white;
     }
 }

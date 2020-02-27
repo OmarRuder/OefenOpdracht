@@ -5,6 +5,7 @@
     var totaalVoldoende = 0;
     var aantalVoldoende = 0;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,13 +14,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <link href="~/css/loginPage.css" rel="stylesheet" />
     <script src="~/js/demo/chart-area-demo.js"></script>
     <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="~/js/sb-admin-2.min.js"></script>
     <script src="~/vendor/chart.js/Chart.min.js"></script>
-    <script src="~/js/demo/dashboard.js"></script>
     <script src="~/js/demo/chart-bar-demo.js"></script>
+    <script src="~/js/demo/dashboard.js"></script>
+
     <title>Dashboard</title>
     <style>
         .col {
@@ -29,8 +32,86 @@
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <div class="col">
+        <div class="row" id="snelActies" style="position:relative;" aria-label="Snel invoer knoppen">
+            <div id="previousPage">
+                <div id="previousPageButton">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="col-12 " id="snel-invoeren">
+                    <div class="chartCard">
+                        <div class="card-body">
+                            <h1>Snel invoeren:</h1>
+                            <div class="row">
+                                <div class="col">
+                                    <a asp-controller="Groepen" asp-action="Create">
+                                        <div class="buttonCard green grow clickable">
+                                            <i class="fas fa-users"></i> +
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a asp-controller="Resultaten" asp-action="Create">
+                                        <div class="buttonCard green grow clickable">
+                                            <i class="fas fa-list-ol"></i> +
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a asp-controller="Studenten" asp-action="Create">
+                                        <div class="buttonCard green grow clickable">
+                                            <i class="fas fa-graduation-cap"></i> +
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col">
+                                    <a asp-controller="Vakken" asp-action="Create">
+                                        <div class="buttonCard green grow clickable">
+                                            <i class="fas fa-book"></i> +
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="nextPage">
+                <div id="nextPageButton">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="col " id="snel-bekijken">
+                    <div class="chartCard">
+                        <div class="card-body">
+                            <h1>Snel bekijken:</h1>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="buttonCard red grow clickable">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="buttonCard red grow clickable">
+                                        <i class="fas fa-list-ol"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="buttonCard red grow clickable">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="buttonCard red grow clickable">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:2%;">
+            <div class="col-4">
                 <div class="chartCard">
                     <div class="card-body">
                         <div class="chart-area">
@@ -41,7 +122,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col">
+            <div class="col-4">
+                <div class="chartCard">
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myBarChart"></canvas>
+                        </div>
+                        <hr>
+                        Hier ziet u het aantal behaalde voldoendes dat het totaal aantal studenten in een groep behaald heeft <br /><code>Dit is niet het aantal behaalde voldoendes in een groep</code>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
                 <div class="chartCard">
                     <div class="card-body">
                         <div class="chart-area">
@@ -56,14 +148,40 @@
         <hr />
         <div id="groupCharts">
         </div>
-   
+        <div class="row" id="opleidingAanvraagHoofdRow">
+            <div class="col">
+                <div class="chartCard">
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <h1>Opleiding aanvragen</h1>
+                            @foreach (var aanvraag in Model.Aanvragen)
+                            {
+                                <div class="row opleidingAanvraagRow clickable">
+                                    <a asp-area="" asp-action="Edit" asp-controller="Aanvragen" asp-route-id="@aanvraag.Id">
+                                        <div class="aanvraagDetails" style="float:left;">
+                                            <p><span class="name">@aanvraag.Voornaam @aanvraag.Tussenvoegsel @aanvraag.Achternaam</span>@aanvraag.Opmerking</p>
+                                        </div>
+                                        <span class="aanvraagStatus">@aanvraag.AanvraagStatus</span>
+                                        <span class="aanvraagDatum">@aanvraag.AanvraagDatum</span>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="groepData">
+        <script>
+            var aantalVoldoendesarray = [];
+            var groepData = [];
+            var aantalOnvoldoendes = [];
+        </script>
         @foreach (var groep in Model.Groepen)
         {
             aantalVoldoende = 0;
             aantalOnvoldoende = 0;
-            <span id="groep-@groep.Groepscode" groepscode="@groep.Groepscode" groep-id="@groep.Id" class="groepsCode"></span>
             @foreach (var student in groep.Studenten)
             {
                 @foreach (var beoordeling in Model.Resultaten)
@@ -83,11 +201,23 @@
                     }
                 }
             }
-            <span style="color:green;" class="groepsVoldoendes" aantalVoldoendes="@aantalVoldoende"></span>
-            <span style="color:red;" class="groepsOnvoldoendes" aantalOnvoldoendes="@aantalOnvoldoende"></span>
+            <script>
+                groepData.push({
+                    Id: '@groep.Id',
+                    groepNaam: '@groep.Naam',
+                    groepsCode: '@groep.Groepscode',
+                    aantalVoldoendes: parseInt('@aantalVoldoende'),
+                    aantalOnvoldoendes: parseInt('@aantalOnvoldoende')
+                });
+            </script>
         }
-        <span id="totaalVoldoende" aantalVoldoendes="@totaalVoldoende"></span>
-        <span id="totaalOnvoldoende" aantalOnvoldoendes="@totaalOnvoldoende"></span>
+        <script>
+            var totaalVoldoende = parseInt('@totaalVoldoende');
+            var totaalOnvoldoende = parseInt('@totaalOnvoldoende');
+        </script>
     </div>
+
+
+
 </body>
 </html>

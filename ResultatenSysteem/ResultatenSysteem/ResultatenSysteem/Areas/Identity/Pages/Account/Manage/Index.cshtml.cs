@@ -142,7 +142,7 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Je profiel is bewerkt!";
             return RedirectToPage();
         }
 

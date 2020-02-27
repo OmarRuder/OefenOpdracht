@@ -12,6 +12,7 @@ using ResultatenSysteem.ViewModels;
 
 namespace ResultatenSysteem.Controllers
 {
+    [Authorize]
     [Area("Medewerker")]
     public class ResultatenController : Controller
     {

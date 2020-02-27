@@ -13,17 +13,13 @@
     <script>
         $(document).ready(function () {
             $(document).find('#profilePicture').each(function () {
-                console.log("item found");
-                console.log($(this).attr("src"));
                 $(this).on('load', function () { console.log("image loaded correctly"); });
                 $(this).on('error', function () { console.log("error loading image"); });
-
             });
         });
     </script>
     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
     <li class="nav-item dropdown no-arrow d-sm-none">
-
         <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-search fa-fw"></i>
         </a>
@@ -208,7 +204,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Dashboard", new { area = "" })">
                         <button type="submit" class="btn btn-primary">Uitloggen</button>
                     </form>
                 </div>

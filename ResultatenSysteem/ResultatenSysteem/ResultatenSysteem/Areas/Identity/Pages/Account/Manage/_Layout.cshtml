@@ -20,37 +20,25 @@
         text-align: center;
     }
     .accountdetails > img {
-        width: 125px;
-        border-radius: 50%;
+        width: 50px;
+        border-radius: 100%;
         height: auto;
+        float: right;
+        margin-top: -2%;
+        margin-right: -15%;
     }
 </style>
-
-
-
-@*<div class="accountdetails" style="float:right;">
-    @if (User.IsInRole("Medewerker"))
-    {<span id="roleSpan">Medewerker</span>
-    }
-    <img src="~/userImg/@activeUser.ImgNaam" />
-    <hr />
-    <h3>@activeUser.Voornaam @activeUser.Tussenvoegsel @activeUser.Achternaam <span style="font-size:15px;">(@activeUser.Gebruikersnummer)</span></h3>
-</div>*@
-@*<div>
-    <h4>Verander je account opties:</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
-        </div>
-        <div class="col-md-9">
-        </div>
-    </div>
-</div>*@
 
 <div class="container">
     <div class="loginCardContainer">
         <div class="loginCard" style="width:50%;float:left;margin-left:-20%;">
+            <div class="accountdetails" >
+                @*@if (User.IsInRole("Medewerker"))
+            {<span id="roleSpan">Medewerker</span>
+            }*@
+                <img src="~/userImg/@activeUser.ImgNaam" />
+               @* <span>@activeUser.Voornaam @activeUser.Tussenvoegsel @activeUser.Achternaam <span style="font-size:15px;">(@activeUser.Gebruikersnummer)</span></span>*@
+            </div>
             <section id="loginSection">
                 <h1>Account beheren</h1>
                 <div>
