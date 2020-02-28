@@ -50,7 +50,7 @@ $(document).ready(function () {
     groepsCodes = [];
     groepId = 0;
     var displayText = "";
-
+    var destinationPage = "";
     var percentageVoldoende = totaalVoldoende * 100 / (totaalVoldoende + totaalOnvoldoende);
     if (Number.isNaN(percentageVoldoende)) {
         percentageVoldoende = "";
@@ -273,21 +273,29 @@ $(document).ready(function () {
         });
     }
 
-    $("#nextPageButton").click(function () {
-        $(this).toggle();
+    function slideToRightPage() {
         $("#previousPageButton").toggle();
         $("#snel-bekijken").toggleClass("selected");
         $("#snel-invoeren").toggleClass("unselected");
-    });
-    $("#previousPageButton").click(function () {
-        $(this).toggle();
+    }
+
+    function slideToLeftPage() {
         $("#nextPageButton").toggle();
         $("#snel-bekijken").toggleClass("selected");
         $("#snel-invoeren").toggleClass("unselected");
+    }
+
+    $("#nextPageButton").click(function () {
+        $(this).toggle();
+        slideToRightPage();
     });
 
-    console.log(vakken);
-    console.log(studenten);
+    $("#previousPageButton").click(function () {
+        $(this).toggle();
+        slideToLeftPage();
+    });
+
+
     //snel toevoegen modal
     $("#groepSnelToevoegenButton").click(function () {
         $("#inputContent").remove(); //verwijder oude modal content
@@ -361,5 +369,21 @@ $(document).ready(function () {
         html += `</div></form></div>`
         $("#inputSection").append(html);
     });
+
+    function slideToRightPageDirection(el, d) {
+        if (d == "l") {
+            slideToRightPage();
+        }
+    }
+
+    function slideToLeftPageDirection(el, d) {
+        if (d == "r") {
+            slideToLeftPage();
+        }
+    }
+
+    detectSwipe("previousPage", slideToRightPageDirection);
+    detectSwipe("nextPage", slideToLeftPageDirection);
+
 });
 

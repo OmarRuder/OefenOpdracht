@@ -396,6 +396,9 @@ span.opleiding-aanvragen_aanvraag-datum, span.opleiding-aanvragen_aanvraag-statu
 
 
 @media screen and (max-width: 600px) {
+    .buttonCard {
+        font-size: 16px;             
+    }
     .opleiding-aanvragen_card-content {
         height: auto;
     }
