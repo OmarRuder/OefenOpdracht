@@ -53,8 +53,9 @@ namespace ResultatenSysteem
                 //.AddIdentityUI()
                 .AddDefaultTokenProviders();
 
-            services.AddRazorPages().AddMvcOptions(options => options.EnableEndpointRouting = false);
-
+            services.AddRazorPages()
+                .AddMvcOptions(options => options.EnableEndpointRouting = false)
+                .AddRazorRuntimeCompilation();
             //    services.AddMvc(options =>
             //           options.EnableEndpointRouting = false)
             //           .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

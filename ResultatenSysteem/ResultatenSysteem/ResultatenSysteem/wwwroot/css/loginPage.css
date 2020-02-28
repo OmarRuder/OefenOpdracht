@@ -173,3 +173,17 @@ a:hover {
         background-color: #202020;
     }
 }
+
+.loginCard.account-management {
+    width:50%;
+    float:left;
+    margin-left:-20%;
+}
+
+/*iPhone X support (main)*/
+
+@media only screen and (max-width: 400px) {
+    .loginCard {
+        width: 100%!important;
+    }
+}

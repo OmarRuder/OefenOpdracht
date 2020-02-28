@@ -177,3 +177,21 @@ a:hover {
         background-color: white;
     }
 }
+
+.loginCard.account-management {
+    width: 50%;
+    float: left;
+    margin-left: -20%;
+}
+
+@media only screen and (max-width: 400px) {
+    .loginCard {
+        width: 100% !important;
+        margin-left: 0%!important;
+        margin-bottom: 6%;
+    }
+    body {
+        margin-bottom: 0;
+        overflow: scroll!important;
+    }
+}

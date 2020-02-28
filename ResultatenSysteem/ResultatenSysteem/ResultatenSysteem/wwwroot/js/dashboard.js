@@ -295,7 +295,6 @@ $(document).ready(function () {
         slideToLeftPage();
     });
 
-
     //snel toevoegen modal
     $("#groepSnelToevoegenButton").click(function () {
         $("#inputContent").remove(); //verwijder oude modal content
@@ -335,14 +334,14 @@ $(document).ready(function () {
         <span>Beoordeling</span><input type="number" min="1" max="10" step="0.1" id="cijferInput" name="Cijfer" placeholder="Cijfer invoeren..." />
         <span>Student</span><select id="studentSelect" name="studentId">`;
         for (i = 0; i < studenten.length; i++) {
-            html += `<option value=${studenten[i].Id}>${studenten[i].voorNaam} ${studenten[i].tussenVoegsel} ${studenten[i].achterNaam} (${studenten[i].studentNummer})</option>`;
+            html += `<option value="${studenten[i].Id}">${studenten[i].voorNaam} ${studenten[i].tussenVoegsel} ${studenten[i].achterNaam} (${studenten[i].studentNummer})</option>`;
         }
         html += `
         </select>
         <span>Vak</span>
         <select id="vakSelect" name="vakId">`;
         for (i = 0; i < vakken.length; i++) {
-            html += `<option  value=${vakken[i].Id}>${vakken[i].naam}</option>`;
+            html += `<option  value="${vakken[i].Id}">${vakken[i].naam}</option>`;
         }
         html += `
         </select><div class="modal-footer">
