@@ -14,6 +14,7 @@ using ResultatenSysteem.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ResultatenSysteem.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace ResultatenSysteem
 {
@@ -39,7 +40,7 @@ namespace ResultatenSysteem
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            
+
             //default identity 
             //services.AddDefaultIdentity<IdentityUser>()
             //    .AddDefaultUI(UIFramework.Bootstrap4)
@@ -48,16 +49,19 @@ namespace ResultatenSysteem
             services.AddIdentity<ApplicationUser, ApplicationRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
+                //.AddDefaultUI(UIFramework.Bootstrap4)
+                //.AddIdentityUI()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc(options =>
-                   options.EnableEndpointRouting = false)
-                   .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddRazorPages().AddMvcOptions(options => options.EnableEndpointRouting = false);
+
+            //    services.AddMvc(options =>
+            //           options.EnableEndpointRouting = false)
+            //           .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context,
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager
             )

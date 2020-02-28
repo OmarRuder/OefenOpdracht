@@ -20,13 +20,13 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        private readonly IHostingEnvironment _env;
+        private readonly IWebHostEnvironment _env;
         private static string generatedImgName;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender, IHostingEnvironment env)
+            IEmailSender emailSender, IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -146,7 +146,7 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        private void UploadFile(IFormFile file, IHostingEnvironment env)
+        private void UploadFile(IFormFile file, IWebHostEnvironment env)
         {
             Random random = new Random();
             string RandomString(int length)
@@ -164,7 +164,7 @@ namespace ResultatenSysteem.Areas.Identity.Pages.Account.Manage
             }
         }
 
-        private void DeleteFile(IFormFile file, IHostingEnvironment env, string existingFile, ApplicationUser user)
+        private void DeleteFile(IFormFile file, IWebHostEnvironment env, string existingFile, ApplicationUser user)
         {
             Console.WriteLine("current existing file is: " + existingFile);
             Console.WriteLine("userfile is:" + user.ImgNaam);
