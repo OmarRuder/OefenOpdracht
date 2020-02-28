@@ -10,8 +10,8 @@ using ResultatenSysteem.Data;
 namespace ResultatenSysteem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200210075154_OpleidingAanvraagStatus")]
-    partial class OpleidingAanvraagStatus
+    [Migration("20200210075154_Opleidingopleiding-aanvragen_aanvraag-status")]
+    partial class Opleidingopleiding-aanvragen_aanvraag-status
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -326,7 +326,7 @@ namespace ResultatenSysteem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AanvraagStatus");
+                    b.Property<int>("opleiding-aanvragen_aanvraag-status");
 
                     b.Property<string>("Achternaam");
 

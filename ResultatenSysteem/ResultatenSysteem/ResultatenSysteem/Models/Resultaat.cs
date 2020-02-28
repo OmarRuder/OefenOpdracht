@@ -10,10 +10,8 @@ namespace ResultatenSysteem.Models
     {
         public int Id { get; set; }
         public double Beoordeling { get; set; }
-
         public Student Student { get; set; }
         public int StudentId { get; set; }
-
         public Vak Vak { get; set; }
         public int VakId { get; set; }
         public DateTime InvoerDatum { get; set; }

@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ResultatenSysteem.Data.Migrations
 {
-    public partial class OpleidingAanvraagStatus : Migration
+    public partial class Opleidingopleiding-aanvragen_aanvraag-status : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "AanvraagStatus",
+                name: "opleiding-aanvragen_aanvraag-status",
                 table: "OpleidingAanvraag",
                 nullable: false,
                 defaultValue: 0);
@@ -80,7 +80,7 @@ namespace ResultatenSysteem.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "AanvraagStatus",
+                name: "opleiding-aanvragen_aanvraag-status",
                 table: "OpleidingAanvraag");
 
             migrationBuilder.UpdateData(

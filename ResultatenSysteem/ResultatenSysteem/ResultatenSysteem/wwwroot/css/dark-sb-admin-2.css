@@ -14,13 +14,47 @@
 /*
     ZELF TOEGEVOEGD :
 */
-.chartCard {
+
+#content {
+    background-color: #4e4f52;
+}
+
+.container-fluid {
+    background-color: #4e4f52;
+}
+
+h1, h2, h3, h4, h5, h6, a, p, span, label, body, tr {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.bg-white {
+    background-color: #242323 !important;
+}
+
+.navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow {
+    -webkit-box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
+    box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
+}
+
+.snelToevoegenModal {
     background-color: #202020;
 }
-.chartCard h1 {
+#inputSection.toevoegModal input, #inputSection.toevoegModal select {
+    background-color: #3d3d3d;
+    color: #e3e3e3;
+}
+#inputSection .modal-footer {
+    border-top: 1px solid #3d3d3d;
+}
+
+.chart-card {
+    background-color: #202020;
+}
+.chart-card h1 {
     color: #e3e3e3!important;
 }
-.opleidingAanvraagRow {
+.opleiding-aanvragen_row {
     background-color: #3b3b3b;
 }
 .studentPieChartContainer {
@@ -6571,17 +6605,13 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-    background-color: #5a5c69 !important;
+    background-color: #5a5c69 !important
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
 button.bg-dark:hover,
 button.bg-dark:focus {
     background-color: #42444e !important;
-}
-
-.bg-white {
-    background-color: #fff !important;
 }
 
 .bg-transparent {
@@ -11962,23 +11992,4 @@ footer.sticky-footer {
 
 body.sidebar-toggled footer.sticky-footer {
     width: 100%;
-}
-
-#content {
-    background-color: #4e4f52;
-}
-.container-fluid {
-    background-color: #4e4f52;
-}
-h1, h2, h3, h4, h5, h6, a, p, span, label, body, tr {
-    color: rgba(255, 255, 255, 0.7);
-}
-.bg-white {
-    background-color: #242323 !important;
-    
-}
-.navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow {
-    -webkit-box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
-    box-shadow: 0px 50px 76px -27px rgba(0,0,0,0.75);
 }

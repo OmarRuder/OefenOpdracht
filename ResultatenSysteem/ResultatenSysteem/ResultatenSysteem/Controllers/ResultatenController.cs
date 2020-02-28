@@ -194,18 +194,14 @@ namespace ResultatenSysteem.Controllers
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> QuickCreate(double Cijfer, int vakId, int studentId, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
+        public async Task<IActionResult> QuickCreate(decimal Cijfer, int vakId, int studentId, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat)
         {
-            var cijfer = "";
+            double cijfer = Decimal.ToDouble(Cijfer);
 
-            if (Cijfer > 10)
-            {
-               cijfer = Cijfer.ToString();
-            }
+            Console.WriteLine(Cijfer + " DECIMAL TO DOUBLE " + cijfer);
 
             resultaat.InvoerDatum = DateTime.Now;
-            resultaat.Beoordeling = Cijfer;
-            Console.WriteLine("____------ " + Cijfer);
+            resultaat.Beoordeling = cijfer;
             resultaat.VakId = vakId;
             resultaat.StudentId = studentId;
             if (ModelState.IsValid)
@@ -290,13 +286,7 @@ namespace ResultatenSysteem.Controllers
 
         public async Task<IActionResult> UpdateCijfer(int resultaatId, double Cijfer/*, [Bind("Id,Beoordeling,StudentId,VakId")] Resultaat resultaat*/)
         {
-            Console.WriteLine("we zitten in de functie, en meegegven id en cijfer zijn: " + resultaatId + " - " + Cijfer);
             var resultaat = await _context.Resultaat.FindAsync(resultaatId);
-            Console.WriteLine("bijbehorende gegevens uit database");
-            Console.WriteLine("----------------------------------");
-            Console.WriteLine("Resultaat Id uit database:" + resultaat.Id);
-            Console.WriteLine("----------------------------------");
-            Console.WriteLine("Resultaat beoordeling uit database:" + resultaat.Beoordeling);
             if (Cijfer < 10 )
             {
                 resultaat.Beoordeling = Cijfer;

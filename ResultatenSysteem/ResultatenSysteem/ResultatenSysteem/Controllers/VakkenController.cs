@@ -68,6 +68,24 @@ namespace ResultatenSysteem.Controllers
             return View(vak);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> QuickCreate(string vakNaam, string vakCode, [Bind("Id,Naam,Vakcode")] Vak vak)
+        {
+            vak.Naam = vakNaam;
+            vak.Vakcode = vakCode;
+            if (ModelState.IsValid)
+            {
+                Console.WriteLine("Modelstate is valid, vak " + vak.Naam);
+                _context.Add(vak);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+                //return RedirectToAction("Index", "Dashboard");
+            }
+            return View();
+            //return View("../Views/Dashboard/Index.cshtml");
+
+        }
+
         // GET: Vakken/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

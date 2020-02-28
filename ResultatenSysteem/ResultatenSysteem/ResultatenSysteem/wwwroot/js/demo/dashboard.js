@@ -217,10 +217,10 @@ $(document).ready(function () {
             html += "</div>"; //als het de 4e is eindig je de row div
             html += "<div class='row'>"; //en maak je een nieuwe row div (elke 4 columns een nieuwe row)
         }
-        html += `<div class='col groupChartCol'><div class='chartCard cartBody clickable grow shadow'><a class='stretched-link' href='/Medewerker/Groepen/Overzicht/${groepId}'></a><div class='chart-area small'><canvas id='pieChart-${groepsCodes[i]}'></canvas><span class='innerPieChartText'>${percentageVoldoende.toString().substring(0, 5)}</span></div><hr><span>${displayText}</span></div></div><br>`;
+        html += `<div class='col groupChartCol'><div class='chart-card card-body clickable grow shadow'><a class='stretched-link' href='/Medewerker/Groepen/Overzicht/${groepId}'></a><div class='chart-area small'><canvas class="groupPieChartCanvas" id='pieChart-${groepsCodes[i]}'></canvas><span class='innerPieChartText'>${percentageVoldoende.toString().substring(0, 5)}</span></div><hr><span>${displayText}</span></div></div><br>`;
     }
-    //hier voeren we de opgebouwde html in de groupCharts div
-    $("#groupCharts").append(html);
+    //hier voeren we de opgebouwde html in de group-charts div
+    $("#group-charts").append(html);
 
     for (i = 0; i < groepData.length; i++) {
         percentageVoldoende = groepsVoldoendes[i] * 100 / (groepsVoldoendes[i] + groepsOnvoldoendes[i]);
@@ -340,22 +340,25 @@ $(document).ready(function () {
         </select><div class="modal-footer">
         <input type="submit" class="oButton oPrimary w100" id="submitButtonSnelToevoegenModal" value="Cijfer invoeren" />
         <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>
-        </div></form></div>`
+        </div></form></div>`;
         $("#inputSection").append(html);
     });
 
     $("#vakSnelToevoegenButton").click(function () {
         $("#inputContent").remove();
         $("#submitButtonSnelToevoegenModal").text("Vak toevoegen");
-        html = `<div id="inputContent">`
-        html +=
-            `<div id="inputContent">
+        html = `<div id="inputContent">
+        <form action="/Medewerker/Vakken/QuickCreate" method="post">`
+        html +=`
+        <div id="inputContent">
         <h3>Vakdetails</h3>
         <hr />
-        <span>Naam</span><input type="text" name="vakNaam" placeholder="Naam invoeren..." />
+        <span>Naam</span><input type="text" value="test" name="vakNaam" placeholder="Naam invoeren..." />
         <span>Vakcode</span><input type="text" name="vakCode" placeholder="Code invoeren..." />
-        `;
-        html += `</div>`
+        <div class="modal-footer">
+        <input type="submit" class="oButton oPrimary w100" id="submitButtonSnelToevoegenModal" value="Vak toevoegen" />
+        <button type="button" class="btn" data-dismiss="modal"><i class="fas fa-times"></i></button>`;
+        html += `</div></form></div>`
         $("#inputSection").append(html);
     });
 });

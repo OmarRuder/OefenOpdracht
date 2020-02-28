@@ -326,9 +326,9 @@ namespace ResultatenSysteem.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("AanvraagDatum");
+                    b.Property<DateTime>("opleiding-aanvragen_aanvraag-datum");
 
-                    b.Property<int>("AanvraagStatus");
+                    b.Property<int>("opleiding-aanvragen_aanvraag-status");
 
                     b.Property<string>("Achternaam");
 

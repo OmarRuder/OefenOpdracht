@@ -89,7 +89,7 @@ namespace ResultatenSysteem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Voornaam,Tussenvoegsel,Achternaam,Opmerking,AanvraagStatus")] OpleidingAanvraag opleidingAanvraag)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Voornaam,Tussenvoegsel,Achternaam,Opmerking,opleiding-aanvragen_aanvraag-status")] OpleidingAanvraag opleidingAanvraag)
         {
             if (id != opleidingAanvraag.Id)
             {

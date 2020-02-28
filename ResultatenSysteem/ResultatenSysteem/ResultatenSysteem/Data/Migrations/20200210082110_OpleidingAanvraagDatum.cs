@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ResultatenSysteem.Data.Migrations
 {
-    public partial class OpleidingAanvraagDatum : Migration
+    public partial class OpleidingAanvraag : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
-                name: "AanvraagDatum",
+                name: "aanvraagDatum",
                 table: "OpleidingAanvraag",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
@@ -80,7 +80,7 @@ namespace ResultatenSysteem.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "AanvraagDatum",
+                name: "aanvraagDatum",
                 table: "OpleidingAanvraag");
 
             migrationBuilder.UpdateData(
